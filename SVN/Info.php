@@ -57,9 +57,6 @@
  *
  * If the 'path' option is omitted, '.' is assumed.
  *
- * Note: This command only operates on working copies. It does
- * NOT access the repository.
- *
  * $switches is an array containing one or more command line options
  * defined by the following associative keys:
  *
@@ -72,7 +69,11 @@
  *                      // descend recursively
  *  'recursive'     =>  true|false,
  *                      // descend recursively
- *  'config-dir'    =>  'Path to a Subversion configuration directory'
+ *  'config-dir'    =>  'Path to a Subversion configuration directory',
+ * 
+ *  'username'      =>  'username for accessing repository',
+ * 
+ *  'password'      =>  'password for accessing repository'
  * );
  *
  * </code>
@@ -129,7 +130,9 @@ class VersionControl_SVN_Info extends VersionControl_SVN
                                 'recursive',
                                 'targets',
                                 'config-dir',
-                                'config_dir'
+                                'config_dir',
+                                'username',
+                                'password'
                                 );
 
     
@@ -197,6 +200,8 @@ class VersionControl_SVN_Info extends VersionControl_SVN
                 $switch = str_replace('_', '-', $switch);
                 switch ($switch) {
                     case 'targets':
+                    case 'username':
+                    case 'password':
                     case 'config-dir':
                         $_switches .= "--$switch $val ";
                         break;
