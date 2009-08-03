@@ -281,7 +281,7 @@ class VersionControl_SVN_Copy extends VersionControl_SVN
         $_switches = trim($_switches);
         $this->_switches = $_switches;
 
-        $cmd = "$this->svn_path $this->svn_cmd $_switches";
+        $cmd = "$this->svn_path $this->_svn_cmd $_switches";
         if (!empty($args)) {
             $cmd .= ' '. join(' ', $args);
         }
