@@ -1,72 +1,73 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 5                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 2004-2007, Clay Loveless                               |
-// | All rights reserved.                                                 |
-// +----------------------------------------------------------------------+
-// | This LICENSE is in the BSD license style.                            |
-// | http://www.opensource.org/licenses/bsd-license.php                   |
-// |                                                                      |
-// | Redistribution and use in source and binary forms, with or without   |
-// | modification, are permitted provided that the following conditions   |
-// | are met:                                                             |
-// |                                                                      |
-// |  * Redistributions of source code must retain the above copyright    |
-// |    notice, this list of conditions and the following disclaimer.     |
-// |                                                                      |
-// |  * Redistributions in binary form must reproduce the above           |
-// |    copyright notice, this list of conditions and the following       |
-// |    disclaimer in the documentation and/or other materials provided   |
-// |    with the distribution.                                            |
-// |                                                                      |
-// |  * Neither the name of Clay Loveless nor the names of contributors   |
-// |    may be used to endorse or promote products derived from this      |
-// |    software without specific prior written permission.               |
-// |                                                                      |
-// | THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS  |
-// | "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT    |
-// | LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS    |
-// | FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE      |
-// | COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  |
-// | INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, |
-// | BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;     |
-// | LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER     |
-// | CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT   |
-// | LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN    |
-// | ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE      |
-// | POSSIBILITY OF SUCH DAMAGE.                                          |
-// +----------------------------------------------------------------------+
-// | Author: Clay Loveless <clay@killersoft.com>                          |
-// +----------------------------------------------------------------------+
-//
-// $Id$
-//
 
 /**
- * @package     VersionControl_SVN
- * @category    VersionControl
- * @author      Clay Loveless <clay@killersoft.com>
+ * +----------------------------------------------------------------------+
+ * | PHP version 5                                                        |
+ * +----------------------------------------------------------------------+
+ * | Copyright (c) 2004-2007, Clay Loveless                               |
+ * | All rights reserved.                                                 |
+ * +----------------------------------------------------------------------+
+ * | This LICENSE is in the BSD license style.                            |
+ * | http://www.opensource.org/licenses/bsd-license.php                   |
+ * |                                                                      |
+ * | Redistribution and use in source and binary forms, with or without   |
+ * | modification, are permitted provided that the following conditions   |
+ * | are met:                                                             |
+ * |                                                                      |
+ * |  * Redistributions of source code must retain the above copyright    |
+ * |    notice, this list of conditions and the following disclaimer.     |
+ * |                                                                      |
+ * |  * Redistributions in binary form must reproduce the above           |
+ * |    copyright notice, this list of conditions and the following       |
+ * |    disclaimer in the documentation and/or other materials provided   |
+ * |    with the distribution.                                            |
+ * |                                                                      |
+ * |  * Neither the name of Clay Loveless nor the names of contributors   |
+ * |    may be used to endorse or promote products derived from this      |
+ * |    software without specific prior written permission.               |
+ * |                                                                      |
+ * | THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS  |
+ * | "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT    |
+ * | LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS    |
+ * | FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE      |
+ * | COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  |
+ * | INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, |
+ * | BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;     |
+ * | LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER     |
+ * | CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT   |
+ * | LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN    |
+ * | ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE      |
+ * | POSSIBILITY OF SUCH DAMAGE.                                          |
+ * +----------------------------------------------------------------------+
+ *
+ * @category  VersionControl
+ * @package   VersionControl_SVN
+ * @author    Clay Loveless <clay@killersoft.com>
+ * @author    Michiel Rook <mrook@php.net>
+ * @copyright 2004-2007 Clay Loveless
+ * @license   http://www.killersoft.com/LICENSE.txt BSD License
+ * @version   SVN: $Id$
+ * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
 // {{{ Error Management
 require_once 'PEAR/ErrorStack.php';
 
 // error & notice constants
-define('VERSIONCONTROL_SVN_ERROR',                         -1);
-define('VERSIONCONTROL_SVN_ERROR_NO_VERSION',              -2);
-define('VERSIONCONTROL_SVN_ERROR_NO_REVISION',             -3);
-define('VERSIONCONTROL_SVN_ERROR_UNKNOWN_CMD',             -4);
-define('VERSIONCONTROL_SVN_ERROR_NOT_IMPLEMENTED',         -5);
-define('VERSIONCONTROL_SVN_ERROR_NO_SWITCHES',             -6);
-define('VERSIONCONTROL_SVN_ERROR_UNDEFINED',               -7);
+define('VERSIONCONTROL_SVN_ERROR', -1);
+define('VERSIONCONTROL_SVN_ERROR_NO_VERSION', -2);
+define('VERSIONCONTROL_SVN_ERROR_NO_REVISION', -3);
+define('VERSIONCONTROL_SVN_ERROR_UNKNOWN_CMD', -4);
+define('VERSIONCONTROL_SVN_ERROR_NOT_IMPLEMENTED', -5);
+define('VERSIONCONTROL_SVN_ERROR_NO_SWITCHES', -6);
+define('VERSIONCONTROL_SVN_ERROR_UNDEFINED', -7);
 define('VERSIONCONTROL_SVN_ERROR_REQUIRED_SWITCH_MISSING', -8);
-define('VERSIONCONTROL_SVN_ERROR_MIN_ARGS',                -9);
-define('VERSIONCONTROL_SVN_ERROR_EXEC',                   -10);
-define('VERSIONCONTROL_SVN_NOTICE',                      -999);
-define('VERSIONCONTROL_SVN_NOTICE_INVALID_SWITCH',       -901);
-define('VERSIONCONTROL_SVN_NOTICE_INVALID_OPTION',       -902);
+define('VERSIONCONTROL_SVN_ERROR_MIN_ARGS', -9);
+define('VERSIONCONTROL_SVN_ERROR_EXEC', -10);
+define('VERSIONCONTROL_SVN_NOTICE', -999);
+define('VERSIONCONTROL_SVN_NOTICE_INVALID_SWITCH', -901);
+define('VERSIONCONTROL_SVN_NOTICE_INVALID_OPTION', -902);
 
 // }}}
 // {{{ fetch modes
@@ -120,13 +121,15 @@ define('VERSIONCONTROL_SVN_FETCHMODE_ARRAY', 6);
 /**
  * Simple OO interface for Subversion 
  *
- * @package     VersionControl_SVN
- * @tutorial    VersionControl_SVN.pkg
- * @version     @version@
- * @category    VersionControl
- * @author      Clay Loveless <clay@killersoft.com>
- * @copyright   Copyright (c) 2004 Clay Loveless. All Rights Reserved.
- * @license     http://www.killersoft.com/LICENSE.txt BSD License
+ * @tutorial  VersionControl_SVN.pkg
+ * @category  VersionControl
+ * @package   VersionControl_SVN
+ * @author    Clay Loveless <clay@killersoft.com>
+ * @author    Michiel Rook <mrook@php.net>
+ * @copyright 2004-2007 Clay Loveless
+ * @license   http://www.killersoft.com/LICENSE.txt BSD License
+ * @version   @version@
+ * @link      http://pear.php.net/package/VersionControl_SVN
  * @static
  */
 class VersionControl_SVN
@@ -315,7 +318,6 @@ class VersionControl_SVN
     /**
      * Set up VersionControl_SVN error message templates for PEAR_ErrorStack.
      *
-     * @param   void
      * @return  array
      * @access  public
      */
@@ -354,7 +356,7 @@ class VersionControl_SVN
     /**
      * Create a new VersionControl_SVN command object.
      *
-     * $switches is an array containing multiple options
+     * $options is an array containing multiple options
      * defined by the following associative keys:
      *
      * <code>
@@ -394,8 +396,9 @@ class VersionControl_SVN
      * ?>
      * </code>
      *
-     * @param   array   $options    An associative array of option names and
-     *                              their values
+     * @param string $command The Subversion command
+     * @param array  $options An associative array of option names and
+     *                        their values
      *
      * @return  mixed   a newly created VersionControl_SVN command object, or PEAR_ErrorStack
      *                  constant on error
@@ -429,6 +432,10 @@ class VersionControl_SVN
     
     /**
      * Initialize an object wrapper for a Subversion subcommand.
+     *
+     * @param string $command The Subversion command
+     * @param array  $options An associative array of option names and
+     *                        their values
      *
      * @return  mixed   object on success, false on failure
      * @access public
@@ -498,7 +505,6 @@ class VersionControl_SVN
      * Return the array of pre-defined shortcuts (also known as Alternate Names)
      * for Subversion commands.
      *
-     * @param   void
      * @return  array
      * @access public
      */
@@ -512,8 +518,12 @@ class VersionControl_SVN
     // {{{ setOptions()
     
     /**
-     * Allow for overriding of previously declared options.
+     * Allow for overriding of previously declared options.     
      *
+     * @param array $options An associative array of option names and
+     *                       their values
+     *
+     * @return boolean
      */
     function setOptions($options = array())
     {
@@ -540,6 +550,8 @@ class VersionControl_SVN
      * Prepare the command switches.
      *
      * This function should be overloaded by the command class.
+     *
+     * @return boolean
      */
     function prepare()
     {
@@ -554,8 +566,7 @@ class VersionControl_SVN
     /**
      * Standardized validation of requirements for a command class.
      *
-     * @param   void
-     * @returns mixed   true if all requirements are met, false if 
+     * @return mixed   true if all requirements are met, false if 
      *                  requirements are not met. Details of failures
      *                  are pushed into the PEAR_ErrorStack for VersionControl_SVN
      * @access  public
@@ -611,7 +622,9 @@ class VersionControl_SVN
     /**
      * Run the command with the defined switches.
      *
-     * @param   void
+     * @param array $args     Arguments to pass to Subversion
+     * @param array $switches Switches to pass to Subversion
+     *
      * @return  mixed   $fetchmode specified output on success,
      *                  or false on failure.
      * @access  public
@@ -643,10 +656,10 @@ class VersionControl_SVN
         }
 
         if ($ret_var > 0) {
-            $params['options'] = $this->options;
+            $params['options']  = $this->options;
             $params['switches'] = $this->switches;
-            $params['args'] = $this->args;
-            $params['cmd'] = $cmd;
+            $params['args']     = $this->args;
+            $params['cmd']      = $cmd;
             foreach ($out as $line) {
                 if (substr($line, 0, 4) == 'svn:') {
                     $params['errstr'] = $line;
@@ -666,9 +679,10 @@ class VersionControl_SVN
      *
      * This bare-bones function should be overridden by the command class.
      *
-     * @param   array   $out    Array of output captured by exec command in {@link run}.
-     * @return  mixed   Returns output requested by fetchmode (if available), or raw output
-     *                  if desired fetchmode is not available.
+     * @param array $out Array of output captured by exec command in {@link run}
+     *
+     * @return  mixed   Returns output requested by fetchmode (if available), or 
+     *                  raw output if desired fetchmode is not available.
      * @access  public
      */
     function parseOutput($out)
@@ -697,6 +711,10 @@ class VersionControl_SVN
     /**
      * Callback function for array_filter. Keeps _private options
      * out of settable options.
+     *
+     * @param string $var Passed value
+     *
+     * @return boolean
      */
     function _filterOpts($var)
     {
