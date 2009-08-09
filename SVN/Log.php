@@ -268,7 +268,8 @@ class VersionControl_SVN_Log extends VersionControl_SVN
         }
         
         $this->xml_avail = true;
-        if ($fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ASSOC  || 
+        if ($fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ARRAY  ||
+            $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ASSOC  || 
             $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT ||
             $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_XML)
         {
