@@ -678,10 +678,8 @@ class VersionControl_SVN
             $params['args']     = $this->args;
             $params['cmd']      = $cmd;
             foreach ($out as $line) {
-                if (substr($line, 0, 4) == 'svn:') {
-                    $params['errstr'] = $line;
-                    $this->_stack->push(VERSIONCONTROL_SVN_ERROR_EXEC, 'error', $params);
-                }
+                $params['errstr'] = $line;
+                $this->_stack->push(VERSIONCONTROL_SVN_ERROR_EXEC, 'error', $params);
             }
             return false;
         }
