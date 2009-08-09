@@ -55,8 +55,8 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
   <email>mrook@php.net</email>
   <active>yes</active>
  </lead>
- <date>2007-09-17</date>
- <time>15:58:38</time>
+ <date>2009-08-09</date>
+ <time>21:22:09</time>
  <version>
   <release>0.3.2</release>
   <api>0.3.0alpha1</api>
