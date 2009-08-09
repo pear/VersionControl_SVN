@@ -71,9 +71,9 @@
  *
  * $switches = array(
  *  'm [message]'   =>  'Specified commit message',
- *                      // either 'm' or 'message' may be used
+ *                      // either 'm' or 'message' may be used (optional)
  *  'F [file]'      =>  'Read commit message data from specified file',
- *                      // either 'F' or 'file' may be used
+ *                      // either 'F' or 'file' may be used (optional)
  *  'q [quiet]'     =>  true|false,
  *                      // prints as little as possible
  *  'targets'       =>  'ARG',
@@ -194,7 +194,7 @@ class VersionControl_SVN_Delete extends VersionControl_SVN
      * @var     array
      * @access  public
      */
-    var $required_switches = array('m|message|F|file');
+    var $required_switches = array('');
         
     /**
      * Use exec or passthru to get results from command.
