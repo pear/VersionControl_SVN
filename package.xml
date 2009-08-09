@@ -67,25 +67,12 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
  </stability>
  <license>BSD License</license>
  <notes>
-The 0.3.1 alpha release addresses a vast majority of open items discovered 
-with the VersionControl_SVN 0.3.0alpha1 release.
-     
- * Fix Bug #5020: Code-bug, missing break in switch [clay]
- * Fix Bug #5099: Copy ignores source, traget and switches [clay]
- * Fix Bug #9351: log does not accept the &apos;limit&apos; switch [clay]
- * Fix Bug #9998: Regular Expression Matching For List [clay]
- * Fix Bug #11935: All checkouts are non-recursive due to a typo in SVN/Checkout.php [clay]
- * Implement Feature #5021: SVN objects are not reusable [clay]
- * Implement Feature #9343: Using non-english file/dir names [clay]
- 
-A new public property called 'prepend_cmd' is supported to allow environment 
-variables controlling things such as character encoding to be prepended to 
-the Subversion command execution. This was introduced in response to #9343.
-
-NOTE: This is very likely to be among the last of PHP 4 compatible releases.
-Significant refactoring is already underway for a PHP 5-only release of the 
-package. If significant issues are found in this release, a few more 0.3.x 
-releases may be made.
+ * Fix Bug #12439: Log using VERSIONCONTROL_SVN_FETCHMODE_ARRAY fails [mrook]
+ * Fix Bug #14114: Delete command requires -m switch [mrook]
+ * Fix Bug #14643: Single quote are used instead of double quotes. [mrook]
+ * Fix Bug #14827: VersionControl_SVN_Copy cannot prepare command [mrook]
+ * Fix Bug #15186: VersionControl_SVN::run has trouble with Windows paths. [mrook]
+ * Implement Feature #13011: info command should accept username/password switches [mrook]
  </notes>
  <contents>
   <dir name="/">
@@ -188,10 +175,6 @@ releases may be made.
      <tasks:replace from="@version@" to="version" type="package-info" />
     </file>
    </dir> <!-- /SVN -->
-   <dir name="tests">
-    <file baseinstalldir="/VersionControl" name="README" role="test" />
-    <file baseinstalldir="/VersionControl" name="test.php" role="test" />
-   </dir> <!-- /tests -->
    <file baseinstalldir="/VersionControl" name="SVN.php" role="php">
     <tasks:replace from="@version@" to="version" type="package-info" />
    </file>
