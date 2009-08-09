@@ -196,8 +196,9 @@ class VersionControl_SVN
     
     /**
      * Indicates whether commands passed to the {@link http://www.php.net/exec exec()} function in 
-     * the {@link run}
-     * method should be passed through {@link http://www.php.net/escapeshellcmd escapeshellcmd()}.
+     * the {@link run} method should be passed through
+     * {@link http://www.php.net/escapeshellcmd escapeshellcmd()}.
+     * NOTE: this variable is ignored on Windows machines!
      *
      * @var     bool
      * @access  public
