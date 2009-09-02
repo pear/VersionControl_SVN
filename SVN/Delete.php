@@ -194,7 +194,7 @@ class VersionControl_SVN_Delete extends VersionControl_SVN
      * @var     array
      * @access  public
      */
-    var $required_switches = array('');
+    var $required_switches = array();
         
     /**
      * Use exec or passthru to get results from command.
