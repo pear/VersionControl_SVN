@@ -255,7 +255,8 @@ class VersionControl_SVN_Diff extends VersionControl_SVN
                                 'non-interactive',
                                 'non_interactive',
                                 'config-dir',
-                                'config_dir'
+                                'config_dir',
+                                'summarize'
                                 );
 
     /**
