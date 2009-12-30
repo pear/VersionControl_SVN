@@ -345,6 +345,7 @@ class VersionControl_SVN_Diff extends VersionControl_SVN
                     case 'notice-ancestry':
                     case 'non-interactive':
                     case 'non-recursive':
+                    case 'summarize':
                         if ($val === true) {
                             $_switches .= "--$switch ";
                         }
