@@ -651,26 +651,26 @@ class VersionControl_SVN
         // executed as 'cmd /c ""C:\Program Files\SVN\bin\svn.exe" info "C:\Program Files\dev\trunk""
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
         {
-			$cmd = '"' . $cmd . '"';
+            $cmd = '"' . $cmd . '"';
 
-			if (!$this->passthru) {
-				exec("$cmd 2>&1", $out, $ret_var);
-			} else {
-				passthru("$cmd 2>&1", $ret_var);
-			}
-		}
-		else
-		{
-			if ($this->use_escapeshellcmd) {
-				$cmd = escapeshellcmd($cmd);
-			}
+            if (!$this->passthru) {
+                exec("cmd /C $cmd 2>&1", $out, $ret_var);
+            } else {
+                passthru("cmd /C $cmd 2>&1", $ret_var);
+            }
+        }
+        else
+        {
+            if ($this->use_escapeshellcmd) {
+                $cmd = escapeshellcmd($cmd);
+            }
 
-			if (!$this->passthru) {
-				exec("{$this->prepend_cmd}$cmd 2>&1", $out, $ret_var);
-			} else {
-				passthru("{$this->prepend_cmd}$cmd 2>&1", $ret_var);
-			}
-		}
+            if (!$this->passthru) {
+                exec("{$this->prepend_cmd}$cmd 2>&1", $out, $ret_var);
+            } else {
+                passthru("{$this->prepend_cmd}$cmd 2>&1", $ret_var);
+            }
+        }
 
         if ($ret_var > 0) {
             $params['options']  = $this->options;

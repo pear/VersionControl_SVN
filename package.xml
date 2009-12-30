@@ -55,10 +55,10 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
   <email>mrook@php.net</email>
   <active>yes</active>
  </lead>
- <date>2009-08-09</date>
- <time>21:22:09</time>
+ <date>2009-09-02</date>
+ <time>08:55:48</time>
  <version>
-  <release>0.3.2</release>
+  <release>0.3.3</release>
   <api>0.3.0alpha1</api>
  </version>
  <stability>
@@ -67,12 +67,7 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
  </stability>
  <license>BSD License</license>
  <notes>
- * Fix Bug #12439: Log using VERSIONCONTROL_SVN_FETCHMODE_ARRAY fails [mrook]
- * Fix Bug #14114: Delete command requires -m switch [mrook]
- * Fix Bug #14643: Single quote are used instead of double quotes. [mrook]
- * Fix Bug #14827: VersionControl_SVN_Copy cannot prepare command [mrook]
- * Fix Bug #15186: VersionControl_SVN::run has trouble with Windows paths. [mrook]
- * Implement Feature #13011: info command should accept username/password switches [mrook]
+* Fix Bug #14114: Delete command requires -m switch [mrook]
  </notes>
  <contents>
   <dir name="/">
@@ -202,6 +197,26 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>0.3.2</release>
+    <api>0.3.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2009-08-09</date>
+   <license>BSD License</license>
+   <notes>
+* Fix Bug #12439: Log using VERSIONCONTROL_SVN_FETCHMODE_ARRAY fails [mrook]
+* Fix Bug #14114: Delete command requires -m switch [mrook]
+* Fix Bug #14643: Single quote are used instead of double quotes. [mrook]
+* Fix Bug #14827: VersionControl_SVN_Copy cannot prepare command [mrook]
+* Fix Bug #15186: VersionControl_SVN::run has trouble with Windows paths. [mrook]
+* Implement Feature #13011: info command should accept username/password switches [mrook]
+   </notes>
+  </release>
   <release>
    <version>
     <release>0.3.1</release>
