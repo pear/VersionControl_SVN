@@ -93,7 +93,8 @@
  *                      // Do not cache authentication tokens
  *  'encoding'      =>  'ARG',
  *                      // treat value as being in charset encoding ARG
- *  'config-dir'    =>  'Path to a Subversion configuration directory'
+ *  'config-dir'    =>  'Path to a Subversion configuration directory',
+ *  'parents'       =>  true|false
  * );
  *
  * </code>
@@ -172,7 +173,8 @@ class VersionControl_SVN_Copy extends VersionControl_SVN
                                 'F',
                                 'encoding',
                                 'force-log',
-                                'force_log'
+                                'force_log',
+                                'parents',
                                 );
 
     /**
@@ -257,6 +259,7 @@ class VersionControl_SVN_Copy extends VersionControl_SVN
                         $_switches .= "--$switch \"$val\" ";
                         break;
                     case 'quiet':
+                    case 'parents':
                     case 'force-log':
                     case 'no-auth-cache':
                     case 'non-interactive':
