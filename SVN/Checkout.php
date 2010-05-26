@@ -154,6 +154,7 @@ class VersionControl_SVN_Checkout extends VersionControl_SVN
                                 'non_recursive',
                                 'username',
                                 'password',
+                                'ignore-externals',
                                 'no-auth-cache',
                                 'no_auth_cache',
                                 'non-interactive',
