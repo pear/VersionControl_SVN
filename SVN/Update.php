@@ -164,6 +164,7 @@ class VersionControl_SVN_Update extends VersionControl_SVN
                                 'diff3-cmd',
                                 'username',
                                 'password',
+                                'ignore-externals',
                                 'no-auth-cache',
                                 'no_auth_cache',
                                 'non-interactive',
