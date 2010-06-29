@@ -170,7 +170,8 @@ class VersionControl_SVN_Update extends VersionControl_SVN
                                 'non-interactive',
                                 'non_interactive',
                                 'config-dir',
-                                'config_dir'
+                                'config_dir',
+                                'force'
                                 );
 
     
