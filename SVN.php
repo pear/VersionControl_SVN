@@ -636,7 +636,9 @@ class VersionControl_SVN
             $this->switches = $switches;
         }
         if (sizeof($args) > 0) {
-            $this->args = $args;
+            foreach (array_keys($args) as $k) {
+                $this->args[$k] = escapeshellarg($args[$k]);
+            }
         }
         
         // Always prepare, allows for obj re-use. (Request #5021)
@@ -651,12 +653,12 @@ class VersionControl_SVN
         // executed as 'cmd /c ""C:\Program Files\SVN\bin\svn.exe" info "C:\Program Files\dev\trunk""
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
         {
-            $cmd = '"' . $cmd . '"';
-
+            $cmd = str_replace($this->svn_path, escapeshellarg($this->svn_path), $cmd);
+            
             if (!$this->passthru) {
-                exec("cmd /C $cmd 2>&1", $out, $ret_var);
+                exec("$cmd 2>&1", $out, $ret_var);
             } else {
-                passthru("cmd /C $cmd 2>&1", $ret_var);
+                passthru("$cmd 2>&1", $ret_var);
             }
         }
         else
