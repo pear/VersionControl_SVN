@@ -55,10 +55,10 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
   <email>mrook@php.net</email>
   <active>yes</active>
  </lead>
- <date>2009-09-02</date>
- <time>08:55:48</time>
+ <date>2010-10-05</date>
+ <time>19:56:39</time>
  <version>
-  <release>0.3.3</release>
+  <release>0.3.4</release>
   <api>0.3.0alpha1</api>
  </version>
  <stability>
@@ -67,7 +67,21 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
  </stability>
  <license>BSD License</license>
  <notes>
-* Fix Bug #14114: Delete command requires -m switch [mrook]
+ * Fix Bug #16892: SVN.run() on windows doesn&apos;t execute properly [mrook]
+ * Fix Bug #17268: Windows &quot;Fix&quot; actually prevents execution
+ * [mrook]
+ * Fix Bug #17477: Windows directory not quoted in the $arg array of the
+ * SVN-&gt;run()
+   method [mrook]
+ * Implement Feature #16952: Enable --summarize switch for diff command
+ * [mrook]
+ * Implement Feature #17310: Add support for --parents in Svn/Copy.php
+ * [mrook]
+ * Implement Feature #17394: Add support for ignore-externals switch for
+ * update and checkout
+   command [mrook]
+ * Implement Feature #17415: escapeshellargs [mrook]
+ * Implement Feature #17530: Enable --force command for update [mrook]
  </notes>
  <contents>
   <dir name="/">
@@ -197,6 +211,21 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>0.3.3</release>
+    <api>0.3.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2009-09-02</date>
+   <license>BSD License</license>
+   <notes>
+* Fix Bug #14114: Delete command requires -m switch [mrook]
+   </notes>
+  </release>
   <release>
    <version>
     <release>0.3.2</release>
