@@ -239,6 +239,7 @@ class VersionControl_SVN_Checkout extends VersionControl_SVN
                     case 'non-interactive':
                     case 'no-auth-cache':
                     case 'quiet':
+                    case 'ignore-externals':
                         if ($val === true) {
                             $_switches .= "--$switch ";
                         }

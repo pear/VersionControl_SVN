@@ -183,6 +183,7 @@ class VersionControl_SVN_Export extends VersionControl_SVN
                                 'force',
                                 'username',
                                 'password',
+                                'ignore-externals',
                                 'no-auth-cache',
                                 'no_auth_cache',
                                 'non-interactive',
@@ -273,6 +274,7 @@ class VersionControl_SVN_Export extends VersionControl_SVN
                     case 'force':
                     case 'non-interactive':
                     case 'no-auth-cache':
+                    case 'ignore-externals':
                         if ($val === true) {
                             $_switches .= "--$switch ";
                         }
