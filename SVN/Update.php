@@ -257,6 +257,7 @@ class VersionControl_SVN_Update extends VersionControl_SVN
                     case 'non-recursive':
                     case 'non-interactive':
                     case 'no-auth-cache':
+                    case 'ignore-externals':
                         if ($val === true) {
                             $_switches .= "--$switch ";
                         }
