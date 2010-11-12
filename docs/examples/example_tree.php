@@ -128,7 +128,7 @@ if ($base_add != '') {
     $menu->addItem($node1);
     
     // Create presentation class
-    $treeMenu = &new HTML_TreeMenu_DHTML($menu, array('images' => 'images',
+    $treeMenu = new HTML_TreeMenu_DHTML($menu, array('images' => 'images',
                                                     'defaultClass' => 'treeMenuDefault'));
     
     ?>
