@@ -456,7 +456,7 @@ class VersionControl_SVN
         $class      = 'VersionControl_SVN_'.$cmd;
         if (include_once realpath(dirname(__FILE__)) . "/SVN/{$cmd}.php") {
             if (class_exists($class)) {
-                $obj =& new $class;
+                $obj = new $class;
                 $obj->options   = $options;
                 $obj->_svn_cmd  = $lowercmd;
                 $obj->_stack    = &PEAR_ErrorStack::singleton('VersionControl_SVN');
