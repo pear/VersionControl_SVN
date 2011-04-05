@@ -53,6 +53,7 @@
 
 // {{{ Error Management
 require_once 'PEAR/ErrorStack.php';
+require_once 'System.php';
 
 // error & notice constants
 define('VERSIONCONTROL_SVN_ERROR', -1);
@@ -632,6 +633,10 @@ class VersionControl_SVN
      */
     function run($args = array(), $switches = array())
     {
+        if (!file_exists($this->svn_path)) {
+            $this->svn_path = System::which('svn');
+        }
+        
         if (sizeof($switches) > 0) {
             $this->switches = $switches;
         }
