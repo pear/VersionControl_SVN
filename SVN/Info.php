@@ -193,7 +193,7 @@ class VersionControl_SVN_Info extends VersionControl_SVN
         $args               = $this->args;
         $fetchmode          = $this->fetchmode;
         $invalid_switches   = array();
-        $_switches          = '';
+        $_switches          = '--non-interactive ';
         
         foreach ($switches as $switch => $val) {
             if (in_array($switch, $valid_switches)) {
