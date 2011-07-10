@@ -256,7 +256,8 @@ class VersionControl_SVN_Diff extends VersionControl_SVN
                                 'non_interactive',
                                 'config-dir',
                                 'config_dir',
-                                'summarize'
+                                'summarize',
+                                'xml',
                                 );
 
     /**
@@ -346,6 +347,7 @@ class VersionControl_SVN_Diff extends VersionControl_SVN
                     case 'non-interactive':
                     case 'non-recursive':
                     case 'summarize':
+                    case 'xml':
                         if ($val === true) {
                             $_switches .= "--$switch ";
                         }
