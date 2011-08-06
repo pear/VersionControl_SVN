@@ -204,7 +204,7 @@ class VersionControl_SVN_Move extends VersionControl_SVN
      * @var     array
      * @access  public
      */
-    var $required_switches = array('m|message|F|file');
+    var $required_switches = array('F|file');
     
     /**
      * Use exec or passthru to get results from command.
