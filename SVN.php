@@ -131,7 +131,6 @@ define('VERSIONCONTROL_SVN_FETCHMODE_ARRAY', 6);
  * @license   http://www.killersoft.com/LICENSE.txt BSD License
  * @version   @version@
  * @link      http://pear.php.net/package/VersionControl_SVN
- * @static
  */
 class VersionControl_SVN
 {
@@ -154,7 +153,9 @@ class VersionControl_SVN
      *
      * $svn = VersionControl_SVN::factory(array('boot', 'checkin'), $options);
      *
-     * $switches = array('username' => 'user', 'password' => 'pass', 'force' => true);
+     * $switches = array(
+     *                 'username' => 'user', 'password' => 'pass', 'force' => true
+     *             );
      * $args = array('svn://svn.example.com/repos/TestProject/file_to_delete.txt');
      *
      * $svn->boot->run($switches, $args);
@@ -195,8 +196,9 @@ class VersionControl_SVN
         );
     
     /**
-     * Indicates whether commands passed to the {@link http://www.php.net/exec exec()} function in 
-     * the {@link run} method should be passed through
+     * Indicates whether commands passed to the
+     * {@link http://www.php.net/exec exec()} function in the
+     * {@link run} method should be passed through
      * {@link http://www.php.net/escapeshellcmd escapeshellcmd()}.
      * NOTE: this variable is ignored on Windows machines!
      *
@@ -329,8 +331,8 @@ class VersionControl_SVN
                 'svn %_svn_cmd% requires at least %min_args% %argstr%',
             VERSIONCONTROL_SVN_NOTICE => '%notice%',
             VERSIONCONTROL_SVN_NOTICE_INVALID_SWITCH => 
-                '\'%list%\' %is_invalid_switch% for VersionControl_SVN_%_svn_cmd% and %was% ignored. ' .
-                    'Please refer to the documentation.',
+                '\'%list%\' %is_invalid_switch% for VersionControl_SVN_%_svn_cmd% ' .
+                'and %was% ignored. Please refer to the documentation.',
             VERSIONCONTROL_SVN_NOTICE_INVALID_OPTION =>
                 '\'%option%\' is not a valid option, and was ignored.'
         );
@@ -428,15 +430,18 @@ class VersionControl_SVN
     {
         // Check for shortcuts for commands
         $shortcuts = VersionControl_SVN::fetchShortcuts();
+        
         if (isset($options['shortcuts']) && is_array($options['shortcuts'])) {
             foreach ($options['shortcuts'] as $key => $val) {
                 $shortcuts[strtolower($key)] = $val;       
             }
         }
+        
         $cmd = isset($shortcuts[strtolower($command)]) ? $shortcuts[strtolower($command)] : $command;
         $lowercmd   = strtolower($cmd);
         $cmd        = ucfirst($lowercmd);
         $class      = 'VersionControl_SVN_'.$cmd;
+        
         if (include_once realpath(dirname(__FILE__)) . "/SVN/{$cmd}.php") {
             if (class_exists($class)) {
                 $obj = new $class;
@@ -448,8 +453,12 @@ class VersionControl_SVN
                 return $obj;
             }
         }
-        PEAR_ErrorStack::staticPush('VersionControl_SVN', VERSIONCONTROL_SVN_ERROR_UNKNOWN_CMD, 'error', 
-            array('command' => $command, 'options' => $options));
+        
+        PEAR_ErrorStack::staticPush(
+            'VersionControl_SVN', VERSIONCONTROL_SVN_ERROR_UNKNOWN_CMD, 'error', 
+            array('command' => $command, 'options' => $options)
+        );
+        
         return false;
     }
     
@@ -467,17 +476,23 @@ class VersionControl_SVN
         $dir = realpath(dirname(__FILE__)) . '/SVN';
         $dp = @opendir($dir);
         if (empty($dp)) {
-            PEAR_ErrorStack::staticPush('VersionControl_SVN', VERSIONCONTROL_SVN_ERROR, 'error', 
-                array('errstr' => "fetchCommands: opendir($dir) failed"));
+            PEAR_ErrorStack::staticPush(
+                'VersionControl_SVN', VERSIONCONTROL_SVN_ERROR, 'error', 
+                array('errstr' => "fetchCommands: opendir($dir) failed")
+            );
+            
             return false;
         }
         while ($entry = readdir($dp)) {
             if ($entry{0} == '.' || substr($entry, -4) != '.php') {
                 continue;
             }
+            
             $commands[] = substr($entry, 0, -4);
         }
+        
         closedir($dp);
+        
         return $commands;
     }
     
@@ -509,7 +524,11 @@ class VersionControl_SVN
      */
     function setOptions($options = array())
     {
-        $opts = array_filter(array_keys(get_class_vars('VersionControl_SVN')), array($this, '_filterOpts'));
+        $opts = array_filter(
+            array_keys(get_class_vars('VersionControl_SVN')), 
+            array($this, '_filterOpts')
+        );
+        
         foreach ($options as $option => $value) {
             if (in_array($option, $opts)) {
                 if ($option == 'shortcuts') {
@@ -518,10 +537,13 @@ class VersionControl_SVN
                     $this->$option = $value;
                 }
             } else {
-                $this->_stack->push(VERSIONCONTROL_SVN_NOTICE_INVALID_OPTION, 'notice', 
-                    array('option' => $option));
+                $this->_stack->push(
+                    VERSIONCONTROL_SVN_NOTICE_INVALID_OPTION, 'notice', 
+                    array('option' => $option)
+                );
             }
         }
+        
         return true;
     }
     
@@ -537,8 +559,15 @@ class VersionControl_SVN
      */
     function prepare()
     {
-        $this->_stack->push(VERSIONCONTROL_SVN_ERROR_NOT_IMPLEMENTED, 'error', 
-            array('options' => $this->options, 'method' => 'prepare()', 'class' => get_class($this)));
+        $this->_stack->push(
+            VERSIONCONTROL_SVN_ERROR_NOT_IMPLEMENTED, 'error', 
+            array(
+                'options' => $this->options,
+                'method' => 'prepare()',
+                'class' => get_class($this)
+            )
+        );
+        
         return false;
     }
     
@@ -590,7 +619,13 @@ class VersionControl_SVN
             if ($num_missing > 0) {
                 $params['switchstr'] = $num_missing > 1 ? 'switches' : 'switch';
                 $params['missing'] = $missing;
-                $this->_stack->push(VERSIONCONTROL_SVN_ERROR_REQUIRED_SWITCH_MISSING, 'error', $params);
+                
+                $this->_stack->push(
+                    VERSIONCONTROL_SVN_ERROR_REQUIRED_SWITCH_MISSING,
+                    'error',
+                    $params
+                );
+                
                 return false;
             }
         }
@@ -632,10 +667,10 @@ class VersionControl_SVN
         
         $cmd = $this->_prepped_cmd;
 
-        // On Windows, don't use escapeshellcmd, and double-quote $cmd so it's
-        // executed as 'cmd /c ""C:\Program Files\SVN\bin\svn.exe" info "C:\Program Files\dev\trunk""
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
-        {
+        // On Windows, don't use escapeshellcmd, and double-quote $cmd
+        // so it's executed as 
+        // cmd /c ""C:\Program Files\SVN\bin\svn.exe" info "C:\Program Files\dev\trunk""
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $cmd = str_replace($this->svn_path, escapeshellarg($this->svn_path), $cmd);
             
             if (!$this->passthru) {
@@ -643,9 +678,7 @@ class VersionControl_SVN
             } else {
                 passthru("$cmd 2>&1", $ret_var);
             }
-        }
-        else
-        {
+        } else {
             if ($this->use_escapeshellcmd) {
                 $cmd = escapeshellcmd($cmd);
             }
