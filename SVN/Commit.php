@@ -239,6 +239,7 @@ class VersionControl_SVN_Commit extends VersionControl_SVN
                     case 'encoding':
                     case 'config-dir':
                     case 'targets':
+                    case 'changelist':
                         $_switches .= "--$switch $val ";
                         break;
                     case 'F':

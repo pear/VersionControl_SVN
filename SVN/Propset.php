@@ -190,7 +190,8 @@ class VersionControl_SVN_Propset extends VersionControl_SVN
                                 'non_interactive',
                                 'force',
                                 'encoding',
-                                'config-dir'
+                                'config-dir',
+                                'changelist'
                                 );
     
     /**
@@ -262,6 +263,7 @@ class VersionControl_SVN_Propset extends VersionControl_SVN
                     case 'file':
                     case 'config-dir':
                     case 'targets':
+                    case 'changelist':
                         $_switches .= "--$switch $val ";
                         break;
                     case 'r':

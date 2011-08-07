@@ -133,7 +133,8 @@ class VersionControl_SVN_Revert extends VersionControl_SVN
                                 'quiet',
                                 'q',
                                 'targets',
-                                'config-dir'
+                                'config-dir',
+                                'changelist'
                                 );
     
     /**
@@ -201,6 +202,7 @@ class VersionControl_SVN_Revert extends VersionControl_SVN
                 switch ($switch) {
                     case 'targets':
                     case 'config-dir':
+                    case 'changelist':
                         $_switches .= "--$switch $val ";
                         break;
                     case 'recursive':

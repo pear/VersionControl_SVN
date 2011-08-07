@@ -333,6 +333,7 @@ class VersionControl_SVN_Diff extends VersionControl_SVN
                     case 'extensions':
                     case 'diff-cmd':
                     case 'config-dir':
+                    case 'changelist':
                         $_switches .= "--$switch $val ";
                         break;
                     case 'r':

@@ -157,7 +157,8 @@ class VersionControl_SVN_Propget extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
-                                'config-dir'
+                                'config-dir',
+                                'changelist'
                                 );
     
     /**
@@ -227,6 +228,7 @@ class VersionControl_SVN_Propget extends VersionControl_SVN
                     case 'username':
                     case 'password':
                     case 'config-dir':
+                    case 'changelist':
                         $_switches .= "--$switch $val ";
                         break;
                     case 'r':
