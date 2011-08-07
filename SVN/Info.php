@@ -131,6 +131,7 @@ class VersionControl_SVN_Info extends VersionControl_SVN
                                 'targets',
                                 'config-dir',
                                 'config_dir',
+                                'changelist',
                                 'username',
                                 'password'
                                 );
@@ -203,6 +204,7 @@ class VersionControl_SVN_Info extends VersionControl_SVN
                     case 'username':
                     case 'password':
                     case 'config-dir':
+                    case 'changelist':
                         $_switches .= "--$switch $val ";
                         break;
                     case 'recursive':

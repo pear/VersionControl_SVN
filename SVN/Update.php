@@ -174,7 +174,8 @@ class VersionControl_SVN_Update extends VersionControl_SVN
                                 'non_interactive',
                                 'config-dir',
                                 'config_dir',
-                                'force'
+                                'force',
+                                'changelist'
                                 );
 
     
@@ -243,6 +244,7 @@ class VersionControl_SVN_Update extends VersionControl_SVN
                 case 'password':
                 case 'diff3-cmd':
                 case 'config-dir':
+                case 'changelist':
                     $_switches .= "--$switch $val ";
                     break;
                 case 'r':
