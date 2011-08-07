@@ -181,7 +181,7 @@ class VersionControl_SVN_Add extends VersionControl_SVN
 
     /**
      * Use exec or passthru to get results from command.
-     * @var     bool
+     * @var     boolean
      */
     public $passthru = false;
     
