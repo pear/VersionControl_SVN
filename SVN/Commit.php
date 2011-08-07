@@ -84,7 +84,8 @@
  *                      // Do not cache authentication tokens
  *  'encoding'      =>  'ARG',
  *                      // treat value as being in charset encoding ARG
- *  'config-dir'    =>  'Path to a Subversion configuration directory'
+ *  'config-dir'    =>  'Path to a Subversion configuration directory',
+ *  'changelist     =>  'Changelist to operate on'
  * );
  *
  * </code>
@@ -166,7 +167,8 @@ class VersionControl_SVN_Commit extends VersionControl_SVN
                                 'F',
                                 'encoding',
                                 'force-log',
-                                'force_log'
+                                'force_log',
+                                'changelist'
                                 );
 
     /**

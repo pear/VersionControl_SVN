@@ -143,7 +143,8 @@
  *  'password'      =>  'Subversion repository password',
  *  'no-auth-cache' =>  true|false,
  *                      // Do not cache authentication tokens
- *  'config-dir'    =>  'Path to a Subversion configuration directory'
+ *  'config-dir'    =>  'Path to a Subversion configuration directory',
+ *  'changelist     =>  'Changelist to operate on'
  * );
  *
  * </code>
@@ -215,7 +216,8 @@ class VersionControl_SVN_Status extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
-                                'config-dir'
+                                'config-dir',
+                                'changelist'
                                 );
     
     /**
