@@ -202,7 +202,7 @@ class VersionControl_SVN
      * {@link http://www.php.net/escapeshellcmd escapeshellcmd()}.
      * NOTE: this variable is ignored on Windows machines!
      *
-     * @var     bool
+     * @var     boolean
      */
     public $use_escapeshellcmd = true;
 
@@ -270,7 +270,7 @@ class VersionControl_SVN
     /**
      * Keep track of whether options are prepared or not.
      *
-     * @var     bool
+     * @var     boolean
      */
     protected $_prepared = false;
 
@@ -284,7 +284,7 @@ class VersionControl_SVN
     /**
      * Keep track of whether XML output is available for a command
      *
-     * @var     bool
+     * @var     boolean
      */
     protected $_xml_avail = false;
 
@@ -522,7 +522,7 @@ class VersionControl_SVN
      *
      * @return boolean
      */
-    function setOptions($options = array())
+    public function setOptions($options = array())
     {
         $opts = array_filter(
             array_keys(get_class_vars('VersionControl_SVN')), 
@@ -557,7 +557,7 @@ class VersionControl_SVN
      *
      * @return boolean
      */
-    function prepare()
+    public function prepare()
     {
         $this->_stack->push(
             VERSIONCONTROL_SVN_ERROR_NOT_IMPLEMENTED, 'error', 
@@ -746,7 +746,7 @@ class VersionControl_SVN
      *
      * @return boolean
      */
-    function _filterOpts($var)
+    public function _filterOpts($var)
     {
         $ret = ($var{0} == '_') ? false : true;
         return $ret;
