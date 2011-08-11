@@ -195,7 +195,7 @@ class VersionControl_SVN_Move extends VersionControl_SVN
      * @var     int
      * @access  public
      */
-    var $min_args = 2;
+    var $min_args = 0;
     
     /**
      * Switches required by this subcommand.
@@ -204,7 +204,7 @@ class VersionControl_SVN_Move extends VersionControl_SVN
      * @var     array
      * @access  public
      */
-    var $required_switches = array('F|file');
+    var $required_switches = array();
     
     /**
      * Use exec or passthru to get results from command.
