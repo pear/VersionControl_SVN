@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>VersionControl_SVN</name>
+ <channel>pear.php.net</channel>
+ <summary>Simple OO wrapper interface for the Subversion command-line client.</summary>
+ <description>What is VersionControl_SVN?
+
+VersionControl_SVN is a simple OO-style interface for Subversion,
+the free/open-source version control system.
+
+VersionControl_SVN can be used to manage trees of source code, 
+text files, image files -- just about any 
+collection of files.
+
+Some of VersionControl_SVN&apos;s features:
+
+* Full support of svn command-line client&apos;s 
+  subcommands.
+* Use of flexible error reporting provided by
+  PEAR_ErrorStack.
+* Multi-object factory.
+* Source fully documented with PHPDoc.
+* Stable, extensible interface.
+* Collection of helpful quickstart examples and
+  tutorials.
+
+What can be done with VersionControl_SVN?
+
+* Make your source code available to your 
+  remote dev team or project manager.
+
+* Build your own WYSIWYG web interface to a
+  Subversion repository.
+ 
+* Add true version control to a content management
+  system!
+  
+Note: Requires a Subversion installation.
+Subverison is available from
+http://subversion.tigris.org/
+
+VersionControl_SVN is tested against Subversion 1.6.3</description>
+ <lead>
+  <name>Clay Loveless</name>
+  <user>clay</user>
+  <email>clay@loveless.net</email>
+  <active>no</active>
+ </lead>
+ <lead>
+  <name>Michiel Rook</name>
+  <user>mrook</user>
+  <email>mrook@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2011-10-14</date>
+ <time>21:42:55</time>
+ <version>
+  <release>0.4.0</release>
+  <api>0.4.0</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>beta</api>
+ </stability>
+ <license>BSD License</license>
+ <notes>
+* Fix Bug #16639: PHP &quot;Error return value of new by reference is deprecated&quot; [mrook]
+ * Fix Bug #17335: E_DEPRECATED is triggered [mrook]
+ * Fix Bug #18010: Determine svn location automatically [mrook]
+ * Fix Bug #18472: Need to add --non-interactive [mrook]
+ * Fix Bug #18713: Move Command doesn&apos;t need a Message [mrook]
+ * Fix Bug #18715: Copy command requires message switch [mrook]
+ * Implement Feature #18028: Better support for --ignore-externals option [mrook]
+ * Implement Feature #18623: Add xml output switch [mrook]
+ </notes>
+ <contents>
+  <dir name="/">
+   <dir name="docs">
+    <dir name="examples">
+     <file baseinstalldir="/VersionControl" name="example1.php" role="doc" />
+     <file baseinstalldir="/VersionControl" name="example_tree.php" role="doc" />
+    </dir> <!-- /docs/examples -->
+    <dir name="tutorials">
+     <dir name="VersionControl_SVN">
+      <file baseinstalldir="/VersionControl" name="VersionControl_SVN.pkg" role="doc">
+       <tasks:replace from="@version@" to="version" type="package-info" />
+      </file>
+     </dir> <!-- /docs/tutorials/VersionControl_SVN -->
+    </dir> <!-- /docs/tutorials -->
+    <file baseinstalldir="/VersionControl" name="LICENSE" role="doc" />
+   </dir> <!-- /docs -->
+   <dir name="SVN">
+    <dir name="Parsers">
+     <file baseinstalldir="/VersionControl" name="Log.php" role="php">
+      <tasks:replace from="@version@" to="version" type="package-info" />
+     </file>
+    </dir> <!-- /SVN/Parsers -->
+    <file baseinstalldir="/VersionControl" name="Add.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Blame.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Cat.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Checkout.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Cleanup.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Commit.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Copy.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Delete.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Diff.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Export.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Import.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Info.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="List.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Log.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Merge.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Mkdir.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Move.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Propdel.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Propget.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Proplist.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Propset.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Resolved.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Revert.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Status.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Switch.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+    <file baseinstalldir="/VersionControl" name="Update.php" role="php">
+     <tasks:replace from="@version@" to="version" type="package-info" />
+    </file>
+   </dir> <!-- /SVN -->
+   <file baseinstalldir="/VersionControl" name="SVN.php" role="php">
+    <tasks:replace from="@version@" to="version" type="package-info" />
+   </file>
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.2.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+   <package>
+    <name>PEAR</name>
+    <channel>pear.php.net</channel>
+    <min>1.9.4</min>
+   </package>
+   <package>
+    <name>XML_Parser</name>
+    <channel>pear.php.net</channel>
+    <min>1.3.4</min>
+   </package>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.3.4</release>
+    <api>0.3.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2010-10-05</date>
+   <license>BSD License</license>
+   <notes>
+* Fix Bug #16892: SVN.run() on windows doesn&apos;t execute properly [mrook]
+* Fix Bug #17268: Windows &quot;Fix&quot; actually prevents execution
+* [mrook]
+* Fix Bug #17477: Windows directory not quoted in the $arg array of the
+* SVN-&gt;run()
+  method [mrook]
+* Implement Feature #16952: Enable --summarize switch for diff command
+* [mrook]
+* Implement Feature #17310: Add support for --parents in Svn/Copy.php
+* [mrook]
+* Implement Feature #17394: Add support for ignore-externals switch for
+* update and checkout
+  command [mrook]
+* Implement Feature #17415: escapeshellargs [mrook]
+* Implement Feature #17530: Enable --force command for update [mrook]
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.3.3</release>
+    <api>0.3.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2009-09-02</date>
+   <license>BSD License</license>
+   <notes>
+* Fix Bug #14114: Delete command requires -m switch [mrook]
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.3.2</release>
+    <api>0.3.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2009-08-09</date>
+   <license>BSD License</license>
+   <notes>
+* Fix Bug #12439: Log using VERSIONCONTROL_SVN_FETCHMODE_ARRAY fails [mrook]
+* Fix Bug #14114: Delete command requires -m switch [mrook]
+* Fix Bug #14643: Single quote are used instead of double quotes. [mrook]
+* Fix Bug #14827: VersionControl_SVN_Copy cannot prepare command [mrook]
+* Fix Bug #15186: VersionControl_SVN::run has trouble with Windows paths. [mrook]
+* Implement Feature #13011: info command should accept username/password switches [mrook]
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.3.1</release>
+    <api>0.3.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2007-09-17</date>
+   <license>BSD License</license>
+   <notes>
+The 0.3.1 alpha release addresses a vast majority of open items discovered 
+with the VersionControl_SVN 0.3.0alpha1 release.
+     
+ * Fix Bug #5020: Code-bug, missing break in switch [clay]
+ * Fix Bug #5099: Copy ignores source, traget and switches [clay]
+ * Fix Bug #9351: log does not accept the &apos;limit&apos; switch [clay]
+ * Fix Bug #9998: Regular Expression Matching For List [clay]
+ * Fix Bug #11935: All checkouts are non-recursive due to a typo in SVN/Checkout.php [clay]
+ * Implement Feature #5021: SVN objects are not reusable [clay]
+ * Implement Feature #9343: Using non-english file/dir names [clay]
+ 
+A new public property called &apos;prepend_cmd&apos; is supported to allow environment 
+variables controlling things such as character encoding to be prepended to 
+the Subversion command execution. This was introduced in response to #9343.
+
+NOTE: This is very likely to be among the last of PHP 4 compatible releases.
+Significant refactoring is already underway for a PHP 5-only release of the 
+package. If significant issues are found in this release, a few more 0.3.x 
+releases may be made.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.3.0</release>
+    <api>0.3.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2004-06-09</date>
+   <license>BSD License</license>
+   <notes>
+- Completed all svn subcommand packages.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.3.0alpha1</release>
+    <api>0.3.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2004-06-09</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>
+- Completed all svn subcommand packages.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.2alpha1</release>
+    <api>0.2.2alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2004-06-06</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>
+- Added in-depth parsing to List subcommand output.
+
+- Added Propget subcomand.
+
+- Added VERSIONCONTROL_SVN_FETCHMODE_ARRAY mode for numbered-index array output. (Currently used by List command only.)
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.1alpha1</release>
+    <api>0.2.1alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2004-04-26</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>
+Renamed the package from SCM_SVN to VersionControl_SVN.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.0alpha1</release>
+    <api>0.2.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2004-04-25</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>
+Revised alpha release for PEAR Proposal.
+    
+- Reworked use of PEAR_ErrorStack throughout the package.
+
+- Split the concept of the $options array into three seperate
+  arrays:
+  
+  $options()    - Used to set runtime options for the 
+                  VersionControl_SVN class itself.
+                  (Associative array)
+                  
+  $switches()   - Used to pass switches and their values
+                  to an individual Subversion subcommand.
+                  (Associative array)
+                  
+  $args()       - Used to pass arguments to the Subversion
+                  subcommands. This non-associative array
+                  will be joined by single spaces when passed
+                  off to the run() method.
+                  
+                  Use for anything you would normally specify 
+                  on the command-line *outside* of switches.
+                  
+- Implemented use_escapeshellcmd property, which defaults to true.
+  If set to false, the svn command passed to exec will NOT be 
+  escaped. Recommended use: retain default setting of true unless
+  you really know what you&apos;re doing. (Thanks to Alan Knowles for 
+  this suggestion.)
+  
+- Introduced the $shortcuts property, which contains all known
+  shortcuts for Subversion svn subcommands. This allows you 
+  to pass the shortcuts to VersionControl_SVN::factory if you prefer.
+  
+- Merged VersionControl_SVN_Common into VersionControl_SVN to simplify things a bit.
+  (Thanks again to Alan Knowles.)
+  
+- Moved basic property assignment tasks into init() method
+  called by factory() and got rid of subclass constructors.
+ 
+- Added parseOutput() method to VersionControl_SVN, which should be overridden
+  by each subclass. The parseOutput() methods will (when possible!)
+  parse output of successful run() calls into an associative array.
+  Default parseOutput result is a join() of the exec() output generated
+  by the run() method.
+  
+- Added checkCommandRequirements() method to VersionControl_SVN, which reads
+  properties from the command subclass and validates the given
+  $switches and $args to insure that all necessary $switches and $args
+  are set for proper command execution. (Thanks once again to Alan
+  Knowles for this recommendation.)
+  
+- Added SVN/Propdel.php and SVN/Propget.php subclasses.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.0</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2004-04-14</date>
+   <license uri="http://www.example.com">BSD License</license>
+   <notes>
+Initial alpha release for PEAR Proposal.
+   </notes>
+  </release>
+ </changelog>
+</package>
