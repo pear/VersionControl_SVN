@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.6.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
+<package packagerversion="1.9.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>VersionControl_SVN</name>
  <channel>pear.php.net</channel>
  <summary>Simple OO wrapper interface for the Subversion command-line client.</summary>
@@ -46,7 +43,7 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
  <lead>
   <name>Clay Loveless</name>
   <user>clay</user>
-  <email>clay@killersoft.com</email>
+  <email>clay@loveless.net</email>
   <active>no</active>
  </lead>
  <lead>
@@ -55,33 +52,26 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
   <email>mrook@php.net</email>
   <active>yes</active>
  </lead>
- <date>2010-10-05</date>
- <time>19:56:39</time>
+ <date>2011-10-14</date>
+ <time>21:42:55</time>
  <version>
-  <release>0.3.4</release>
-  <api>0.3.0alpha1</api>
+  <release>0.4.0</release>
+  <api>0.4.0</api>
  </version>
  <stability>
   <release>alpha</release>
-  <api>alpha</api>
+  <api>beta</api>
  </stability>
  <license>BSD License</license>
  <notes>
- * Fix Bug #16892: SVN.run() on windows doesn&apos;t execute properly [mrook]
- * Fix Bug #17268: Windows &quot;Fix&quot; actually prevents execution
- * [mrook]
- * Fix Bug #17477: Windows directory not quoted in the $arg array of the
- * SVN-&gt;run()
-   method [mrook]
- * Implement Feature #16952: Enable --summarize switch for diff command
- * [mrook]
- * Implement Feature #17310: Add support for --parents in Svn/Copy.php
- * [mrook]
- * Implement Feature #17394: Add support for ignore-externals switch for
- * update and checkout
-   command [mrook]
- * Implement Feature #17415: escapeshellargs [mrook]
- * Implement Feature #17530: Enable --force command for update [mrook]
+* Fix Bug #16639: PHP &quot;Error return value of new by reference is deprecated&quot; [mrook]
+ * Fix Bug #17335: E_DEPRECATED is triggered [mrook]
+ * Fix Bug #18010: Determine svn location automatically [mrook]
+ * Fix Bug #18472: Need to add --non-interactive [mrook]
+ * Fix Bug #18713: Move Command doesn&apos;t need a Message [mrook]
+ * Fix Bug #18715: Copy command requires message switch [mrook]
+ * Implement Feature #18028: Better support for --ignore-externals option [mrook]
+ * Implement Feature #18623: Add xml output switch [mrook]
  </notes>
  <contents>
   <dir name="/">
@@ -192,7 +182,7 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
  <dependencies>
   <required>
    <php>
-    <min>4.0.0</min>
+    <min>5.2.0</min>
    </php>
    <pearinstaller>
     <min>1.4.0b1</min>
@@ -200,17 +190,46 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
    <package>
     <name>PEAR</name>
     <channel>pear.php.net</channel>
-    <min>1.3.1</min>
+    <min>1.9.4</min>
    </package>
    <package>
     <name>XML_Parser</name>
     <channel>pear.php.net</channel>
-    <min>1.0.1</min>
+    <min>1.3.4</min>
    </package>
   </required>
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>0.3.4</release>
+    <api>0.3.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2010-10-05</date>
+   <license>BSD License</license>
+   <notes>
+* Fix Bug #16892: SVN.run() on windows doesn&apos;t execute properly [mrook]
+* Fix Bug #17268: Windows &quot;Fix&quot; actually prevents execution
+* [mrook]
+* Fix Bug #17477: Windows directory not quoted in the $arg array of the
+* SVN-&gt;run()
+  method [mrook]
+* Implement Feature #16952: Enable --summarize switch for diff command
+* [mrook]
+* Implement Feature #17310: Add support for --parents in Svn/Copy.php
+* [mrook]
+* Implement Feature #17394: Add support for ignore-externals switch for
+* update and checkout
+  command [mrook]
+* Implement Feature #17415: escapeshellargs [mrook]
+* Implement Feature #17530: Enable --force command for update [mrook]
+   </notes>
+  </release>
   <release>
    <version>
     <release>0.3.3</release>
@@ -269,7 +288,7 @@ with the VersionControl_SVN 0.3.0alpha1 release.
  * Implement Feature #5021: SVN objects are not reusable [clay]
  * Implement Feature #9343: Using non-english file/dir names [clay]
  
-A new public property called 'prepend_cmd' is supported to allow environment 
+A new public property called &apos;prepend_cmd&apos; is supported to allow environment 
 variables controlling things such as character encoding to be prepended to 
 the Subversion command execution. This was introduced in response to #9343.
 
@@ -277,7 +296,7 @@ NOTE: This is very likely to be among the last of PHP 4 compatible releases.
 Significant refactoring is already underway for a PHP 5-only release of the 
 package. If significant issues are found in this release, a few more 0.3.x 
 releases may be made.
-   </notes> 
+   </notes>
   </release>
   <release>
    <version>
@@ -290,7 +309,8 @@ releases may be made.
    </stability>
    <date>2004-06-09</date>
    <license>BSD License</license>
-   <notes>- Completed all svn subcommand packages.
+   <notes>
+- Completed all svn subcommand packages.
    </notes>
   </release>
   <release>
@@ -304,8 +324,8 @@ releases may be made.
    </stability>
    <date>2004-06-09</date>
    <license uri="http://www.example.com">BSD License</license>
-   <notes>- Completed all svn subcommand packages.
-
+   <notes>
+- Completed all svn subcommand packages.
    </notes>
   </release>
   <release>
@@ -319,12 +339,12 @@ releases may be made.
    </stability>
    <date>2004-06-06</date>
    <license uri="http://www.example.com">BSD License</license>
-   <notes>- Added in-depth parsing to List subcommand output.
+   <notes>
+- Added in-depth parsing to List subcommand output.
 
 - Added Propget subcomand.
 
 - Added VERSIONCONTROL_SVN_FETCHMODE_ARRAY mode for numbered-index array output. (Currently used by List command only.)
-
    </notes>
   </release>
   <release>
@@ -338,8 +358,8 @@ releases may be made.
    </stability>
    <date>2004-04-26</date>
    <license uri="http://www.example.com">BSD License</license>
-   <notes>Renamed the package from SCM_SVN to VersionControl_SVN.
-
+   <notes>
+Renamed the package from SCM_SVN to VersionControl_SVN.
    </notes>
   </release>
   <release>
@@ -353,7 +373,8 @@ releases may be made.
    </stability>
    <date>2004-04-25</date>
    <license uri="http://www.example.com">BSD License</license>
-   <notes>Revised alpha release for PEAR Proposal.
+   <notes>
+Revised alpha release for PEAR Proposal.
     
 - Reworked use of PEAR_ErrorStack throughout the package.
 
@@ -405,7 +426,6 @@ releases may be made.
   Knowles for this recommendation.)
   
 - Added SVN/Propdel.php and SVN/Propget.php subclasses.
-
    </notes>
   </release>
   <release>
@@ -419,8 +439,8 @@ releases may be made.
    </stability>
    <date>2004-04-14</date>
    <license uri="http://www.example.com">BSD License</license>
-   <notes>Initial alpha release for PEAR Proposal.
-
+   <notes>
+Initial alpha release for PEAR Proposal.
    </notes>
   </release>
  </changelog>
