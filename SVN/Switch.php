@@ -166,11 +166,12 @@ class VersionControl_SVN_Switch extends VersionControl_SVN
                                 'relocate',
                                 'username',
                                 'password',
-                                'ignore-externals',
+    							'ignore-externals',
                                 'no-auth-cache',
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir'
                                 );
@@ -258,6 +259,7 @@ class VersionControl_SVN_Switch extends VersionControl_SVN
                     case 'relocate':
                     case 'non-recursive':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'no-auth-cache':
                     case 'ignore-externals':
                         if ($val === true) {

@@ -184,10 +184,11 @@ class VersionControl_SVN_Propset extends VersionControl_SVN
                                 'targets',
                                 'username',
                                 'password',
-                                'no-auth-cache',
+    							'no-auth-cache',
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'force',
                                 'encoding',
                                 'config-dir',
@@ -273,6 +274,7 @@ class VersionControl_SVN_Propset extends VersionControl_SVN
                     case 'force':
                     case 'revprop':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'recursive':
                     case 'no-auth-cache':
                         if ($val === true) {

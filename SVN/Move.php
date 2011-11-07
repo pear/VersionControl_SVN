@@ -172,6 +172,7 @@ class VersionControl_SVN_Move extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir',
                                 'encoding',
@@ -263,6 +264,7 @@ class VersionControl_SVN_Move extends VersionControl_SVN
                     case 'quiet':
                     case 'force':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'force-log':
                     case 'no-auth-cache':
                         if ($val === true) {

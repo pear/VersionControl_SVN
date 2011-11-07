@@ -157,6 +157,7 @@ class VersionControl_SVN_Propget extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'changelist'
                                 );
@@ -237,6 +238,7 @@ class VersionControl_SVN_Propget extends VersionControl_SVN
                     case 'strict':
                     case 'revprop':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'recursive':
                     case 'no-auth-cache':
                         if ($val === true) {

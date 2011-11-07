@@ -159,6 +159,7 @@ class VersionControl_SVN_Checkout extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir'
                                 );
@@ -237,6 +238,7 @@ class VersionControl_SVN_Checkout extends VersionControl_SVN
                         break;
                     case 'non-recursive':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'no-auth-cache':
                     case 'quiet':
                     case 'ignore-externals':

@@ -133,7 +133,8 @@ class VersionControl_SVN_Info extends VersionControl_SVN
                                 'config_dir',
                                 'changelist',
                                 'username',
-                                'password'
+                                'password',
+                                'trust-server-cert'
                                 );
 
     
@@ -208,6 +209,7 @@ class VersionControl_SVN_Info extends VersionControl_SVN
                         $_switches .= "--$switch $val ";
                         break;
                     case 'recursive':
+                    case 'trust-server-cert':
                         if ($val === true) {
                             $_switches .= "--$switch ";
                         }

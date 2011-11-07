@@ -144,6 +144,7 @@ class VersionControl_SVN_Blame extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir'
                                 );
@@ -218,6 +219,7 @@ class VersionControl_SVN_Blame extends VersionControl_SVN
                     break;
                 case 'no-auth-cache':
                 case 'non-interactive':
+                case 'trust-server-cert':
                     if ($val === true) {
                         $_switches .= "--$switch ";
                     }

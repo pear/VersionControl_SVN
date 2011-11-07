@@ -151,7 +151,8 @@ class VersionControl_SVN_Propdel extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
-                                'config-dir',
+                                'trust-server-cert',
+    							'config-dir',
                                 'changelist'
                                 );
     
@@ -231,6 +232,7 @@ class VersionControl_SVN_Propdel extends VersionControl_SVN
                     case 'quiet':
                     case 'revprop':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'recursive':
                     case 'no-auth-cache':
                         if ($val === true) {

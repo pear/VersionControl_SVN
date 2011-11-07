@@ -255,6 +255,7 @@ class VersionControl_SVN_Diff extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir',
                                 'changelist',
@@ -348,6 +349,7 @@ class VersionControl_SVN_Diff extends VersionControl_SVN
                     case 'no-diff-deleted':
                     case 'notice-ancestry':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'non-recursive':
                     case 'summarize':
                     case 'xml':

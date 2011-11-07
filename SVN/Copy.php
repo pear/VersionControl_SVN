@@ -168,6 +168,7 @@ class VersionControl_SVN_Copy extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir',
                                 'file',
@@ -264,6 +265,7 @@ class VersionControl_SVN_Copy extends VersionControl_SVN
                     case 'force-log':
                     case 'no-auth-cache':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'ignore-externals':
                         if ($val === true) {
                             $_switches .= "--$switch ";
