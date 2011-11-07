@@ -155,6 +155,7 @@ class VersionControl_SVN_Proplist extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'changelist'
                                 );
@@ -234,6 +235,7 @@ class VersionControl_SVN_Proplist extends VersionControl_SVN
                         break;
                     case 'revprop':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'recursive':
                     case 'verbose':
                     case 'quiet':

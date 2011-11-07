@@ -160,6 +160,7 @@ class VersionControl_SVN_Commit extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir',
                                 'targets',
@@ -253,6 +254,7 @@ class VersionControl_SVN_Commit extends VersionControl_SVN
                     case 'quiet':
                     case 'no-auth-cache':
                     case 'force-log':
+                    case 'trust-server-cert':
                     case 'non-recursive':
                         if ($val === true) {
                             $_switches .= "--$switch ";

@@ -188,6 +188,7 @@ class VersionControl_SVN_Export extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir'
                                 );
@@ -273,6 +274,7 @@ class VersionControl_SVN_Export extends VersionControl_SVN
                     case 'quiet':
                     case 'force':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'no-auth-cache':
                     case 'ignore-externals':
                         if ($val === true) {

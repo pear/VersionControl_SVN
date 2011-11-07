@@ -158,6 +158,7 @@ class VersionControl_SVN_Log extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir',
                                 'limit'
@@ -244,6 +245,7 @@ class VersionControl_SVN_Log extends VersionControl_SVN
                     case 'no-auth-cache':
                     case 'stop-on-copy':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                         if ($val === true) {
                             $_switches .= "--$switch ";
                         }

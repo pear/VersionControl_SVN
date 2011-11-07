@@ -165,6 +165,7 @@ class VersionControl_SVN_Mkdir extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir',
                                 'encoding',
@@ -251,6 +252,7 @@ class VersionControl_SVN_Mkdir extends VersionControl_SVN
                         break;
                     case 'quiet':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'force-log':
                     case 'no-auth-cache':
                         if ($val === true) {

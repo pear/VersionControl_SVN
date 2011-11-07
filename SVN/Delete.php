@@ -159,6 +159,7 @@ class VersionControl_SVN_Delete extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir',
                                 'file',
@@ -250,6 +251,7 @@ class VersionControl_SVN_Delete extends VersionControl_SVN
                     case 'force':
                     case 'force-log':
                     case 'no-auth-cache':
+                    case 'trust-server-cert':
                         if ($val === true) {
                             $_switches .= "--$switch ";
                         }

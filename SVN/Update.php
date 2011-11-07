@@ -172,7 +172,8 @@ class VersionControl_SVN_Update extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
-                                'config-dir',
+    							'trust-server-cert',
+    							'config-dir',
                                 'config_dir',
                                 'force',
                                 'changelist'
@@ -258,6 +259,7 @@ class VersionControl_SVN_Update extends VersionControl_SVN
                     break;
                 case 'non-recursive':
                 case 'non-interactive':
+                case 'trust-server-cert':
                 case 'no-auth-cache':
                 case 'ignore-externals':
                     if ($val === true) {

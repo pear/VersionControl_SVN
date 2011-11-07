@@ -242,6 +242,7 @@ class VersionControl_SVN_Merge extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'config-dir',
                                 'config_dir'
                                 );
@@ -330,6 +331,7 @@ class VersionControl_SVN_Merge extends VersionControl_SVN
                     case 'dry-run':
                     case 'non-recursive':
                     case 'non-interactive':
+                    case 'trust-server-cert':
                     case 'ignore-ancestry':
                     case 'no-auth-cache':
                         if ($val === true) {

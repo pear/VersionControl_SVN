@@ -211,12 +211,13 @@ class VersionControl_SVN_Status extends VersionControl_SVN
                                 'no-ignore',
                                 'username',
                                 'password',
-                                'ignore-externals',
+    							'ignore-externals',
                                 'no-auth-cache',
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
-                                'config-dir',
+                                'trust-server-cert',
+    							'config-dir',
                                 'changelist'
                                 );
     
@@ -294,6 +295,7 @@ class VersionControl_SVN_Status extends VersionControl_SVN
                     case 'no-ignore':
                     case 'show-updates':
                     case 'quiet':
+                    case 'trust-server-cert':
                     case 'ignore-externals':
                         if ($val === true) {
                             $_switches .= "--$switch ";

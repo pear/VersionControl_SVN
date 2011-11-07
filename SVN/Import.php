@@ -167,6 +167,7 @@ class VersionControl_SVN_Import extends VersionControl_SVN
                                 'no_auth_cache',
                                 'non-interactive',
                                 'non_interactive',
+                                'trust-server-cert',
                                 'force-log',
                                 'force_log',
                                 'encoding',
@@ -259,6 +260,7 @@ class VersionControl_SVN_Import extends VersionControl_SVN
                     case 'non-recursive':
                     case 'no-auth-cache':
                     case 'force-log':
+                    case 'trust-server-cert':
                         if ($val === true) {
                             $_switches .= "--$switch ";
                         }
