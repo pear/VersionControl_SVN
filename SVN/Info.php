@@ -111,8 +111,6 @@
  * ?>
  * </code>
  *
- * Note: Subversion does not offer an XML output option for this subcommand
- *
  * @package  VersionControl_SVN
  * @version  @version@
  * @category SCM
@@ -134,7 +132,8 @@ class VersionControl_SVN_Info extends VersionControl_SVN
                                 'changelist',
                                 'username',
                                 'password',
-                                'trust-server-cert'
+                                'trust-server-cert',
+                                'xml'
                                 );
 
     
@@ -209,6 +208,7 @@ class VersionControl_SVN_Info extends VersionControl_SVN
                         $_switches .= "--$switch $val ";
                         break;
                     case 'recursive':
+                    case 'xml':
                     case 'trust-server-cert':
                         if ($val === true) {
                             $_switches .= "--$switch ";
