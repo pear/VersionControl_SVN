@@ -209,6 +209,7 @@ class VersionControl_SVN_Info extends VersionControl_SVN
                         break;
                     case 'recursive':
                     case 'xml':
+                    case 'non-interactive':
                     case 'trust-server-cert':
                         if ($val === true) {
                             $_switches .= "--$switch ";
@@ -225,6 +226,17 @@ class VersionControl_SVN_Info extends VersionControl_SVN
                 }
             } else {
                 $invalid_switches[] = $switch;
+            }
+        }
+
+        $this->xml_avail = true;
+        if ($fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ARRAY  ||
+            $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ASSOC  ||
+            $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT ||
+            $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_XML)
+        {
+            if (strpos($_switches, 'xml') === false) {
+                $_switches .= '--xml ';
             }
         }
 
@@ -269,22 +281,24 @@ class VersionControl_SVN_Info extends VersionControl_SVN
     function parseOutput($out)
     {
         $fetchmode = $this->fetchmode;
+        $dir = realpath(dirname(__FILE__)) . '/Parsers';
         switch($fetchmode) {
             case VERSIONCONTROL_SVN_FETCHMODE_RAW:
                 return join("\n", $out);
                 break;
+            case VERSIONCONTROL_SVN_FETCHMODE_ARRAY:
             case VERSIONCONTROL_SVN_FETCHMODE_ASSOC:
-                // Temporary, see parseOutputArray below
-                return join("\n", $out);
-                break;
             case VERSIONCONTROL_SVN_FETCHMODE_OBJECT:
-                // Temporary, will return object-ified array from
-                // parseOutputArray
-                return join("\n", $out);
+                require_once $dir.'/Info.php';
+                $parser = new VersionControl_SVN_Parser_Info;
+                $parser->parseString(join("\n", $out));
+                if ($fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT) {
+                    return (object) $parser->info;
+                }
+                return $parser->info;
                 break;
             case VERSIONCONTROL_SVN_FETCHMODE_XML:
-                // Temporary, will eventually build an XML string
-                // with XML_Util or XML_Tree
+                // Return command's native XML output
                 return join("\n", $out);
                 break;
             default:
@@ -292,16 +306,6 @@ class VersionControl_SVN_Info extends VersionControl_SVN
                 return join("\n", $out);
                 break;
         }
-    }
-    
-    /**
-     * Helper method for parseOutput that parses output into an associative array
-     *
-     * @todo Finish this method! : )
-     */
-    function parseOutputArray($out)
-    {
-        $parsed = array();
     }
 }
 
