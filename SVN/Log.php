@@ -330,7 +330,7 @@ class VersionControl_SVN_Log extends VersionControl_SVN
             case VERSIONCONTROL_SVN_FETCHMODE_ASSOC:
             case VERSIONCONTROL_SVN_FETCHMODE_OBJECT:
                 require_once $dir.'/Log.php';
-                $parser = new VersionControl_SVN_Log_Parser;
+                $parser = new VersionControl_SVN_Parser_Log;
                 $parser->parseString(join("\n", $out));
                 if ($fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT) {
                     return (object) $parser->log;

@@ -218,7 +218,8 @@ class VersionControl_SVN_Status extends VersionControl_SVN
                                 'non_interactive',
                                 'trust-server-cert',
     							'config-dir',
-                                'changelist'
+                                'changelist',
+                                'xml'
                                 );
     
     /**
@@ -297,6 +298,7 @@ class VersionControl_SVN_Status extends VersionControl_SVN
                     case 'quiet':
                     case 'trust-server-cert':
                     case 'ignore-externals':
+                    case 'xml':
                         if ($val === true) {
                             $_switches .= "--$switch ";
                         }
@@ -315,6 +317,17 @@ class VersionControl_SVN_Status extends VersionControl_SVN
                 }
             } else {
                 $invalid_switches[] = $switch;
+            }
+        }
+
+        $this->xml_avail = true;
+        if ($fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ARRAY  ||
+            $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ASSOC  ||
+            $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT ||
+            $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_XML)
+        {
+            if (strpos($_switches, 'xml') === false) {
+                $_switches .= '--xml ';
             }
         }
 
@@ -342,6 +355,7 @@ class VersionControl_SVN_Status extends VersionControl_SVN
             $params['_svn_cmd'] = ucfirst($this->_svn_cmd);
             $this->_stack->push(VERSIONCONTROL_SVN_NOTICE_INVALID_SWITCH, 'notice', $params);
         }
+
         return true;
     }
     
@@ -359,19 +373,21 @@ class VersionControl_SVN_Status extends VersionControl_SVN
     function parseOutput($out)
     {
         $fetchmode = $this->fetchmode;
+        $dir = realpath(dirname(__FILE__)) . '/Parsers';
         switch($fetchmode) {
             case VERSIONCONTROL_SVN_FETCHMODE_RAW:
                 return join("\n", $out);
                 break;
             case VERSIONCONTROL_SVN_FETCHMODE_ARRAY:
             case VERSIONCONTROL_SVN_FETCHMODE_ASSOC:
-                // Temporary, see parseOutputArray below
-                return join("\n", $out);
-                break;
             case VERSIONCONTROL_SVN_FETCHMODE_OBJECT:
-                // Temporary, will return object-ified array from
-                // parseOutputArray
-                return join("\n", $out);
+                require_once $dir.'/Status.php';
+                $parser = new VersionControl_SVN_Parser_Status;
+                $parser->parseString(join("\n", $out));
+                if ($fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT) {
+                    return (object) $parser->status;
+                }
+                return $parser->status;
                 break;
             case VERSIONCONTROL_SVN_FETCHMODE_XML:
                 // Temporary, will eventually build an XML string
