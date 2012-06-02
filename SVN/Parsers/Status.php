@@ -90,8 +90,10 @@ class VersionControl_SVN_Parser_Status extends XML_Parser
             $this->wcStatus = array(
                 'ITEM' => $attribs['ITEM'],
                 'PROPS' => $attribs['PROPS'],
-                'REVISION' => $attribs['REVISION'],
             );
+            if (isset($attribs['REVISION'])) {
+                $this->wcStatus['REVISION'] = $attribs['REVISION'];
+            }
             break;
         case 'REPOS-STATUS':
             $this->reposStatus = array(
