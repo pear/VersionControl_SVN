@@ -165,143 +165,35 @@ class VersionControl_SVN
      *
      * @var     array
      */
-    public $shortcuts = array(
+    public static $shortcuts = array(
+        'praise'    => 'Blame',
+        'annotate'  => 'Blame',
+        'ann'       => 'Blame',
+        'co'        => 'Checkout',
+        'ci'        => 'Commit',
+        'cp'        => 'Copy',
+        'del'       => 'Delete',
+        'remove'    => 'Delete',
+        'rm'        => 'Delete',
+        'di'        => 'Diff',
+        'ls'        => 'List',
+        'mv'        => 'Move',
+        'rename'    => 'Move',
+        'ren'       => 'Move',
+        'pdel'      => 'Propdel',
+        'pd'        => 'Propdel',
+        'pget'      => 'Propget',
+        'pg'        => 'Propget',
+        'plist'     => 'Proplist',
+        'pl'        => 'Proplist',
+        'pset'      => 'Propset',
+        'ps'        => 'Propset',
+        'stat'      => 'Status',
+        'st'        => 'Status',
+        'sw'        => 'Switch',
+        'up'        => 'Update'
+    );
 
-            'praise'    => 'Blame',
-            'annotate'  => 'Blame',
-            'ann'       => 'Blame',
-            'co'        => 'Checkout',
-            'ci'        => 'Commit',
-            'cp'        => 'Copy',
-            'del'       => 'Delete',
-            'remove'    => 'Delete',
-            'rm'        => 'Delete',
-            'di'        => 'Diff',
-            'ls'        => 'List',
-            'mv'        => 'Move',
-            'rename'    => 'Move',
-            'ren'       => 'Move',
-            'pdel'      => 'Propdel',
-            'pd'        => 'Propdel',
-            'pget'      => 'Propget',
-            'pg'        => 'Propget',
-            'plist'     => 'Proplist',
-            'pl'        => 'Proplist',
-            'pset'      => 'Propset',
-            'ps'        => 'Propset',
-            'stat'      => 'Status',
-            'st'        => 'Status',
-            'sw'        => 'Switch',
-            'up'        => 'Update'
-        );
-    
-    /**
-     * Indicates whether commands passed to the
-     * {@link http://www.php.net/exec exec()} function in the
-     * {@link run} method should be passed through
-     * {@link http://www.php.net/escapeshellcmd escapeshellcmd()}.
-     * NOTE: this variable is ignored on Windows machines!
-     *
-     * @var     boolean
-     */
-    public $use_escapeshellcmd = true;
-
-    /**
-     * Location of the svn client binary installed as part of Subversion
-     *
-     * @var     string  $svn_path
-     */
-    public $svn_path = '/usr/local/bin/svn';
-
-    /**
-     * String to prepend to command string. Helpful for setting exec() 
-     * environment variables, such as: 
-     *    export LANG=en_US.utf8 &&
-     * ... to support non-ASCII file and directory names.
-     * 
-     * @var     string $prepend_cmd
-     */
-    public $prepend_cmd = '';
-
-    /**
-     * Array of switches to use in building svn command
-     *
-     * @var     array
-     */
-    public $switches = array();
-
-    /**
-     * Runtime options being used. 
-     *
-     * @var     array
-     */
-    public $options = array();
-    
-    /**
-     * Preferred fetchmode. Note that not all subcommands have output available for 
-     * each preferred fetchmode. The default cascade is:
-     *
-     * VERSIONCONTROL_SVN_FETCHMODE_ASSOC
-     *  VERSIONCONTROL_SVN_FETCHMODE_RAW
-     *
-     * If the specified fetchmode isn't available, raw output will be returned.
-     * 
-     * @var     int
-     */
-    public $fetchmode = VERSIONCONTROL_SVN_FETCHMODE_ASSOC;
-
-    /**
-     * XML::Parser class to use for parsing XML output
-     * 
-     * @var     string
-     */
-    public $svn_cmd_parser;
-
-    // }}}
-    // {{{ Private Properties
-
-    /**
-     * SVN subcommand to run.
-     * 
-     * @var     string
-     */
-    protected $_svn_cmd = '';
-
-    /**
-     * Keep track of whether options are prepared or not.
-     *
-     * @var     boolean
-     */
-    protected $_prepared = false;
-
-    /**
-     * Fully prepared command string.
-     * 
-     * @var     string
-     */
-    protected $_prepped_cmd = '';
-
-    /**
-     * Keep track of whether XML output is available for a command
-     *
-     * @var     boolean
-     */
-    protected $_xml_avail = false;
-
-    /**
-     * Error stack.
-     *
-     * @var     object
-     */
-    protected $_stack = null;
-    
-    /**
-     * Assembled switches for command line execution
-     * 
-     * @var     object
-     */
-    protected $_switches = '';
-    
     // }}}
     // {{{ errorMessages()
     
@@ -331,8 +223,8 @@ class VersionControl_SVN
                 'svn %_svn_cmd% requires at least %min_args% %argstr%',
             VERSIONCONTROL_SVN_NOTICE => '%notice%',
             VERSIONCONTROL_SVN_NOTICE_INVALID_SWITCH => 
-                '\'%list%\' %is_invalid_switch% for VersionControl_SVN_%_svn_cmd% ' .
-                'and %was% ignored. Please refer to the documentation.',
+                '\'%list%\' %is_invalid_switch% for %CommandClass% '
+                . 'and %was% ignored. Please refer to the documentation.',
             VERSIONCONTROL_SVN_NOTICE_INVALID_OPTION =>
                 '\'%option%\' is not a valid option, and was ignored.'
         );
@@ -429,7 +321,7 @@ class VersionControl_SVN
     public static function init($command, $options)
     {
         // Check for shortcuts for commands
-        $shortcuts = VersionControl_SVN::fetchShortcuts();
+        $shortcuts = self::$shortcuts;
         
         if (isset($options['shortcuts']) && is_array($options['shortcuts'])) {
             foreach ($options['shortcuts'] as $key => $val) {
@@ -437,18 +329,16 @@ class VersionControl_SVN
             }
         }
         
-        $cmd = isset($shortcuts[strtolower($command)]) ? $shortcuts[strtolower($command)] : $command;
-        $lowercmd   = strtolower($cmd);
-        $cmd        = ucfirst($lowercmd);
-        $class      = 'VersionControl_SVN_'.$cmd;
+        $cmd   = isset($shortcuts[strtolower($command)])
+            ? $shortcuts[strtolower($command)]
+            : $command;
+        $cmd   = ucfirst(strtolower($cmd));
+        $class = 'VersionControl_SVN_Command_' . $cmd;
         
-        if (include_once realpath(dirname(__FILE__)) . "/SVN/{$cmd}.php") {
+        if (include_once realpath(dirname(__FILE__)) . "/SVN/Command/{$cmd}.php") {
             if (class_exists($class)) {
                 $obj = new $class;
-                $obj->options   = $options;
-                $obj->_svn_cmd  = $lowercmd;
-                $obj->_stack    = PEAR_ErrorStack::singleton('VersionControl_SVN');
-                $obj->_stack->setErrorMessageTemplate(VersionControl_SVN::declareErrorMessages());
+                $obj->options = $options;
                 $obj->setOptions($options);
                 return $obj;
             }
@@ -473,7 +363,7 @@ class VersionControl_SVN
     public function fetchCommands()
     {
         $commands = array();
-        $dir = realpath(dirname(__FILE__)) . '/SVN';
+        $dir = realpath(dirname(__FILE__)) . '/SVN/Command';
         $dp = @opendir($dir);
         if (empty($dp)) {
             PEAR_ErrorStack::staticPush(
@@ -497,232 +387,6 @@ class VersionControl_SVN
     }
     
     // }}}
-    // {{{ fetchShortcuts()
-    
-    /**
-     * Return the array of pre-defined shortcuts (also known as Alternate Names)
-     * for Subversion commands.
-     *
-     * @return  array
-     */
-    protected static function fetchShortcuts()
-    {
-        $vars = get_class_vars('VersionControl_SVN');
-        return $vars['shortcuts'];
-    }
-    
-    // }}}
-    // {{{ setOptions()
-    
-    /**
-     * Allow for overriding of previously declared options.     
-     *
-     * @param array $options An associative array of option names and
-     *                       their values
-     *
-     * @return boolean
-     */
-    public function setOptions($options = array())
-    {
-        $opts = array_filter(
-            array_keys(get_class_vars('VersionControl_SVN')), 
-            array($this, '_filterOpts')
-        );
-        
-        foreach ($options as $option => $value) {
-            if (in_array($option, $opts)) {
-                if ($option == 'shortcuts') {
-                    $this->shortcuts = array_merge($this->shortcuts, $value);
-                } else {
-                    $this->$option = $value;
-                }
-            } else {
-                $this->_stack->push(
-                    VERSIONCONTROL_SVN_NOTICE_INVALID_OPTION, 'notice', 
-                    array('option' => $option)
-                );
-            }
-        }
-        
-        return true;
-    }
-    
-    // }}}
-    // {{{ prepare()
-    
-    /**
-     * Prepare the command switches.
-     *
-     * This function should be overloaded by the command class.
-     *
-     * @return boolean
-     */
-    public function prepare()
-    {
-        $this->_stack->push(
-            VERSIONCONTROL_SVN_ERROR_NOT_IMPLEMENTED, 'error', 
-            array(
-                'options' => $this->options,
-                'method' => 'prepare()',
-                'class' => get_class($this)
-            )
-        );
-        
-        return false;
-    }
-    
-    // }}}
-    // {{{ checkCommandRequirements()
-    
-    /**
-     * Standardized validation of requirements for a command class.
-     *
-     * @return mixed   true if all requirements are met, false if 
-     *                  requirements are not met. Details of failures
-     *                  are pushed into the PEAR_ErrorStack for VersionControl_SVN
-     */
-    public function checkCommandRequirements()
-    {
-        // Set up error push parameters to avoid any notices about undefined indexes
-        $params['options']  = $this->options;
-        $params['switches'] = $this->switches;
-        $params['args']     = $this->args;
-        $params['_svn_cmd'] = $this->_svn_cmd;
-        $params['cmd']      = '';
-        
-        // Check for minimum arguments
-        if (sizeof($this->args) < $this->min_args) {
-            $params['argstr'] = $this->min_args > 1 ? 'arguments' : 'argument';
-            $params['min_args'] = $this->min_args;
-            $this->_stack->push(VERSIONCONTROL_SVN_ERROR_MIN_ARGS, 'error', $params);
-            return false;
-        }
-        
-        // Check for presence of required switches
-        if (sizeof($this->required_switches) > 0) {
-            $missing    = array();
-            $switches   = $this->switches;
-            $reqsw      = $this->required_switches;
-            foreach ($reqsw as $req) {
-                $found = false;
-                $good_switches = explode('|', $req);
-                foreach ($good_switches as $gsw) {
-                    if (isset($switches[$gsw])) {
-                        $found = true;
-                    }
-                }
-                if (!$found) {
-                    $missing[] = '('.$req.')';
-                }
-            }
-            $num_missing = count($missing);
-            if ($num_missing > 0) {
-                $params['switchstr'] = $num_missing > 1 ? 'switches' : 'switch';
-                $params['missing'] = $missing;
-                
-                $this->_stack->push(
-                    VERSIONCONTROL_SVN_ERROR_REQUIRED_SWITCH_MISSING,
-                    'error',
-                    $params
-                );
-                
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    // }}}
-    // {{{ run()
-    
-    /**
-     * Run the command with the defined switches.
-     *
-     * @param array $args     Arguments to pass to Subversion
-     * @param array $switches Switches to pass to Subversion
-     *
-     * @return  mixed   $fetchmode specified output on success,
-     *                  or false on failure.
-     */
-    public function run($args = array(), $switches = array())
-    {
-        if (!file_exists($this->svn_path)) {
-            $this->svn_path = System::which('svn');
-        }
-        
-        if (sizeof($switches) > 0) {
-            $this->switches = $switches;
-        }
-        if (sizeof($args) > 0) {
-            foreach (array_keys($args) as $k) {
-                $this->args[$k] = escapeshellarg($args[$k]);
-            }
-        }
-        
-        // Always prepare, allows for obj re-use. (Request #5021)
-        $this->prepare();
-        
-        $out        = array();
-        $ret_var    = null;
-        
-        $cmd = $this->_prepped_cmd;
-
-        // On Windows, don't use escapeshellcmd, and double-quote $cmd
-        // so it's executed as 
-        // cmd /c ""C:\Program Files\SVN\bin\svn.exe" info "C:\Program Files\dev\trunk""
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $cmd = str_replace($this->svn_path, escapeshellarg($this->svn_path), $cmd);
-            
-            if (!$this->passthru) {
-                exec("$cmd 2>&1", $out, $ret_var);
-            } else {
-                passthru("$cmd 2>&1", $ret_var);
-            }
-        } else {
-            if ($this->use_escapeshellcmd) {
-                $cmd = escapeshellcmd($cmd);
-            }
-
-            if (!$this->passthru) {
-                exec("{$this->prepend_cmd}$cmd 2>&1", $out, $ret_var);
-            } else {
-                passthru("{$this->prepend_cmd}$cmd 2>&1", $ret_var);
-            }
-        }
-
-        if ($ret_var > 0) {
-            $params['options']  = $this->options;
-            $params['switches'] = $this->switches;
-            $params['args']     = $this->args;
-            $params['cmd']      = $cmd;
-            foreach ($out as $line) {
-                $params['errstr'] = $line;
-                $this->_stack->push(VERSIONCONTROL_SVN_ERROR_EXEC, 'error', $params);
-            }
-            return false;
-        }
-        return $this->parseOutput($out);
-    }
-    
-    // }}}
-    // {{{ parseOutput()
-    
-    /**
-     * Handle output parsing chores.
-     *
-     * This bare-bones function should be overridden by the command class.
-     *
-     * @param array $out Array of output captured by exec command in {@link run}
-     *
-     * @return  mixed   Returns output requested by fetchmode (if available), or 
-     *                  raw output if desired fetchmode is not available.
-     */
-    public function parseOutput($out)
-    {
-        return join("\n", $out);
-    }
-    
-    // }}}
     // {{{ apiVersion()
     
     /**
@@ -735,22 +399,6 @@ class VersionControl_SVN
         return '@version@';
     }
     
-    // }}}
-    // {{{ _filterOpts
-    
-    /**
-     * Callback function for array_filter. Keeps _private options
-     * out of settable options.
-     *
-     * @param string $var Passed value
-     *
-     * @return boolean
-     */
-    public function _filterOpts($var)
-    {
-        $ret = ($var{0} == '_') ? false : true;
-        return $ret;
-    }
     // }}}
 }
 
