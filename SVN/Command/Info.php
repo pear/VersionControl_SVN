@@ -50,6 +50,8 @@
  * @author      Clay Loveless <clay@killersoft.com>
  */
 
+require_once 'VersionControl/SVN/Command.php';
+
 /**
  * Subversion Info command manager class
  *
@@ -116,7 +118,7 @@
  * @category SCM
  * @author   Clay Loveless <clay@killersoft.com>
  */
-class VersionControl_SVN_Info extends VersionControl_SVN
+class VersionControl_SVN_Command_Info extends VersionControl_SVN_Command
 {
     /**
      * Valid switches for svn info
@@ -124,17 +126,18 @@ class VersionControl_SVN_Info extends VersionControl_SVN
      * @var     array
      * @access  public
      */
-    var $valid_switches = array('R',
-                                'recursive',
-                                'targets',
-                                'config-dir',
-                                'config_dir',
-                                'changelist',
-                                'username',
-                                'password',
-                                'trust-server-cert',
-                                'xml'
-                                );
+    var $valid_switches = array(
+        'R',
+        'recursive',
+        'targets',
+        'config-dir',
+        'config_dir',
+        'changelist',
+        'username',
+        'password',
+        'trust-server-cert',
+        'xml'
+    );
 
     
     /**
@@ -172,104 +175,49 @@ class VersionControl_SVN_Info extends VersionControl_SVN
     var $passthru = false;
     
     /**
-     * Prepare the svn subcommand switches.
+     * Keep track of whether XML output is available for a command
      *
-     * Defaults to non-interactive mode, and will auto-set the 
-     * --xml switch (if available) if $fetchmode is set to VERSIONCONTROL_SVN_FETCHMODE_XML,
-     * VERSIONCONTROL_SVN_FETCHMODE_ASSOC or VERSIONCONTROL_SVN_FETCHMODE_OBJECT
-     *
-     * @param   void
-     * @return  int    true on success, false on failure. Check PEAR_ErrorStack
-     *                 for error details, if any.
+     * @var boolean $xmlAvail
      */
-    function prepare()
+    protected $xmlAvail = true;
+
+    // }}}
+    // {{{ __construct()
+
+    public function __construct()
     {
-        $meets_requirements = $this->checkCommandRequirements();
-        if (!$meets_requirements) {
-            return false;
-        }
-        
-        $valid_switches     = $this->valid_switches;
-        $switches           = $this->switches;
-        $args               = $this->args;
-        $fetchmode          = $this->fetchmode;
-        $invalid_switches   = array();
-        $_switches          = '--non-interactive ';
-        
-        foreach ($switches as $switch => $val) {
-            if (in_array($switch, $valid_switches)) {
-                $switch = str_replace('_', '-', $switch);
-                switch ($switch) {
-                    case 'targets':
-                    case 'username':
-                    case 'password':
-                    case 'config-dir':
-                    case 'changelist':
-                        $_switches .= "--$switch $val ";
-                        break;
-                    case 'recursive':
-                    case 'xml':
-                    case 'non-interactive':
-                    case 'trust-server-cert':
-                        if ($val === true) {
-                            $_switches .= "--$switch ";
-                        }
-                        break;
-                    case 'R':
-                        if ($val === true) {
-                            $_switches .= "-$switch ";
-                        }
-                        break;
-                    default:
-                        // that's all, folks!
-                        break;
-                }
-            } else {
-                $invalid_switches[] = $switch;
-            }
-        }
+        parent::__construct();
 
-        $this->xml_avail = true;
-        if ($fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ARRAY  ||
-            $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ASSOC  ||
-            $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT ||
-            $fetchmode == VERSIONCONTROL_SVN_FETCHMODE_XML)
-        {
-            if (strpos($_switches, 'xml') === false) {
-                $_switches .= '--xml ';
-            }
-        }
+        $this->validSwitchesValue = array_merge(
+            $this->validSwitchesValue,
+            array(
+                'revision',
+                'depth',
+                'targets',
+                'changelist',
+            )
+        );
 
-        $_switches = trim($_switches);
-        $this->_switches = $_switches;
+        $this->validSwitchesLong = array_merge(
+            $this->validSwitchesLong,
+            array(
+                'recursive',
+                'incremental',
+                'xml',
+            )
+        );
 
-        $cmd = "$this->svn_path $this->_svn_cmd $_switches";
-        if (!empty($args)) {
-            $cmd .= ' '. join(' ', $args);
-        }
-        
-        $this->_prepped_cmd = $cmd;
-        $this->prepared = true;
-
-        $invalid = count($invalid_switches);
-        if ($invalid > 0) {
-            $params['was'] = 'was';
-            $params['is_invalid_switch'] = 'is an invalid switch';
-            if ($invalid > 1) {
-                $params['was'] = 'were';
-                $params['is_invalid_switch'] = 'are invalid switches';
-            }
-            $params['list'] = $invalid_switches;
-            $params['switches'] = $switches;
-            $params['_svn_cmd'] = ucfirst($this->_svn_cmd);
-            $this->_stack->push(VERSIONCONTROL_SVN_NOTICE_INVALID_SWITCH, 'notice', $params);
-        }
-        return true;
+        $this->validSwitchesShort = array_merge(
+            $this->validSwitchesShort,
+            array(
+                'R',
+            )
+        );
     }
-    
+
     // }}}
     // {{{ parseOutput()
-    
+
     /**
      * Handles output parsing of standard and verbose output of command.
      *
@@ -281,7 +229,6 @@ class VersionControl_SVN_Info extends VersionControl_SVN
     function parseOutput($out)
     {
         $fetchmode = $this->fetchmode;
-        $dir = realpath(dirname(__FILE__)) . '/Parsers';
         switch($fetchmode) {
             case VERSIONCONTROL_SVN_FETCHMODE_RAW:
                 return join("\n", $out);
@@ -289,7 +236,7 @@ class VersionControl_SVN_Info extends VersionControl_SVN
             case VERSIONCONTROL_SVN_FETCHMODE_ARRAY:
             case VERSIONCONTROL_SVN_FETCHMODE_ASSOC:
             case VERSIONCONTROL_SVN_FETCHMODE_OBJECT:
-                require_once $dir.'/Info.php';
+                require_once 'VersionControl/SVN/Parsers/Info.php';
                 $parser = new VersionControl_SVN_Parser_Info;
                 $parser->parseString(join("\n", $out));
                 if ($fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT) {
