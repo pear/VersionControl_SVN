@@ -121,26 +121,6 @@ require_once 'VersionControl/SVN/Command.php';
 class VersionControl_SVN_Command_Info extends VersionControl_SVN_Command
 {
     /**
-     * Valid switches for svn info
-     *
-     * @var     array
-     * @access  public
-     */
-    var $valid_switches = array(
-        'R',
-        'recursive',
-        'targets',
-        'config-dir',
-        'config_dir',
-        'changelist',
-        'username',
-        'password',
-        'trust-server-cert',
-        'xml'
-    );
-
-    
-    /**
      * Command-line arguments that should be passed 
      * <b>outside</b> of those specified in {@link switches}.
      *
@@ -168,22 +148,15 @@ class VersionControl_SVN_Command_Info extends VersionControl_SVN_Command
     var $required_switches = array();
     
     /**
-     * Use exec or passthru to get results from command.
-     * @var     bool
-     * @access  public
-     */
-    var $passthru = false;
-    
-    /**
      * Keep track of whether XML output is available for a command
      *
      * @var boolean $xmlAvail
      */
     protected $xmlAvail = true;
 
-    // }}}
-    // {{{ __construct()
-
+    /**
+     * Constuctor of command. Adds available switches.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -214,47 +187,6 @@ class VersionControl_SVN_Command_Info extends VersionControl_SVN_Command
             )
         );
     }
-
-    // }}}
-    // {{{ parseOutput()
-
-    /**
-     * Handles output parsing of standard and verbose output of command.
-     *
-     * @param   array   $out    Array of output captured by exec command in {@link run}.
-     * @return  mixed   Returns output requested by fetchmode (if available), or raw output
-     *                  if desired fetchmode is not available.
-     * @access  public
-     */
-    function parseOutput($out)
-    {
-        $fetchmode = $this->fetchmode;
-        switch($fetchmode) {
-            case VERSIONCONTROL_SVN_FETCHMODE_RAW:
-                return join("\n", $out);
-                break;
-            case VERSIONCONTROL_SVN_FETCHMODE_ARRAY:
-            case VERSIONCONTROL_SVN_FETCHMODE_ASSOC:
-            case VERSIONCONTROL_SVN_FETCHMODE_OBJECT:
-                require_once 'VersionControl/SVN/Parsers/Info.php';
-                $parser = new VersionControl_SVN_Parser_Info;
-                $parser->parseString(join("\n", $out));
-                if ($fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT) {
-                    return (object) $parser->info;
-                }
-                return $parser->info;
-                break;
-            case VERSIONCONTROL_SVN_FETCHMODE_XML:
-                // Return command's native XML output
-                return join("\n", $out);
-                break;
-            default:
-                // What you get with VERSIONCONTROL_SVN_FETCHMODE_DEFAULT
-                return join("\n", $out);
-                break;
-        }
-    }
 }
 
-/// }}}
 ?>
