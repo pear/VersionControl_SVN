@@ -78,6 +78,13 @@ abstract class VersionControl_SVN_Command
     public $useEscapeshellcmd = true;
 
     /**
+     * Use exec or passthru to get results from command.
+     *
+     * @var bool $passthru
+     */
+    public $passthru = false;
+
+    /**
      * Location of the svn client binary installed as part of Subversion
      *
      * @var string  $binaryPath
@@ -439,12 +446,13 @@ var_dump($cmd);
 
                     include_once $file;
                     $parser = new $class;
+                    $contentVar = $this->commandName;
 
-                    $result = $parser->parseString(join("\n", $out));
+                    $parser->parseString(join("\n", $out));
                     if ($this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT) {
-                        return (object) $result;
+                        return (object) $parser->$contentVar;
                     }
-                    return $result;
+                    return $parser->$contentVar;
                     break;
                 }
             case VERSIONCONTROL_SVN_FETCHMODE_RAW:
