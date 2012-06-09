@@ -52,6 +52,8 @@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */
 
+require_once 'VersionControl/SVN/Command.php';
+
 /**
  * Subversion Add command manager class
  *
@@ -133,28 +135,8 @@
  * @version  @version@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */
-class VersionControl_SVN_Add extends VersionControl_SVN
+class VersionControl_SVN_Command_Add extends VersionControl_SVN_Command
 {
-    /**
-     * Valid switches for svn add
-     *
-     * @var     array
-     */
-    public $valid_switches = array('q',
-                                'quiet',
-                                'N',
-                                'targets',
-                                'non-recursive',
-                                'non_recursive',
-                                'auto-props',
-                                'auto_props',
-                                'no-auto-props',
-                                'no_auto_props',
-                                'config-dir',
-                                'config_dir'
-                                );
-
-    
     /**
      * Command-line arguments that should be passed 
      * <b>outside</b> of those specified in {@link switches}.
@@ -180,169 +162,40 @@ class VersionControl_SVN_Add extends VersionControl_SVN
     public $required_switches = array();
 
     /**
-     * Use exec or passthru to get results from command.
-     * @var     boolean
+     * Constuctor of command. Adds available switches.
      */
-    public $passthru = false;
-    
-    /**
-     * Prepare the svn subcommand switches.
-     *
-     * Defaults to non-interactive mode, and will auto-set the 
-     * --xml switch if $fetchmode is set to SVN_FETCHMODE_XML,
-     * SVN_FETCHMODE_ASSOC or SVN_FETCHMODE_OBJECT
-     *
-     * @return boolean true on success, false on failure. Check PEAR_ErrorStack
-     *                 for error details, if any.
-     */
-    public function prepare()
+    public function __construct()
     {
-        $meets_requirements = $this->checkCommandRequirements();
-        if (!$meets_requirements) {
-            return false;
-        }
-        
-        $valid_switches     = $this->valid_switches;
-        $switches           = $this->switches;
-        $args               = $this->args;
-        $fetchmode          = $this->fetchmode;
-        $invalid_switches   = array();
-        $_switches          = '';
-        
-        foreach ($switches as $switch => $val) {
-            if (in_array($switch, $valid_switches)) {
-                $switch = str_replace('_', '-', $switch);
-                switch ($switch) {
-                case 'targets':
-                case 'config-dir':
-                    $_switches .= "--$switch $val ";
-                    break;
-                case 'non-recursive':
-                case 'auto-props':
-                case 'no-auto-props':
-                    if ($val === true) {
-                        $_switches .= "--$switch ";
-                    }
-                    break;
-                case 'quiet':
-                    if ($val === true) {
-                        $_switches .= "--$switch ";
-                    }
-                    break;
-                case 'q':
-                case 'N':
-                    if ($val === true) {
-                        $_switches .= "-$switch ";
-                    }
-                    break;
-                default:
-                    // that's all, folks!
-                    break;
-                }
-            } else {
-                $invalid_switches[] = $switch;
-            }
-        }
+        parent::__construct();
 
-        $_switches = trim($_switches);
-        $this->_switches = $_switches;
+        $this->validSwitchesValue = array_merge(
+            $this->validSwitchesValue,
+            array(
+                'targets',
+                'depth',
+            )
+        );
 
-        $cmd = "$this->svn_path $this->_svn_cmd";
-        if (!empty($args)) {
-            $cmd .= ' '. join(' ', $args);
-        }
-        if ($_switches != '') {
-            $cmd .= ' ' . $_switches;
-        }
-        $this->_prepped_cmd = $cmd;
-        $this->prepared = true;
+        $this->validSwitchesLong = array_merge(
+            $this->validSwitchesLong,
+            array(
+                'non-recursive',
+                'quiet',
+                'force',
+                'no-ignore',
+                'auto-props',
+                'no-auto-props',
+                'parents',
+            )
+        );
 
-        $invalid = count($invalid_switches);
-        if ($invalid > 0) {
-            $params['was'] = 'was';
-            $params['is_invalid_switch'] = 'is an invalid switch';
-            
-            if ($invalid > 1) {
-                $params['was'] = 'were';
-                $params['is_invalid_switch'] = 'are invalid switches';
-            }
-            
-            $params['list'] = $invalid_switches;
-            $params['switches'] = $switches;
-            $params['_svn_cmd'] = ucfirst($this->_svn_cmd);
-            
-            $this->_stack->push(
-                VERSIONCONTROL_SVN_NOTICE_INVALID_SWITCH,
-                'notice',
-                $params
-            );
-        }
-        return true;
-    }
-    
-    // }}}
-    // {{{ parseOutput()
-    
-    /**
-     * Handles output parsing of output of command.
-     *
-     * @param array $out Array of output captured by exec command in {@link run}.
-     *
-     * @return mixed Returns output requested by fetchmode (if available),
-     *               or raw output if desired fetchmode is not available.
-     */
-    public function parseOutput($out)
-    {
-        $fetchmode = $this->fetchmode;
-        switch($fetchmode) {
-        case VERSIONCONTROL_SVN_FETCHMODE_RAW:
-            return join("\n", $out);
-            break;
-        case VERSIONCONTROL_SVN_FETCHMODE_ASSOC:
-            // Temporary, see parseOutputArray below
-            return join("\n", $out);
-            break;
-        case VERSIONCONTROL_SVN_FETCHMODE_OBJECT:
-            // Temporary, will return object-ified array from
-            // parseOutputArray
-            return join("\n", $out);
-            break;
-        case VERSIONCONTROL_SVN_FETCHMODE_XML:
-            // Temporary, will eventually build an XML string
-            // with XML_Util or XML_Tree
-            return join("\n", $out);
-            break;
-        default:
-            // What you get with VERSIONCONTROL_SVN_FETCHMODE_DEFAULT
-            return join("\n", $out);
-            break;
-        }
-    }
-    
-    /**
-     * Helper method for parseOutput that parses output into an associative array
-     *
-     * @param array $out Array of output captured by exec command in {@link run}.
-     *
-     * @return mixed
-     * @todo Covert list output parsing used in example_tree.php to this method
-     *       (more or less)
-     */
-    function parseOutputArray($out)
-    {
-        $parsed = array();
-        
-        // check switches for verbose output
-        if ((isset($this->switches['v']) && $this->switches['v'] === true) 
-            || (isset($this->switches['verbose']) && $this->switches['verbose'] === true)
-        ) {
-            
-            
-        } else {
-        
-        }
+        $this->validSwitchesShort = array_merge(
+            $this->validSwitchesShort,
+            array(
+                'N', 'q'
+            )
+        );
     }
 }
 
-/// }}}
 ?>
