@@ -50,6 +50,8 @@
  * @author      Clay Loveless <clay@killersoft.com>
  */
 
+require_once 'VersionControl/SVN/Command.php';
+
 /**
  * Subversion Cleanup command manager class
  *
@@ -109,19 +111,8 @@
  * @category SCM
  * @author   Clay Loveless <clay@killersoft.com>
  */
-class VersionControl_SVN_Cleanup extends VersionControl_SVN
+class VersionControl_SVN_Command_Cleanup extends VersionControl_SVN_Command
 {
-    /**
-     * Valid switches for svn cleanup
-     *
-     * @var     array
-     * @access  public
-     */
-    var $valid_switches = array('config-dir',
-                                'config_dir',
-                                'diff3-cmd'
-                                );
-
     /**
      * Command-line arguments that should be passed 
      * <b>outside</b> of those specified in {@link switches}.
@@ -148,81 +139,21 @@ class VersionControl_SVN_Cleanup extends VersionControl_SVN
      * @access  public
      */
     var $required_switches = array();
-    
+
     /**
-     * Use exec or passthru to get results from command.
-     * @var     bool
-     * @access  public
+     * Constuctor of command. Adds available switches.
      */
-    var $passthru = false;
-    
-    /**
-     * Prepare the svn subcommand switches.
-     *
-     * @param   void
-     * @return  int    true on success, false on failure. Check PEAR_ErrorStack
-     *                 for error details, if any.
-     */
-    function prepare()
+    public function __construct()
     {
-        
-        $meets_requirements = $this->checkCommandRequirements();
-        if (!$meets_requirements) {
-            return false;
-        }
-        
-        $valid_switches     = $this->valid_switches;
-        $switches           = $this->switches;
-        $args               = $this->args;
-        $fetchmode          = $this->fetchmode;
-        $invalid_switches   = array();
-        $_switches          = '';
-        
-        foreach ($switches as $switch => $val) {
-            if (in_array($switch, $valid_switches)) {
-                $switch = str_replace('_', '-', $switch);
-                switch ($switch) {
-                    case 'config-dir':
-                    case 'diff3-cmd':
-                        $_switches .= "--$switch $val ";
-                        break;
-                    default:
-                        // that's all, folks!
-                        break;
-                }
-            } else {
-                $invalid_switches[] = $switch;
-            }
-        }
+        parent::__construct();
 
-        $_switches = trim($_switches);
-        $this->_switches = $_switches;
-
-        $cmd = "$this->svn_path $this->_svn_cmd $_switches";
-        if (!empty($args)) {
-            $cmd .= ' '. join(' ', $args);
-        }
-        $this->_prepped_cmd = $cmd;
-        $this->prepared = true;
-
-        $invalid = count($invalid_switches);
-        if ($invalid > 0) {
-            $params['was'] = 'was';
-            $params['is_invalid_switch'] = 'is an invalid switch';
-            if ($invalid > 1) {
-                $params['was'] = 'were';
-                $params['is_invalid_switch'] = 'are invalid switches';
-            }
-            $params['list'] = $invalid_switches;
-            $params['switches'] = $switches;
-            $params['_svn_cmd'] = ucfirst($this->_svn_cmd);
-            $this->_stack->push(VERSIONCONTROL_SVN_NOTICE_INVALID_SWITCH, 'notice', $params);
-        }
-        return true;
+        $this->validSwitchesValue = array_merge(
+            $this->validSwitchesValue,
+            array(
+                'diff3-cmd',
+            )
+        );
     }
-    
-    /// }}}
 }
 
-/// }}}
 ?>
