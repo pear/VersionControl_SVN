@@ -182,6 +182,8 @@ class VersionControl_SVN_Command_Commit extends VersionControl_SVN_Command
             array(
                 'depth',
                 'targets',
+                'message',
+                'file',
                 'editor-cmd',
                 'encoding',
                 'with-revprop',
