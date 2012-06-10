@@ -143,31 +143,13 @@ require_once 'VersionControl/SVN/Command.php';
 class VersionControl_SVN_Command_Commit extends VersionControl_SVN_Command
 {
     /**
-     * Command-line arguments that should be passed 
-     * <b>outside</b> of those specified in {@link switches}.
-     *
-     * @var     array
-     * @access  public
-     */
-    var $args = array();
-    
-    /**
-     * Minimum number of args required by this subcommand.
-     * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion}, 
-     * Subversion Complete Reference for details on arguments for this subcommand.
-     * @var     int
-     * @access  public
-     */
-    var $min_args = 0;
-    
-    /**
      * Switches required by this subcommand.
      * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion}, 
      * Subversion Complete Reference for details on arguments for this subcommand.
-     * @var     array
-     * @access  public
+     *
+     * @var array $requiredSwitches
      */
-    var $required_switches = array('m|message|F|file');
+    public $requiredSwitches = array('m|message|F|file');
 
     /**
      * Constuctor of command. Adds available switches.

@@ -109,12 +109,38 @@ abstract class VersionControl_SVN_Command
     public $switches = array();
 
     /**
+     * Switches required by this subcommand.
+     * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion},
+     * Subversion Complete Reference for details on arguments for this subcommand.
+     *
+     * @var array $requiredSwitches
+     */
+    public $requiredSwitches = array();
+
+    /**
      * Runtime options being used. 
      *
-     * @var array
+     * @var array $options
      */
     public $options = array();
-    
+
+    /**
+     * Command-line arguments that should be passed
+     * <b>outside</b> of those specified in {@link switches}.
+     *
+     * @var array $args
+     */
+    public $args = array();
+
+    /**
+     * Minimum number of args required by this subcommand.
+     * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion},
+     * Subversion Complete Reference for details on arguments for this subcommand.
+     *
+     * @var int $minArgs
+     */
+    public $minArgs = 0;
+
     /**
      * Preferred fetchmode. Note that not all subcommands have output available for 
      * each preferred fetchmode. The default cascade is:
@@ -156,11 +182,17 @@ abstract class VersionControl_SVN_Command
      */
     protected $errorStack = null;
 
+    /**
+     * Useable switches for command with parameters.
+     */
     protected $validSwitchesValue = array(
         'username',
         'password',
     );
 
+    /**
+     * Useable switches for command without parameters.
+     */
     protected $validSwitches = array(
         'no-auth-cache',
         'non-interactive',
@@ -169,6 +201,9 @@ abstract class VersionControl_SVN_Command
         'config-option',
     );
 
+    /**
+     * Constructor. Can't be called directly as class is abstract.
+     */
     public function __construct()
     {
         $this->errorStack = PEAR_ErrorStack::singleton('VersionControl_SVN');
@@ -255,12 +290,19 @@ abstract class VersionControl_SVN_Command
         $this->postProcessSwitches($invalidSwitches);
 
         $this->preparedCmd = implode(
-            ' ' , array_merge($cmdParts, $this->args)
+            ' ', array_merge($cmdParts, $this->args)
         );
 
         return true;
     }
 
+    /**
+     * Called after handling switches.
+     *
+     * @param array $invalidSwitches Invalid switches found while processing.
+     *
+     * @return void
+     */
     protected function postProcessSwitches($invalidSwitches)
     {
         $invalid = count($invalidSwitches);
@@ -280,14 +322,20 @@ abstract class VersionControl_SVN_Command
         }
     }
 
+
+    /**
+     * Called before handling switches.
+     *
+     * @return void
+     */
     protected function preProcessSwitches()
     {
         if ($this->xmlAvail
             && ($this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ARRAY
             || $this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ASSOC
             || $this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT
-            || $this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_XML))
-        {
+            || $this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_XML)
+        ) {
             $this->switches['xml'] = true;
         }
         $this->switches['non-interactive'] = true;
@@ -311,18 +359,20 @@ abstract class VersionControl_SVN_Command
         $params['cmd']         = '';
         
         // Check for minimum arguments
-        if (sizeof($this->args) < $this->min_args) {
-            $params['argstr'] = $this->min_args > 1 ? 'arguments' : 'argument';
-            $params['min_args'] = $this->min_args;
-            $this->errorStack->push(VERSIONCONTROL_SVN_ERROR_MIN_ARGS, 'error', $params);
+        if (sizeof($this->args) < $this->minArgs) {
+            $params['argstr'] = $this->minArgs > 1 ? 'arguments' : 'argument';
+            $params['minArgs'] = $this->minArgs;
+            $this->errorStack->push(
+                VERSIONCONTROL_SVN_ERROR_MIN_ARGS, 'error', $params
+            );
             return false;
         }
         
         // Check for presence of required switches
-        if (sizeof($this->required_switches) > 0) {
+        if (sizeof($this->requiredSwitches) > 0) {
             $missing    = array();
             $switches   = $this->switches;
-            $reqsw      = $this->required_switches;
+            $reqsw      = $this->requiredSwitches;
             foreach ($reqsw as $req) {
                 $found = false;
                 $good_switches = explode('|', $req);
@@ -388,7 +438,11 @@ abstract class VersionControl_SVN_Command
         // so it's executed as 
         // cmd /c ""C:\Program Files\SVN\bin\svn.exe" info "C:\Program Files\dev\trunk""
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $cmd = str_replace($this->binaryPath, escapeshellarg($this->binaryPath), $cmd);
+            $cmd = str_replace(
+                $this->binaryPath,
+                escapeshellarg($this->binaryPath),
+                $cmd
+            );
             
             if (!$this->passthru) {
                 exec("$cmd 2>&1", $out, $ret_var);
@@ -399,7 +453,6 @@ abstract class VersionControl_SVN_Command
             if ($this->useEscapeshellcmd) {
                 $cmd = escapeshellcmd($cmd);
             }
-var_dump($cmd);
             if (!$this->passthru) {
                 exec("{$this->prependCmd}$cmd 2>&1", $out, $ret_var);
             } else {
@@ -414,7 +467,11 @@ var_dump($cmd);
             $params['cmd']      = $cmd;
             foreach ($out as $line) {
                 $params['errstr'] = $line;
-                $this->errorStack->push(VERSIONCONTROL_SVN_ERROR_EXEC, 'error', $params);
+                $this->errorStack->push(
+                    VERSIONCONTROL_SVN_ERROR_EXEC,
+                    'error',
+                    $params
+                );
             }
             return false;
         }
@@ -434,31 +491,31 @@ var_dump($cmd);
     {
         $dir = realpath(dirname(__FILE__)) . '/Parsers';
         switch($this->fetchmode) {
-            case VERSIONCONTROL_SVN_FETCHMODE_ARRAY:
-            case VERSIONCONTROL_SVN_FETCHMODE_ASSOC:
-            case VERSIONCONTROL_SVN_FETCHMODE_OBJECT:
-                $file = $dir . '/' . ucfirst($this->commandName) . '.php';
-                if (file_exists($file)) {
-                    $class = 'VersionControl_SVN_Parser_'
-                        . ucfirst($this->commandName);
+        case VERSIONCONTROL_SVN_FETCHMODE_ARRAY:
+        case VERSIONCONTROL_SVN_FETCHMODE_ASSOC:
+        case VERSIONCONTROL_SVN_FETCHMODE_OBJECT:
+            $file = $dir . '/' . ucfirst($this->commandName) . '.php';
+            if (file_exists($file)) {
+                $class = 'VersionControl_SVN_Parser_'
+                    . ucfirst($this->commandName);
 
-                    include_once $file;
-                    $parser = new $class;
-                    $contentVar = $this->commandName;
+                include_once $file;
+                $parser = new $class;
+                $contentVar = $this->commandName;
 
-                    $parser->parseString(join("\n", $out));
-                    if ($this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT) {
-                        return (object) $parser->$contentVar;
-                    }
-                    return $parser->$contentVar;
-                    break;
+                $parser->parseString(join("\n", $out));
+                if ($this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT) {
+                    return (object) $parser->$contentVar;
                 }
-            case VERSIONCONTROL_SVN_FETCHMODE_RAW:
-            case VERSIONCONTROL_SVN_FETCHMODE_XML:
-            default:
-                // What you get with VERSIONCONTROL_SVN_FETCHMODE_DEFAULT
-                return join("\n", $out);
+                return $parser->$contentVar;
                 break;
+            }
+        case VERSIONCONTROL_SVN_FETCHMODE_RAW:
+        case VERSIONCONTROL_SVN_FETCHMODE_XML:
+        default:
+            // What you get with VERSIONCONTROL_SVN_FETCHMODE_DEFAULT
+            return join("\n", $out);
+            break;
         }
     }
 }

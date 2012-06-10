@@ -141,38 +141,13 @@ require_once 'VersionControl/SVN/Command.php';
 class VersionControl_SVN_Command_Propget extends VersionControl_SVN_Command
 {
     /**
-     * Command-line arguments that should be passed 
-     * <b>outside</b> of those specified in {@link switches}.
-     *
-     * @var     array
-     * @access  public
-     */
-    var $args = array();
-    
-    /**
      * Minimum number of args required by this subcommand.
-     * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion}, 
+     * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion},
      * Subversion Complete Reference for details on arguments for this subcommand.
-     * @var     int
-     * @access  public
+     *
+     * @var int $minArgs
      */
-    var $min_args = 1;
-    
-    /**
-     * Switches required by this subcommand.
-     * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion}, 
-     * Subversion Complete Reference for details on arguments for this subcommand.
-     * @var     array
-     * @access  public
-     */
-    var $required_switches = array();
-    
-    /**
-     * Use exec or passthru to get results from command.
-     * @var     bool
-     * @access  public
-     */
-    var $passthru = false;
+    public $minArgs = 1;
 
     /**
      * Keep track of whether XML output is available for a command

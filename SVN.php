@@ -1,12 +1,6 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
-
 /**
- * +----------------------------------------------------------------------+
- * | PHP version 5                                                        |
- * +----------------------------------------------------------------------+
- * | Copyright (c) 2004-2007, Clay Loveless                               |
- * | All rights reserved.                                                 |
  * +----------------------------------------------------------------------+
  * | This LICENSE is in the BSD license style.                            |
  * | http://www.opensource.org/licenses/bsd-license.php                   |
@@ -41,13 +35,15 @@
  * | POSSIBILITY OF SUCH DAMAGE.                                          |
  * +----------------------------------------------------------------------+
  *
+ * PHP version 5
+ *
  * @category  VersionControl
  * @package   VersionControl_SVN
  * @author    Clay Loveless <clay@killersoft.com>
  * @author    Michiel Rook <mrook@php.net>
+ * @author    Alexander Opitz <opitz.alexander@gmail.com>
  * @copyright 2004-2007 Clay Loveless
- * @license   http://www.killersoft.com/LICENSE.txt BSD License
- * @version   SVN: $Id$
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
@@ -281,8 +277,8 @@ class VersionControl_SVN
      * @param array  $options An associative array of option names and
      *                        their values
      *
-     * @return  mixed   a newly created VersionControl_SVN command object, or PEAR_ErrorStack
-     *                  constant on error
+     * @return mixed A newly created command object or an stdObj with the
+     *               command objects set.
      */
     public static function factory($command, $options = array())
     {
