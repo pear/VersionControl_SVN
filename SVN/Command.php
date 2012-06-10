@@ -46,7 +46,7 @@
  * @author    Michiel Rook <mrook@php.net>
  * @author    Alexander Opitz <opitz.alexander@gmail.com>
  * @copyright 2004-2007 Clay Loveless
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
@@ -60,7 +60,7 @@
  * @author    Michiel Rook <mrook@php.net>
  * @author    Alexander Opitz <opitz.alexander@gmail.com>
  * @copyright 2004-2007 Clay Loveless
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  * @version   @version@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */

@@ -37,6 +37,7 @@
  * | ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE      |
  * | POSSIBILITY OF SUCH DAMAGE.                                          |
  * +----------------------------------------------------------------------+
+ *
  * PHP version 5
  *
  * @category  VersionControl
@@ -44,7 +45,7 @@
  * @author    Clay Loveless <clay@killersoft.com>
  * @author    Alexander Opitz <opitz.alexander@gmail.com>
  * @copyright 2004-2007 Clay Loveless
- * @license   http://www.opensource.org/licenses/bsd-license.php BSD
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
@@ -53,11 +54,11 @@
 /**
  * Class VersionControl_SVN_Parser_Info - XML Parser for Subversion Info output
  *
- * @category SCM
+ * @category VersionControl
  * @package  VersionControl_SVN
  * @author   Clay Loveless <clay@killersoft.com>
  * @author   Alexander Opitz <opitz.alexander@gmail.com>
- * @license  http://www.opensource.org/licenses/bsd-license.php BSD
+ * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
  * @version  @version@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */

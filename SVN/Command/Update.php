@@ -1,15 +1,9 @@
 <?php
-
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
-
-/** +----------------------------------------------------------------------+
- * | PHP version 5                                                        |
- * +----------------------------------------------------------------------+
- * | Copyright (c) 2004-2007, Clay Loveless                               |
- * | All rights reserved.                                                 |
+/**
  * +----------------------------------------------------------------------+
  * | This LICENSE is in the BSD license style.                            |
- * | http: *www.opensource.org/licenses/bsd-license.php                   |
+ * | http://www.opensource.org/licenses/bsd-license.php                   |
  * |                                                                      |
  * | Redistribution and use in source and binary forms, with or without   |
  * | modification, are permitted provided that the following conditions   |
@@ -40,16 +34,17 @@
  * | ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE      |
  * | POSSIBILITY OF SUCH DAMAGE.                                          |
  * +----------------------------------------------------------------------+
- * | Author: Clay Loveless <clay@killersoft.com>                          |
- * +----------------------------------------------------------------------+
  *
- * @category VersionControl
- * @package  VersionControl_SVN
- * @author   Clay Loveless <clay@killersoft.com>
- * @author   Michiel Rook <mrook@php.net>
- * @license  http://www.killersoft.com/LICENSE.txt BSD License
- * @version  SVN: $Id$
- * @link     http://pear.php.net/package/VersionControl_SVN
+ * PHP version 5
+ *
+ * @category  VersionControl
+ * @package   VersionControl_SVN
+ * @author    Clay Loveless <clay@killersoft.com>
+ * @author    Michiel Rook <mrook@php.net>
+ * @author    Alexander Opitz <opitz.alexander@gmail.com>
+ * @copyright 2004-2007 Clay Loveless
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
 require_once 'VersionControl/SVN/Command.php';
@@ -148,7 +143,8 @@ require_once 'VersionControl/SVN/Command.php';
  * @package  VersionControl_SVN
  * @author   Clay Loveless <clay@killersoft.com>
  * @author   Michiel Rook <mrook@php.net>
- * @license  http://www.killersoft.com/LICENSE.txt BSD License
+ * @author   Alexander Opitz <opitz.alexander@gmail.com>
+ * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
  * @version  @version@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */
