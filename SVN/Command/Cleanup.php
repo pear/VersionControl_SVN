@@ -1,9 +1,6 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 /**
- * VersionControl_SVN_Info allows for XML formatted output. XML_Parser is used to
- * manipulate that output.
- *
  * +----------------------------------------------------------------------+
  * | This LICENSE is in the BSD license style.                            |
  * | http://www.opensource.org/licenses/bsd-license.php                   |
@@ -49,10 +46,61 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
- require_once 'XML/Parser.php';
+require_once 'VersionControl/SVN/Command.php';
 
 /**
- * Class VersionControl_SVN_Parser_Info - XML Parser for Subversion Info output
+ * Subversion Cleanup command manager class
+ *
+ * Recursively clean up the working copy indicated by PATH, removing
+ * locks, resuming unfinished operations, etc.
+ *
+ * $options is an array containing one or more options
+ * defined by the following associative keys:
+ *
+ * <code>
+ *
+ * $switches = array(
+ *  'config-dir'    =>  'Path to a Subversion configuration directory',
+ *  'diff3-cmd'     =>  'ARG'
+ *                      // Use ARG as merge command. 
+ * );
+ *
+ * </code>
+ *
+ * If a path is not used in the $args array, the default path of '.' will
+ * be assumed.
+ *
+ * Note: Subversion does not offer an XML output option for this subcommand
+ *
+ * Note: There is no output from the svn cleanup command!
+ *
+ * Usage example:
+ * <code>
+ * <?php
+ * require_once 'VersionControl/SVN.php';
+ *
+ * // Setup error handling -- always a good idea!
+ * $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
+ *
+ * // Pass array of subcommands we need to factory
+ * $svn = VersionControl_SVN::factory(array('cleanup'), $options);
+ *
+ * // Define any switches and aguments we may need
+ * $args = array('/path/to/working_copy');
+ *
+ * // Run command
+ * if ($output = $svn->cleanup->run($args)) {
+ *     print_r($output);
+ * } else {
+ *     if (count($errs = $svnstack->getErrors())) { 
+ *         foreach ($errs as $err) {
+ *             echo '<br />'.$err['message']."<br />\n";
+ *             echo "Command used: " . $err['params']['cmd'];
+ *         }
+ *     }
+ * }
+ * ?>
+ * </code>
  *
  * @category VersionControl
  * @package  VersionControl_SVN
@@ -62,72 +110,22 @@
  * @version  @version@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */
-class VersionControl_SVN_Parser_Info extends XML_Parser
+class VersionControl_SVN_Command_Cleanup extends VersionControl_SVN_Command
 {
-    var $commit = array();
-    var $entry = array();
-    var $info = array();
-
-    function startHandler($xp, $element, &$attribs)
+    /**
+     * Constuctor of command. Adds available switches.
+     */
+    public function __construct()
     {
-        switch ($element) {
-        case 'COMMIT':
-            $this->commit = array(
-                'REVISION' => $attribs['REVISION']
-            );
-            break;
-        case 'ENTRY':
-            $this->entry = array(
-                'REVISION' => $attribs['REVISION']
-            );
-            break;
-        case 'INFO':
-            $this->info = array();
-            break;
-        case 'REPOSITORY':
-            $this->repository = array();
-            break;
-        case 'AUTHOR':
-        case 'DATE':
-        case 'ROOT':
-        case 'URL':
-        case 'UUID':
-            $this->cdata = '';
-            break;
-        }
-    }
+        parent::__construct();
 
-    function cdataHandler($xp, $data)
-    {
-        $this->cdata .= $data;
-    }
-
-    function endHandler($xp, $element)
-    {
-        switch($element) {
-        case 'COMMIT':
-            $this->entry['COMMIT'] = $this->commit;
-            break;
-        case 'ENTRY':
-            $this->info[] = $this->entry;
-            break;
-        case 'INFO':
-            break;
-        case 'REPOSITORY':
-            $this->entry['REPOSITORY'] = $this->repository;
-            break;
-        case 'AUTHOR':
-        case 'DATE':
-            $this->commit[$element] = $this->cdata;
-            break;
-        case 'ROOT':
-        case 'UUID':
-            $this->repository[$element] = $this->cdata;
-            break;
-        case 'URL':
-            $this->entry[$element] = $this->cdata;
-            break;
-        }
+        $this->validSwitchesValue = array_merge(
+            $this->validSwitchesValue,
+            array(
+                'diff3-cmd',
+            )
+        );
     }
 }
+
 ?>
