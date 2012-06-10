@@ -167,18 +167,11 @@ class VersionControl_SVN_Command_Revert extends VersionControl_SVN_Command
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'recursive',
-                'quiet',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'R', 'q',
+                'R', 'recursive',
+                'q', 'quiet',
             )
         );
     }

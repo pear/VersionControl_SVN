@@ -275,33 +275,26 @@ class VersionControl_SVN_Command_Diff extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'revision',
-                'change',
+                'r', 'revision',
+                'c', 'change',
                 'old',
                 'new',
                 'depth',
                 'diff-cmd',
-                'extensions',
+                'x', 'extensions',
                 'changelist',
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'non-recursive',
+                'N', 'non-recursive',
                 'no-diff-deleted',
                 'notice-ancestry',
                 'summerize',
                 'force',
                 'xml',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'N',
             )
         );
     }

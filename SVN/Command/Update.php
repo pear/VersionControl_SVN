@@ -188,7 +188,7 @@ class VersionControl_SVN_Command_Update extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'revision',
+                'r', 'revision',
                 'depth',
                 'set-depth',
                 'diff3-cmd',
@@ -198,20 +198,13 @@ class VersionControl_SVN_Command_Update extends VersionControl_SVN_Command
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'non-recursive',
-                'quiet',
+                'N', 'non-recursive',
+                'q', 'quiet',
                 'force',
                 'ignore-externals',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'N', 'q'
             )
         );
     }

@@ -182,28 +182,21 @@ class VersionControl_SVN_Command_Delete extends VersionControl_SVN_Command
             $this->validSwitchesValue,
             array(
                 'targets',
-                'message',
-                'file',
+                'm', 'message',
+                'F', 'file',
                 'editor-cmd',
                 'encoding',
                 'with-revprop',
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
                 'force',
-                'quiet',
+                'q', 'quiet',
                 'force-log',
                 'keep-local',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'q',
             )
         );
     }

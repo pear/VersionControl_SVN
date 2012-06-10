@@ -176,23 +176,16 @@ class VersionControl_SVN_Command_Add extends VersionControl_SVN_Command
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'non-recursive',
-                'quiet',
+                'N', 'non-recursive',
+                'q', 'quiet',
                 'force',
                 'no-ignore',
                 'auto-props',
                 'no-auto-props',
                 'parents',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'N', 'q'
             )
         );
     }

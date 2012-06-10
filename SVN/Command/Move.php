@@ -190,29 +190,22 @@ class VersionControl_SVN_Command_Move extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'revision',
-                'message',
-                'file',
+                'r', 'revision',
+                'm', 'message',
+                'F', 'file',
                 'editor-cmd',
                 'encoding',
                 'with-revprop'
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'quiet',
+                'q', 'quiet',
                 'force',
                 'parents',
                 'force-log',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'q',
             )
         );
     }

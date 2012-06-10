@@ -245,27 +245,20 @@ class VersionControl_SVN_Command_Status extends VersionControl_SVN_Command
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'show-updates',
-                'verbose',
-                'non-recursive',
+                'u', 'show-updates',
+                'v', 'verbose',
+                'N', 'non-recursive',
+                'q', 'quiet',
                 'no-ignore',
                 'incremental',
                 'xml',
                 'ignore-externals',
             )
         );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'u', 'v', 'N', 'q'
-            )
-        );
     }
 }
 
-// }}}
 ?>

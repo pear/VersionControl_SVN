@@ -151,13 +151,6 @@ class VersionControl_SVN_Command_Resolved extends VersionControl_SVN_Command
      * @access  public
      */
     var $required_switches = array();
-    
-    /**
-     * Use exec or passthru to get results from command.
-     * @var     bool
-     * @access  public
-     */
-    var $passthru = false;
 
     /**
      * Constuctor of command. Adds available switches.
@@ -174,18 +167,11 @@ class VersionControl_SVN_Command_Resolved extends VersionControl_SVN_Command
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'recursive',
-                'quiet',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'R', 'q',
+                'R', 'recursive',
+                'q', 'quiet',
             )
         );
     }

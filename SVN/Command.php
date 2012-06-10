@@ -161,15 +161,12 @@ abstract class VersionControl_SVN_Command
         'password',
     );
 
-    protected $validSwitchesLong = array(
+    protected $validSwitches = array(
         'no-auth-cache',
         'non-interactive',
         'trust-server-cert',
         'config-dir',
         'config-option',
-    );
-
-    protected $validSwitchesShort = array(
     );
 
     public function __construct()
@@ -239,15 +236,16 @@ abstract class VersionControl_SVN_Command
         );
 
         foreach ($this->switches as $switch => $val) {
+            if (1 === strlen($switch)) {
+                $switchPrefix = '-';
+            } else {
+                $switchPrefix = '--';
+            }
             if (in_array($switch, $this->validSwitchesValue)) {
-                $cmdParts[] = '--' . $switch . ' ' . $val;
-            } elseif (in_array($switch, $this->validSwitchesLong)) {
+                $cmdParts[] = $switchPrefix . $switch . ' ' . $val;
+            } elseif (in_array($switch, $this->validSwitches)) {
                 if (true === $val) {
-                    $cmdParts[] = '--' . $switch;
-                }
-            } elseif (in_array($switch, $this->validSwitchesShort)) {
-                if (true === $val) {
-                    $cmdParts[] = '-' . $switch;
+                    $cmdParts[] = $switchPrefix . $switch;
                 }
             } else {
                 $invalidSwitches[] = $switch;

@@ -164,7 +164,7 @@ class VersionControl_SVN_Command_Cat extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'revision',
+                'r', 'revision',
             )
         );
     }

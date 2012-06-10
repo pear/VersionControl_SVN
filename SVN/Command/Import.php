@@ -186,30 +186,23 @@ class VersionControl_SVN_Command_Import extends VersionControl_SVN_Command
             $this->validSwitchesValue,
             array(
                 'depth',
-                'message',
-                'file',
+                'm', 'message',
+                'F', 'file',
                 'editor-cmd',
                 'encoding',
                 'with-revprop',
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'quiet',
-                'non-recursive',
+                'q', 'quiet',
+                'N', 'non-recursive',
                 'force',
                 'no-auto-props',
                 'force-log',
                 'no-ignore',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'q', 'N',
             )
         );
     }

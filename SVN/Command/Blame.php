@@ -174,26 +174,19 @@ class VersionControl_SVN_Command_Blame extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'revision',
-                'extensions',
+                'r', 'revision',
+                'x', 'extensions',
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'verbose',
-                'use-merge-history',
+                'v', 'verbose',
+                'g', 'use-merge-history',
                 'incremental',
                 'xml',
                 'force',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'v', 'g',
             )
         );
     }

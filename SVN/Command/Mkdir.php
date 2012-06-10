@@ -186,27 +186,20 @@ class VersionControl_SVN_Command_Mkdir extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'message',
-                'file',
+                'm', 'message',
+                'F', 'file',
                 'editor-cmd',
                 'encoding',
                 'with-revprop',
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'quiet',
+                'q', 'quiet',
                 'parents',
                 'forde-log',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'q',
             )
         );
     }

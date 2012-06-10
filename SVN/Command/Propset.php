@@ -205,29 +205,22 @@ class VersionControl_SVN_Command_Propset extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'file',
+                'F', 'file',
                 'encoding',
-                'revision',
+                'r', 'revision',
                 'targets',
                 'depth',
                 'changelist',
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'quiet',
-                'recursive',
+                'q', 'quiet',
+                'R', 'recursive',
                 'revprop',
                 'force',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'q', 'R',
             )
         );
     }

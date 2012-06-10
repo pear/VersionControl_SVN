@@ -209,25 +209,19 @@ class VersionControl_SVN_Command_Export extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'revision',
+                'r', 'revision',
                 'depth',
                 'native-eol',
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'quiet',
+                'q', 'quiet',
+                'N', 'non-recursive',
                 'force',
                 'ignore-externals',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'q', 'N',
             )
         );
     }

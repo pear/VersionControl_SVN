@@ -164,26 +164,19 @@ class VersionControl_SVN_Command_Info extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'revision',
+                'r', 'revision',
                 'depth',
                 'targets',
                 'changelist',
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'recursive',
+                'R', 'recursive',
                 'incremental',
                 'xml',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'R',
             )
         );
     }

@@ -179,24 +179,17 @@ class VersionControl_SVN_Command_Propdel extends VersionControl_SVN_Command
             $this->validSwitchesValue,
             array(
                 'depth',
-                'revision',
+                'r', 'revision',
                 'changelist',
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'quiet',
-                'recursive',
+                'q', 'quiet',
+                'R', 'recursive',
                 'revprop',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'q', 'R',
             )
         );
     }

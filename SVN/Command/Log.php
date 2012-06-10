@@ -181,32 +181,25 @@ class VersionControl_SVN_Command_Log extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'revision',
-                'change',
+                'r', 'revision',
+                'c', 'change',
                 'targets',
-                'limit',
+                'l', 'limit',
                 'with-revprop',
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'quiet',
-                'verbose',
-                'use-merge-history',
+                'q', 'quiet',
+                'v', 'verbose',
+                'g', 'use-merge-history',
                 'stop-on-copy',
                 'incremental',
                 'xml',
                 'with-all-revprops',
                 'with-no-revprops',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'q', 'v', 'g'
             )
         );
     }

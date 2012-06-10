@@ -256,32 +256,25 @@ class VersionControl_SVN_Command_Merge extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'revision',
-                'change',
+                'r', 'revision',
+                'c', 'change',
                 'depth',
                 'diff-cmd',
-                'extensions',
+                'x', 'extensions',
                 'accept'
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'non-recursive',
-                'quiet',
+                'N', 'non-recursive',
+                'q', 'quiet',
                 'force',
                 'dry-run',
                 'record-only',
                 'ignore-ancestry',
                 'reintegrated',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'N', 'q',
             )
         );
     }

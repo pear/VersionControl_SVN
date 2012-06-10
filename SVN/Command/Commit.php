@@ -182,8 +182,8 @@ class VersionControl_SVN_Command_Commit extends VersionControl_SVN_Command
             array(
                 'depth',
                 'targets',
-                'message',
-                'file',
+                'm', 'message',
+                'F', 'file',
                 'editor-cmd',
                 'encoding',
                 'with-revprop',
@@ -191,21 +191,14 @@ class VersionControl_SVN_Command_Commit extends VersionControl_SVN_Command
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'quiet',
-                'non-recursive',
+                'q', 'quiet',
+                'N', 'non-recursive',
                 'no-unlock',
                 'force-log',
                 'keep-changelist',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'q', 'N',
             )
         );
     }

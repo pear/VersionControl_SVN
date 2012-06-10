@@ -193,26 +193,19 @@ class VersionControl_SVN_Command_Propget extends VersionControl_SVN_Command
             $this->validSwitchesValue,
             array(
                 'depth',
-                'revision',
+                'r', 'revision',
                 'changelist',
             )
         );
 
-        $this->validSwitchesLong = array_merge(
-            $this->validSwitchesLong,
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
             array(
-                'verbose',
-                'recursive',
+                'v', 'verbose',
+                'R', 'recursive',
                 'revprop',
                 'strict',
                 'xml',
-            )
-        );
-
-        $this->validSwitchesShort = array_merge(
-            $this->validSwitchesShort,
-            array(
-                'v', 'R',
             )
         );
     }
