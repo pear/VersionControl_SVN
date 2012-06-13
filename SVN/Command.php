@@ -87,7 +87,7 @@ abstract class VersionControl_SVN_Command
     /**
      * Location of the svn client binary installed as part of Subversion
      *
-     * @var string  $binaryPath
+     * @var string $binaryPath
      */
     public $binaryPath = '/usr/local/bin/svn';
 
@@ -155,18 +155,32 @@ abstract class VersionControl_SVN_Command
     public $fetchmode = VERSIONCONTROL_SVN_FETCHMODE_ASSOC;
 
     /**
-     * The username to use for connections.
+     * Default username to use for connections.
      *
      * @var string $username
      */
     public $username = '';
 
     /**
-     * The password to use for connections.
+     * Default password to use for connections.
      *
      * @var string $password
      */
     public $password = '';
+
+    /**
+     * Default config-dir to use for connections.
+     *
+     * @var string $configDir
+     */
+    public $configDir = '';
+
+    /**
+     * Default config-option to use for connections.
+     *
+     * @var string $configOption
+     */
+    public $configOption = '';
 
     /**
      * SVN subcommand to run.
@@ -202,6 +216,8 @@ abstract class VersionControl_SVN_Command
     protected $validSwitchesValue = array(
         'username',
         'password',
+        'config-dir',
+        'config-option',
     );
 
     /**
@@ -211,8 +227,6 @@ abstract class VersionControl_SVN_Command
         'no-auth-cache',
         'non-interactive',
         'trust-server-cert',
-        'config-dir',
-        'config-option',
     );
 
     /**
@@ -354,15 +368,18 @@ abstract class VersionControl_SVN_Command
         }
         $this->switches['non-interactive'] = true;
 
-        if (!isset($this->switches['username'])
-            && '' !== $this->username
+        $this->fillSwitch('username', $this->username);
+        $this->fillSwitch('password', $this->password);
+        $this->fillSwitch('config-dir', $this->configDir);
+        $this->fillSwitch('config-option', $this->configOption);
+    }
+
+    protected function fillSwitch($switchName, $value)
+    {
+        if (!isset($this->switches[$switchName])
+            && '' !== $value
         ) {
-            $this->switches['username'] = $this->username;
-        }
-        if (!isset($this->switches['password'])
-            && '' !== $this->password
-        ) {
-            $this->switches['password'] = $this->password;
+            $this->switches[$switchName] = $value;
         }
     }
 
