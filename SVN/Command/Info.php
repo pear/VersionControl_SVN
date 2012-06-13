@@ -1,9 +1,6 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 /**
- * VersionControl_SVN_Info allows for XML formatted output. XML_Parser is used to
- * manipulate that output.
- *
  * +----------------------------------------------------------------------+
  * | This LICENSE is in the BSD license style.                            |
  * | http://www.opensource.org/licenses/bsd-license.php                   |
@@ -49,10 +46,68 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
- require_once 'XML/Parser.php';
+require_once 'VersionControl/SVN/Command.php';
 
 /**
- * Class VersionControl_SVN_Parser_Info - XML Parser for Subversion Info output
+ * Subversion Info command manager class
+ *
+ * Display information about a file or directory in PATH.
+ *
+ * If the 'path' option is omitted, '.' is assumed.
+ *
+ * $switches is an array containing one or more command line options
+ * defined by the following associative keys:
+ *
+ * <code>
+ *
+ * $switches = array(
+ *  'targets'       =>  'ARG',
+ *                      // passes contents of file ARG as additional arguments
+ *  'R'             =>  true|false,
+ *                      // descend recursively
+ *  'recursive'     =>  true|false,
+ *                      // descend recursively
+ *  'config-dir'    =>  'Path to a Subversion configuration directory',
+ * 
+ *  'username'      =>  'username for accessing repository',
+ * 
+ *  'password'      =>  'password for accessing repository'
+ * );
+ *
+ * </code>
+ *
+ * Usage example:
+ * <code>
+ * <?php
+ * require_once 'VersionControl/SVN.php';
+ *
+ * // Setup error handling -- always a good idea!
+ * $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
+ *
+ * // Set up runtime options. Will be passed to all 
+ * // subclasses.
+ * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
+ *
+ * // Pass array of subcommands we need to factory
+ * $svn = VersionControl_SVN::factory(array('info'), $options);
+ *
+ * // Define any switches and aguments we may need
+ * $switches = array('R' => true);
+ * $args = array('/path/to/working_copy');
+ *
+ * // Run command
+ * if ($output = $svn->info->run($args, $switches)) {
+ *     print_r($output);
+ * } else {
+ *     if (count($errs = $svnstack->getErrors())) { 
+ *         foreach ($errs as $err) {
+ *             echo '<br />'.$err['message']."<br />\n";
+ *             echo "Command used: " . $err['params']['cmd'];
+ *         }
+ *     }
+ * }
+ * ?>
+ * </code>
  *
  * @category VersionControl
  * @package  VersionControl_SVN
@@ -62,72 +117,41 @@
  * @version  @version@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */
-class VersionControl_SVN_Parser_Info extends XML_Parser
+class VersionControl_SVN_Command_Info extends VersionControl_SVN_Command
 {
-    var $commit = array();
-    var $entry = array();
-    var $info = array();
+    /**
+     * Keep track of whether XML output is available for a command
+     *
+     * @var boolean $xmlAvail
+     */
+    protected $xmlAvail = true;
 
-    function startHandler($xp, $element, &$attribs)
+    /**
+     * Constuctor of command. Adds available switches.
+     */
+    public function __construct()
     {
-        switch ($element) {
-        case 'COMMIT':
-            $this->commit = array(
-                'REVISION' => $attribs['REVISION']
-            );
-            break;
-        case 'ENTRY':
-            $this->entry = array(
-                'REVISION' => $attribs['REVISION']
-            );
-            break;
-        case 'INFO':
-            $this->info = array();
-            break;
-        case 'REPOSITORY':
-            $this->repository = array();
-            break;
-        case 'AUTHOR':
-        case 'DATE':
-        case 'ROOT':
-        case 'URL':
-        case 'UUID':
-            $this->cdata = '';
-            break;
-        }
-    }
+        parent::__construct();
 
-    function cdataHandler($xp, $data)
-    {
-        $this->cdata .= $data;
-    }
+        $this->validSwitchesValue = array_merge(
+            $this->validSwitchesValue,
+            array(
+                'r', 'revision',
+                'depth',
+                'targets',
+                'changelist',
+            )
+        );
 
-    function endHandler($xp, $element)
-    {
-        switch($element) {
-        case 'COMMIT':
-            $this->entry['COMMIT'] = $this->commit;
-            break;
-        case 'ENTRY':
-            $this->info[] = $this->entry;
-            break;
-        case 'INFO':
-            break;
-        case 'REPOSITORY':
-            $this->entry['REPOSITORY'] = $this->repository;
-            break;
-        case 'AUTHOR':
-        case 'DATE':
-            $this->commit[$element] = $this->cdata;
-            break;
-        case 'ROOT':
-        case 'UUID':
-            $this->repository[$element] = $this->cdata;
-            break;
-        case 'URL':
-            $this->entry[$element] = $this->cdata;
-            break;
-        }
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
+            array(
+                'R', 'recursive',
+                'incremental',
+                'xml',
+            )
+        );
     }
 }
+
 ?>

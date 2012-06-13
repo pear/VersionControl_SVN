@@ -1,9 +1,6 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 /**
- * VersionControl_SVN_Info allows for XML formatted output. XML_Parser is used to
- * manipulate that output.
- *
  * +----------------------------------------------------------------------+
  * | This LICENSE is in the BSD license style.                            |
  * | http://www.opensource.org/licenses/bsd-license.php                   |
@@ -49,10 +46,72 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
- require_once 'XML/Parser.php';
+require_once 'VersionControl/SVN/Command.php';
 
 /**
- * Class VersionControl_SVN_Parser_Info - XML Parser for Subversion Info output
+ * Subversion Revert command manager class
+ *
+ * Restore pristine working copy file (undo most local edits).
+ *
+ * Note: This subcommand does not require network access, and resolves
+ * any conflicted states. However, it does not restore removed directories.
+ *
+ * $switches is an array containing one or more command line options
+ * defined by the following associative keys:
+ *
+ * <code>
+ *
+ * $switches = array(
+ *  'targets'       =>  'ARG',
+ *                      // pass contents of file ARG as additional args
+ *  'R'             =>  true|false,
+ *                      // descend recursively
+ *  'recursive'     =>  true|false,
+ *                      // descend recursively
+ *  'q [quiet]'     =>  true|false,
+ *                      // prints as little as possible
+ *  'config-dir'    =>  'Path to a Subversion configuration directory'
+ * );
+ *
+ * </code>
+ *
+ * Note: Subversion does not offer an XML output option for this subcommand
+ *
+ * The non-interactive option available on the command-line 
+ * svn client may also be set (true|false), but it is set to true by default.
+ *
+ * Usage example:
+ * <code>
+ * <?php
+ * require_once 'VersionControl/SVN.php';
+ *
+ * // Setup error handling -- always a good idea!
+ * $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
+ *
+ * // Set up runtime options. Will be passed to all 
+ * // subclasses.
+ * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
+ *
+ * // Pass array of subcommands we need to factory
+ * $svn = VersionControl_SVN::factory(array('revert'), $options);
+ *
+ * // Define any switches and aguments we may need
+ * $switches = array('R' => true);
+ * $args = array('/path/to/working/copy/TestProj/trunk');
+ *
+ * // Run command
+ * if ($output = $svn->revert->run($args, $switches)) {
+ *     print_r($output);
+ * } else {
+ *     if (count($errs = $svnstack->getErrors())) { 
+ *         foreach ($errs as $err) {
+ *             echo '<br />'.$err['message']."<br />\n";
+ *             echo "Command used: " . $err['params']['cmd'];
+ *         }
+ *     }
+ * }
+ * ?>
+ * </code>
  *
  * @category VersionControl
  * @package  VersionControl_SVN
@@ -62,72 +121,41 @@
  * @version  @version@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */
-class VersionControl_SVN_Parser_Info extends XML_Parser
+class VersionControl_SVN_Command_Revert extends VersionControl_SVN_Command
 {
-    var $commit = array();
-    var $entry = array();
-    var $info = array();
+    /**
+     * Minimum number of args required by this subcommand.
+     * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion},
+     * Subversion Complete Reference for details on arguments for this subcommand.
+     *
+     * @var int $minArgs
+     */
+    public $minArgs = 1;
 
-    function startHandler($xp, $element, &$attribs)
+    /**
+     * Constuctor of command. Adds available switches.
+     */
+    public function __construct()
     {
-        switch ($element) {
-        case 'COMMIT':
-            $this->commit = array(
-                'REVISION' => $attribs['REVISION']
-            );
-            break;
-        case 'ENTRY':
-            $this->entry = array(
-                'REVISION' => $attribs['REVISION']
-            );
-            break;
-        case 'INFO':
-            $this->info = array();
-            break;
-        case 'REPOSITORY':
-            $this->repository = array();
-            break;
-        case 'AUTHOR':
-        case 'DATE':
-        case 'ROOT':
-        case 'URL':
-        case 'UUID':
-            $this->cdata = '';
-            break;
-        }
-    }
+        parent::__construct();
 
-    function cdataHandler($xp, $data)
-    {
-        $this->cdata .= $data;
-    }
+        $this->validSwitchesValue = array_merge(
+            $this->validSwitchesValue,
+            array(
+                'targets',
+                'depth',
+                'changelist',
+            )
+        );
 
-    function endHandler($xp, $element)
-    {
-        switch($element) {
-        case 'COMMIT':
-            $this->entry['COMMIT'] = $this->commit;
-            break;
-        case 'ENTRY':
-            $this->info[] = $this->entry;
-            break;
-        case 'INFO':
-            break;
-        case 'REPOSITORY':
-            $this->entry['REPOSITORY'] = $this->repository;
-            break;
-        case 'AUTHOR':
-        case 'DATE':
-            $this->commit[$element] = $this->cdata;
-            break;
-        case 'ROOT':
-        case 'UUID':
-            $this->repository[$element] = $this->cdata;
-            break;
-        case 'URL':
-            $this->entry[$element] = $this->cdata;
-            break;
-        }
+        $this->validSwitches = array_merge(
+            $this->validSwitches,
+            array(
+                'R', 'recursive',
+                'q', 'quiet',
+            )
+        );
     }
 }
+
 ?>
