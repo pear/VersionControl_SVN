@@ -150,9 +150,23 @@ abstract class VersionControl_SVN_Command
      *
      * If the specified fetchmode isn't available, raw output will be returned.
      * 
-     * @var int
+     * @var int $fetchmode
      */
     public $fetchmode = VERSIONCONTROL_SVN_FETCHMODE_ASSOC;
+
+    /**
+     * The username to use for connections.
+     *
+     * @var string $username
+     */
+    public $username = '';
+
+    /**
+     * The password to use for connections.
+     *
+     * @var string $password
+     */
+    public $password = '';
 
     /**
      * SVN subcommand to run.
@@ -339,6 +353,17 @@ abstract class VersionControl_SVN_Command
             $this->switches['xml'] = true;
         }
         $this->switches['non-interactive'] = true;
+
+        if (!isset($this->switches['username'])
+            && '' !== $this->username
+        ) {
+            $this->switches['username'] = $this->username;
+        }
+        if (!isset($this->switches['password'])
+            && '' !== $this->password
+        ) {
+            $this->switches['password'] = $this->password;
+        }
     }
 
 
