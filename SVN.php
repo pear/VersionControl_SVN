@@ -239,17 +239,16 @@ class VersionControl_SVN
      * <code>
      *
      * array(
-     *  'url'           => 'Subversion repository URL',
      *  'username'      => 'Subversion repository login',
      *  'password'      => 'Subversion repository password',
-     *  'config_dir'    => 'Path to a Subversion configuration directory',
+     *  'config-dir'    => 'Path to a Subversion configuration directory',
      *                     // [DEFAULT: null]
-     *  'dry_run'       => true/false, 
-     *                     // [DEFAULT: false]
-     *  'encoding'      => 'Language encoding to use for commit messages', 
+     *  'config-option' => 'Set Subversion user configuration',
      *                     // [DEFAULT: null]
-     *  'svn_path'      => 'Path to the svn client binary installed as part of Subversion',
+     *  'binaryPath'    => 'Path to the svn client binary installed as part of Subversion',
      *                     // [DEFAULT: /usr/local/bin/svn]
+     *  'fetchmode'     => Type of returning of run function.
+     *                     // [DEFAULT: VERSIONCONTROL_SVN_FETCHMODE_ASSOC]
      * )
      *
      * </code>
@@ -260,8 +259,6 @@ class VersionControl_SVN
      * require_once 'VersionControl/SVN.php';
      *
      * $options = array(
-     *      'url'        => 'https://www.example.com/repos',
-     *      'path'       => 'your_project',
      *      'username'   => 'your_login',
      *      'password'   => 'your_password',
      * );
@@ -269,7 +266,7 @@ class VersionControl_SVN
      * // Run a log command
      * $svn = VersionControl_SVN::factory('log', $options);
      *
-     * print_r($svn->run());
+     * print_r($svn->run(array('path_to_your_svn'));
      * ?>
      * </code>
      *
