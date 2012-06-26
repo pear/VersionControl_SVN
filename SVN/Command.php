@@ -50,6 +50,8 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
+require_once 'VersionControl/SVN/Exception.php';
+require_once 'System.php';
 
 /**
  * Ground class for a SVN command.
@@ -204,13 +206,6 @@ abstract class VersionControl_SVN_Command
     protected $xmlAvail = false;
 
     /**
-     * Error stack.
-     *
-     * @var PEAR_ErrorStack $errorStack
-     */
-    protected $errorStack = null;
-
-    /**
      * Useable switches for command with parameters.
      */
     protected $validSwitchesValue = array(
@@ -234,10 +229,6 @@ abstract class VersionControl_SVN_Command
      */
     public function __construct()
     {
-        $this->errorStack = PEAR_ErrorStack::singleton('VersionControl_SVN');
-        $this->errorStack->setErrorMessageTemplate(
-            VersionControl_SVN::declareErrorMessages()
-        );
         $className = get_class($this);
         $this->commandName = strtolower(
             substr(
@@ -253,7 +244,8 @@ abstract class VersionControl_SVN_Command
      * @param array $options An associative array of option names and
      *                       their values
      *
-     * @return boolean
+     * @return VersionControl_SVN_Command Themself.
+     * @throws VersionControl_SVN_Exception If option isn't available.
      */
     public function setOptions($options = array())
     {
@@ -268,14 +260,14 @@ abstract class VersionControl_SVN_Command
             if (null !== $property && $property->isPublic()) {
                 $this->$option = $value;
             } else {
-                $this->errorStack->push(
-                    VERSIONCONTROL_SVN_NOTICE_INVALID_OPTION, 'notice', 
-                    array('option' => $option)
+                throw new VersionControl_SVN_Exception(
+                    '"' . $option . '" is not a valid option',
+                    VersionControl_SVN_Exception::INVALID_OPTION
                 );
             }
         }
-        
-        return true;
+
+        return $this;
     }
 
     /**
@@ -283,13 +275,12 @@ abstract class VersionControl_SVN_Command
      *
      * This function should be overloaded by the command class.
      *
-     * @return boolean
+     * @return void
+     * @throws VersionControl_SVN_Exception If preparing failed.
      */
     public function prepare()
     {
-        if (!$this->checkCommandRequirements()) {
-            return false;
-        }
+        $this->checkCommandRequirements();
         $this->preProcessSwitches();
 
         $invalidSwitches = array();
@@ -320,8 +311,6 @@ abstract class VersionControl_SVN_Command
         $this->preparedCmd = implode(
             ' ', array_merge($cmdParts, $this->args)
         );
-
-        return true;
     }
 
     /**
@@ -330,22 +319,22 @@ abstract class VersionControl_SVN_Command
      * @param array $invalidSwitches Invalid switches found while processing.
      *
      * @return void
+     * @throws VersionControl_SVN_Exception If switch(s) is/are invalid.
      */
     protected function postProcessSwitches($invalidSwitches)
     {
         $invalid = count($invalidSwitches);
         if ($invalid > 0) {
-            $params['was'] = 'was';
-            $params['is_invalid_switch'] = 'is an invalid switch';
+            $invalides = implode(',', $invalidSwitches);
             if ($invalid > 1) {
-                $params['was'] = 'were';
-                $params['is_invalid_switch'] = 'are invalid switches';
+                $error = '"' . $invalides . '" are invalid switches';
+            } else {
+                $error = '"' . $invalides . '" is a invalid switch';
             }
-            $params['list'] = $invalidSwitches;
-            $params['switches'] = $this->switches;
-            $params['commandClass'] = get_class($this);
-            $this->errorStack->push(
-                VERSIONCONTROL_SVN_NOTICE_INVALID_SWITCH, 'notice', $params
+            $error .= ' for class "' . get_class($this) . '".';
+            throw new VersionControl_SVN_Exception(
+                $error,
+                VersionControl_SVN_Exception::INVALID_SWITCH
             );
         }
     }
@@ -387,9 +376,8 @@ abstract class VersionControl_SVN_Command
     /**
      * Standardized validation of requirements for a command class.
      *
-     * @return mixed   true if all requirements are met, false if 
-     *                  requirements are not met. Details of failures
-     *                  are pushed into the PEAR_ErrorStack for VersionControl_SVN
+     * @return void
+     * @throws VersionControl_SVN_Exception If command requirements not resolved.
      */
     public function checkCommandRequirements()
     {
@@ -402,12 +390,10 @@ abstract class VersionControl_SVN_Command
         
         // Check for minimum arguments
         if (sizeof($this->args) < $this->minArgs) {
-            $params['argstr'] = $this->minArgs > 1 ? 'arguments' : 'argument';
-            $params['minArgs'] = $this->minArgs;
-            $this->errorStack->push(
-                VERSIONCONTROL_SVN_ERROR_MIN_ARGS, 'error', $params
+            throw new VersionControl_SVN_Exception(
+                'svn command requires at least ' . $this->minArgs . ' argument(s)',
+                VersionControl_SVN_Exception::MIN_ARGS
             );
-            return false;
         }
         
         // Check for presence of required switches
@@ -429,19 +415,12 @@ abstract class VersionControl_SVN_Command
             }
             $num_missing = count($missing);
             if ($num_missing > 0) {
-                $params['switchstr'] = $num_missing > 1 ? 'switches' : 'switch';
-                $params['missing'] = $missing;
-                
-                $this->errorStack->push(
-                    VERSIONCONTROL_SVN_ERROR_REQUIRED_SWITCH_MISSING,
-                    'error',
-                    $params
+                throw new VersionControl_SVN_Exception(
+                    'svn command requires the following switch(es): ' . $missing,
+                    VersionControl_SVN_Exception::SWITCH_MISSING
                 );
-                
-                return false;
             }
         }
-        return true;
     }
 
     /**
@@ -450,8 +429,8 @@ abstract class VersionControl_SVN_Command
      * @param array $args     Arguments to pass to Subversion
      * @param array $switches Switches to pass to Subversion
      *
-     * @return  mixed   $fetchmode specified output on success,
-     *                  or false on failure.
+     * @return  mixed   $fetchmode specified output on success.
+     * @throws VersionControl_SVN_Exception If command failed.
      */
     public function run($args = array(), $switches = array())
     {
@@ -503,19 +482,11 @@ abstract class VersionControl_SVN_Command
         }
 
         if ($ret_var > 0) {
-            $params['options']  = $this->options;
-            $params['switches'] = $this->switches;
-            $params['args']     = $this->args;
-            $params['cmd']      = $cmd;
-            foreach ($out as $line) {
-                $params['errstr'] = $line;
-                $this->errorStack->push(
-                    VERSIONCONTROL_SVN_ERROR_EXEC,
-                    'error',
-                    $params
-                );
-            }
-            return false;
+            throw new VersionControl_SVN_Exception(
+                'Execution of command failed returning: ' . $retvar
+                . "\n" . implode("\n", $out),
+                VersionControl_SVN_Exception::ERROR_EXEC
+            );
         }
 
         return $this->parseOutput($out);
