@@ -49,86 +49,7 @@
 require_once 'VersionControl/SVN/Command.php';
 
 /**
- * Subversion List command manager class
- *
- * List directory entries in the repository
- *
- * If the 'target' option is omitted, '.' is assumed, meaning the
- * repository URL of the current working directory.
- *
- * $switches is an array containing one or more command line options
- * defined by the following associative keys:
- *
- * <code>
- *
- * array(
- *  'r [revision]'  =>  'ARG (some commands also take ARG1:ARG2 range)
- *                        A revision argument can be one of:
- *                           NUMBER       revision number
- *                           "{" DATE "}" revision at start of the date
- *                           "HEAD"       latest in repository
- *                           "BASE"       base rev of item's working copy
- *                           "COMMITTED"  last commit at or before BASE
- *                           "PREV"       revision just before COMMITTED',
- *                      // either 'r' or 'revision' may be used
- *  'v [verbose]'   =>  true|false,
- *                      // prints extra information
- *  'R'             =>  true|false,
- *                      // descend recursively
- *  'recursive'     =>  true|false,
- *                      // descend recursively
- *  'username'      =>  'Subversion repository login',
- *  'password'      =>  'Subversion repository password',
- *  'no-auth-cache' =>  true|false,
- *                      // Do not cache authentication tokens
- *  'config-dir'    =>  'Path to a Subversion configuration directory'
- * );
- *
- * </code>
- *
- * With the 'verbose' option set to true, the following fields show the
- * status of the item:
- * 
- *     Revision number of the last commit
- *     Author of the last commit
- *     Size (in bytes)
- *     Date and time of the last commit
- * 
- *
- * Usage example:
- * <code>
- * <?php
- * require_once 'VersionControl/SVN.php';
- *
- * // Setup error handling -- always a good idea!
- * $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
- *
- * // Set up runtime options. Will be passed to all 
- * // subclasses.
- * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
- *
- * // Pass array of subcommands we need to factory
- * $svn = VersionControl_SVN::factory(array('list'), $options);
- *
- * // Define any switches and aguments we may need
- * $switches = array('R' => true, 'username' => 'user', 'password' => 'pass');
- * $args = array('svn://svn.example.com/repos/TestProject');
- *
- * // Run command
- * if ($output = $svn->list->run($args, $switches)) {
- *     print_r($output);
- * } else {
- *     if (count($errs = $svnstack->getErrors())) { 
- *         foreach ($errs as $err) {
- *             echo '<br />'.$err['message']."<br />\n";
- *             echo "Command used: " . $err['params']['cmd'];
- *         }
- *     }
- * }
- * ?>
- * </code>
- *
- * Note: Subversion does not offer an XML output option for this subcommand
+ * Subversion Changelist command manager class
  *
  * @category VersionControl
  * @package  VersionControl_SVN
@@ -138,15 +59,8 @@ require_once 'VersionControl/SVN/Command.php';
  * @version  @version@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */
-class VersionControl_SVN_Command_List extends VersionControl_SVN_Command
+class VersionControl_SVN_Command_Changelist extends VersionControl_SVN_Command
 {
-    /**
-     * Keep track of whether XML output is available for a command
-     *
-     * @var boolean $xmlAvail
-     */
-    protected $xmlAvail = true;
-
     /**
      * Constuctor of command. Adds available switches.
      */
@@ -157,18 +71,18 @@ class VersionControl_SVN_Command_List extends VersionControl_SVN_Command
         $this->validSwitchesValue = array_merge(
             $this->validSwitchesValue,
             array(
-                'r', 'revision',
                 'depth',
+                'targets',
+                'cl', 'changelist',
             )
         );
 
         $this->validSwitches = array_merge(
             $this->validSwitches,
             array(
-                'v', 'verbose',
+                'q', 'quiet',
                 'R', 'recursive',
-                'incremental',
-                'xml',
+                'remove',
             )
         );
     }
