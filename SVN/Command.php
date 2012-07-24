@@ -450,8 +450,9 @@ abstract class VersionControl_SVN_Command
         // Always prepare, allows for obj re-use. (Request #5021)
         $this->prepare();
         
-        $out        = array();
-        $ret_var    = null;
+        $out       = array();
+        // @var integer $returnVar Return number from shell execution.
+        $returnVar = null;
         
         $cmd = $this->preparedCmd;
 
@@ -466,26 +467,26 @@ abstract class VersionControl_SVN_Command
             );
             
             if (!$this->passthru) {
-                exec("$cmd 2>&1", $out, $ret_var);
+                exec("$cmd 2>&1", $out, $returnVar);
             } else {
-                passthru("$cmd 2>&1", $ret_var);
+                passthru("$cmd 2>&1", $returnVar);
             }
         } else {
             if ($this->useEscapeshellcmd) {
                 $cmd = escapeshellcmd($cmd);
             }
             if (!$this->passthru) {
-                exec("{$this->prependCmd}$cmd 2>&1", $out, $ret_var);
+                exec("{$this->prependCmd}$cmd 2>&1", $out, $returnVar);
             } else {
-                passthru("{$this->prependCmd}$cmd 2>&1", $ret_var);
+                passthru("{$this->prependCmd}$cmd 2>&1", $returnVar);
             }
         }
 
-        if ($ret_var > 0) {
+        if ($returnVar > 0) {
             throw new VersionControl_SVN_Exception(
-                'Execution of command failed returning: ' . $retvar
+                'Execution of command failed returning: ' . $returnVar
                 . "\n" . implode("\n", $out),
-                VersionControl_SVN_Exception::ERROR_EXEC
+                VersionControl_SVN_Exception::EXEC
             );
         }
 
