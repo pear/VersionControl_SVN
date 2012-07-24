@@ -79,9 +79,6 @@ require_once 'VersionControl/SVN/Command.php';
  * <?php
  * require_once 'VersionControl/SVN.php';
  *
- * // Setup error handling -- always a good idea!
- * $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
- *
  * // Pass array of subcommands we need to factory
  * $svn = VersionControl_SVN::factory(array('cleanup'), $options);
  *
@@ -89,15 +86,10 @@ require_once 'VersionControl/SVN/Command.php';
  * $args = array('/path/to/working_copy');
  *
  * // Run command
- * if ($output = $svn->cleanup->run($args)) {
- *     print_r($output);
- * } else {
- *     if (count($errs = $svnstack->getErrors())) { 
- *         foreach ($errs as $err) {
- *             echo '<br />'.$err['message']."<br />\n";
- *             echo "Command used: " . $err['params']['cmd'];
- *         }
- *     }
+ * try {
+ *     print_r($svn->cleanup->run($args, $switches));
+ * } catch (VersionControl_SVN_Exception $e) {
+ *     print_r($e->getMessage());
  * }
  * ?>
  * </code>

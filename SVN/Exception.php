@@ -39,111 +39,38 @@
  *
  * @category  VersionControl
  * @package   VersionControl_SVN
- * @author    Clay Loveless <clay@killersoft.com>
  * @author    Alexander Opitz <opitz.alexander@gmail.com>
- * @copyright 2004-2007 Clay Loveless
+ * @copyright 2012 Alexander Opitz
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
-require_once 'VersionControl/SVN/Command.php';
+ require_once 'PEAR/Exception.php';
 
 /**
- * Subversion Info command manager class
+ * Package Exception
  *
- * Display information about a file or directory in PATH.
- *
- * If the 'path' option is omitted, '.' is assumed.
- *
- * $switches is an array containing one or more command line options
- * defined by the following associative keys:
- *
- * <code>
- *
- * $switches = array(
- *  'targets'       =>  'ARG',
- *                      // passes contents of file ARG as additional arguments
- *  'R'             =>  true|false,
- *                      // descend recursively
- *  'recursive'     =>  true|false,
- *                      // descend recursively
- *  'config-dir'    =>  'Path to a Subversion configuration directory',
- * 
- *  'username'      =>  'username for accessing repository',
- * 
- *  'password'      =>  'password for accessing repository'
- * );
- *
- * </code>
- *
- * Usage example:
- * <code>
- * <?php
- * require_once 'VersionControl/SVN.php';
- *
- * // Set up runtime options. Will be passed to all 
- * // subclasses.
- * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
- *
- * // Pass array of subcommands we need to factory
- * $svn = VersionControl_SVN::factory(array('info'), $options);
- *
- * // Define any switches and aguments we may need
- * $switches = array('R' => true);
- * $args = array('/path/to/working_copy');
- *
- * // Run command
- * try {
- *     print_r($svn->info->run($args, $switches));
- * } catch (VersionControl_SVN_Exception $e) {
- *     print_r($e->getMessage());
- * }
- * ?>
- * </code>
- *
- * @category VersionControl
- * @package  VersionControl_SVN
- * @author   Clay Loveless <clay@killersoft.com>
- * @author   Alexander Opitz <opitz.alexander@gmail.com>
- * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
- * @version  @version@
- * @link     http://pear.php.net/package/VersionControl_SVN
+ * @tutorial  VersionControl_SVN.pkg
+ * @category  VersionControl
+ * @package   VersionControl_SVN
+ * @author    Alexander Opitz <opitz.alexander@gmail.com>
+ * @copyright 2012 Alexander Opitz
+ * @license   http://www.killersoft.com/LICENSE.txt BSD License
+ * @version   @version@
+ * @link      http://pear.php.net/package/VersionControl_SVN
  */
-class VersionControl_SVN_Command_Info extends VersionControl_SVN_Command
+class VersionControl_SVN_Exception extends PEAR_Exception
 {
-    /**
-     * Keep track of whether XML output is available for a command
-     *
-     * @var boolean $xmlAvail
-     */
-    protected $xmlAvail = true;
-
-    /**
-     * Constuctor of command. Adds available switches.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->validSwitchesValue = array_merge(
-            $this->validSwitchesValue,
-            array(
-                'r', 'revision',
-                'depth',
-                'targets',
-                'changelist',
-            )
-        );
-
-        $this->validSwitches = array_merge(
-            $this->validSwitches,
-            array(
-                'R', 'recursive',
-                'incremental',
-                'xml',
-            )
-        );
-    }
+    const ERROR = 1;
+    const NO_VERSION = 2;
+    const NO_REVISION = 3;
+    const UNKNOWN_CMD = 4;
+    const NOT_IMPLEMENTED = 5;
+    const NO_SWITCHES = 6;
+    const UNDEFINED = 7;
+    const REQUIRED_SWITCH_MISSING = 8;
+    const MIN_ARGS = 9;
+    const EXEC = 10;
+    const INVALID_SWITCH = 11;
+    const INVALID_OPTION = 12;
 }
-
-?>

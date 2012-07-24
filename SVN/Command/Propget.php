@@ -102,9 +102,6 @@ require_once 'VersionControl/SVN/Command.php';
  * <?php
  * require_once 'VersionControl/SVN.php';
  *
- * // Setup error handling -- always a good idea!
- * $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
- *
  * // Set up runtime options. Will be passed to all 
  * // subclasses.
  * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
@@ -117,15 +114,10 @@ require_once 'VersionControl/SVN/Command.php';
  * $args = array('svn:keywords', 'svn://svn.example.com/repos/TestProj/trunk');
  *
  * // Run command
- * if ($output = $svn->propget->run($args, $switches)) {
- *     print_r($output);
- * } else {
- *     if (count($errs = $svnstack->getErrors())) { 
- *         foreach ($errs as $err) {
- *             echo '<br />'.$err['message']."<br />\n";
- *             echo "Command used: " . $err['params']['cmd'];
- *         }
- *     }
+ * try {
+ *     print_r($svn->propget->run($args, $switches));
+ * } catch (VersionControl_SVN_Exception $e) {
+ *     print_r($e->getMessage());
  * }
  * ?>
  * </code>
