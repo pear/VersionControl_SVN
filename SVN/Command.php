@@ -545,11 +545,11 @@ abstract class VersionControl_SVN_Command
                 $parser = new $class;
                 $contentVar = $this->commandName;
 
-                $parser->parseString(join("\n", $out));
+                $parsedData = $parser->getParsed(join("\n", $out));
                 if ($this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT) {
-                    return (object) $parser->$contentVar;
+                    return (object) $parsedData;
                 }
-                return $parser->$contentVar;
+                return $parsedData;
                 break;
             }
         case VERSIONCONTROL_SVN_FETCHMODE_RAW:

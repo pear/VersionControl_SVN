@@ -49,8 +49,6 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
- require_once 'XML/Parser.php';
-
 /**
  * Class VersionControl_SVN_Parser_Info - XML Parser for Subversion Info output
  *
@@ -62,8 +60,72 @@
  * @version  @version@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */
-class VersionControl_SVN_Parser_Info extends XML_Parser
+class VersionControl_SVN_Parser_Info
 {
+    public function getParsed($xml)
+    {
+        $this->reader = XMLReader::xml($xml);
+        var_dump($xml);
+        if (false === $this->reader) {
+            // @TODO Throw exception
+        }
+        $data = $this->getParsedBody();
+        $this->reader->close();
+        return $data;
+    }
+
+    protected function getParsedBody()
+    {
+        // @var array $data The array of body data
+        $data = array('info' => array());
+
+        while ($this->reader->read()) {
+            if (XMLReader::ELEMENT === $this->reader->nodeType
+                && 'info' === $this->reader->name
+            ) {
+                $data['info'][] = $this->getParsedInfo();
+            }
+        }
+    }
+
+    protected function getParsedInfo()
+    {
+        // @var array $data The array of info data
+        $data = array('info' => array());
+
+        while ($this->reader->read()) {
+            if (XMLReader::ELEMENT === $this->reader->nodeType
+                && 'entry' === $this->reader->name
+            ) {
+                $data['entry'][] = $this->getParsedEntry();
+            }
+            if (XMLReader::END_ELEMENT === $this->reader->nodeType
+                && 'info' === $this->reader->name
+            ) {
+                return $data;
+            }
+        }
+    }
+
+    protected function getParsedEntry()
+    {
+        // @var array $data The array of info data
+        $data = array('info' => array());
+
+        while ($this->reader->read()) {
+            if (XMLReader::ELEMENT === $this->reader->nodeType
+                && 'entry' === $this->reader->name
+            ) {
+                $data['entry'][] = $this->getParsedEntry();
+            }
+            if (XMLReader::END_ELEMENT === $this->reader->nodeType
+                && 'entry' === $this->reader->name
+            ) {
+                return $data;
+            }
+        }
+    }
+
     var $commit = array();
     var $entry = array();
     var $info = array();
