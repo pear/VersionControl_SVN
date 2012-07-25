@@ -58,9 +58,6 @@ ini_set('display_errors', 'on');
 
 require_once 'VersionControl/SVN.php';
 
-// Setup our error stack
-$svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
-
 // Default options
 $base_url = 'https://www.killersoft.com/svn/packages/pear/VersionControl_SVN/trunk';
 $base_add = '';
@@ -75,98 +72,95 @@ $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ASSOC);
 $switches = array('R' => true);
 $args = array("{$base_url}{$base_add}");
 
-// Create svn object with subcommands we'll want
-$svn = VersionControl_SVN::factory(array('list', 'cat'), $options);
+try {
+    // Create svn object with subcommands we'll want
+    $svn = VersionControl_SVN::factory(array('list', 'cat'), $options);
 
-// A quickie sample of browsing a Subversion repository
-if ($base_add != '') {
-    $source = $svn->cat->run($args);
-    if (substr($base_add, -4) == '.php') {
-        highlight_string($source);
+    // A quickie sample of browsing a Subversion repository
+    if ($base_add != '') {
+        $source = $svn->cat->run($args);
+        if (substr($base_add, -4) == '.php') {
+            highlight_string($source);
+        } else {
+            echo '<pre>'.htmlentities($source, ENT_NOQUOTES)."</pre>\n";
+        }
+
     } else {
-        echo '<pre>'.htmlentities($source, ENT_NOQUOTES)."</pre>\n";
-    }
-    
-} else {
 
-    // TreeMenu setup
-    require_once 'HTML/TreeMenu.php';
-    // Change icons to appropriate names
-    // See HTML_TreeMenu docs for more details.
-    $foldericon = 'aquafolder.gif';
-    $docicon = 'bbedit_doc.gif';
-    $menu = new HTML_TreeMenu();
-    $node1 = new HTML_TreeNode(array('text' => 'VersionControl_SVN',
-                                     'icon' => $foldericon));
-    
-    $list = $svn->list->run($args, $switches);
-    foreach ($list as $dir => $contents) {
-        foreach ($list[$dir]['name'] as $i => $item) {
-            if ($list[$dir]['type'][$i] == 'D') {
-                $icon = $foldericon;
-                $link = '';
-            } else {
-                $icon = $docicon;
-                $link = $_SERVER['PHP_SELF']."/$dir/$item";
-                // don't need the link for the .
-                $link = str_replace('/.', '', $link);
-            }
+        // TreeMenu setup
+        require_once 'HTML/TreeMenu.php';
+        // Change icons to appropriate names
+        // See HTML_TreeMenu docs for more details.
+        $foldericon = 'aquafolder.gif';
+        $docicon = 'bbedit_doc.gif';
+        $menu = new HTML_TreeMenu();
+        $node1 = new HTML_TreeNode(array('text' => 'VersionControl_SVN',
+                                        'icon' => $foldericon));
 
-            if ($dir == '.') {
-                // Adding to root level
-                $obj = $item;
-                $$obj =& $node1->addItem(new HTML_TreeNode(array('text' => $item, 'icon' => $icon, 'link' => $link)));
-            } else {
-                // Get parent item
-                $parent = basename($dir);
-                $obj = $item;
-                $$obj =& $$parent->addItem(new HTML_TreeNode(array('text' => $item, 'icon' => $icon, 'link' => $link)));
+        $list = $svn->list->run($args, $switches);
+        foreach ($list as $dir => $contents) {
+            foreach ($list[$dir]['name'] as $i => $item) {
+                if ($list[$dir]['type'][$i] == 'D') {
+                    $icon = $foldericon;
+                    $link = '';
+                } else {
+                    $icon = $docicon;
+                    $link = $_SERVER['PHP_SELF']."/$dir/$item";
+                    // don't need the link for the .
+                    $link = str_replace('/.', '', $link);
+                }
+
+                if ($dir == '.') {
+                    // Adding to root level
+                    $obj = $item;
+                    $$obj =& $node1->addItem(new HTML_TreeNode(array('text' => $item, 'icon' => $icon, 'link' => $link)));
+                } else {
+                    // Get parent item
+                    $parent = basename($dir);
+                    $obj = $item;
+                    $$obj =& $$parent->addItem(new HTML_TreeNode(array('text' => $item, 'icon' => $icon, 'link' => $link)));
+                }
             }
         }
-    }
 
-    $menu->addItem($node1);
-    
-    // Create presentation class
-    $treeMenu = new HTML_TreeMenu_DHTML($menu, array('images' => 'images',
-                                                    'defaultClass' => 'treeMenuDefault'));
-    
+        $menu->addItem($node1);
+
+        // Create presentation class
+        $treeMenu = new HTML_TreeMenu_DHTML($menu, array('images' => 'images',
+                                                        'defaultClass' => 'treeMenuDefault'));
+
+        ?>
+    <html>
+    <head>
+        <title>VersionControl_SVN Source Listing</title>
+        <script language="javascript" type="text/javascript" src="TreeMenu.js"></script>
+        <style type="text/css">
+        body, td, th {
+            font-family: verdana,arial,helvetica,sans-serif;
+            font-size: 80%;
+        }
+        .squeeze { line-height: 96%; font-size: xx-small; font-family:Verdana,Geneva,Arial; color: #999999; }
+        </style>
+    </head>
+    <body>
+    <h3>VersionControl_SVN Source Listing</h3>
+    <?php
+    $treeMenu->printMenu();
     ?>
-<html>
-<head>
-    <title>VersionControl_SVN Source Listing</title>
-    <script language="javascript" type="text/javascript" src="TreeMenu.js"></script>
-    <style type="text/css">
-    body, td, th {
-        font-family: verdana,arial,helvetica,sans-serif;
-        font-size: 80%;
+
+    <p>
+    <span class="squeeze">
+    Source listing driven by <a href="http://pear.php.net/package/HTML_TreeMenu">HTML_TreeMenu</a> and <a href="VersionControl_SVN_docs/index.html">VersionControl_SVN</a>
+    </span>
+    </p>
+    </body>
+    </html>
+    <?php
     }
-    .squeeze { line-height: 96%; font-size: xx-small; font-family:Verdana,Geneva,Arial; color: #999999; }
-    </style>
-</head>
-<body>
-<h3>VersionControl_SVN Source Listing</h3>
-<?php
-$treeMenu->printMenu();
-?>
-
-<p>
-<span class="squeeze">
-Source listing driven by <a href="http://pear.php.net/package/HTML_TreeMenu">HTML_TreeMenu</a> and <a href="VersionControl_SVN_docs/index.html">VersionControl_SVN</a>
-</span>
-</p>
-
-<?php
-// Check for errors
-if (count($errs = $svnstack->getErrors())) { 
+} catch (VersionControl_SVN_Exception $e) {
     echo "<pre>\n";
-    print_r($errs);
+    print_r($e->getMessage());
     echo "</pre>\n";
 }
-?>
 
-</body>
-</html>
-<?php
-}
 ?>

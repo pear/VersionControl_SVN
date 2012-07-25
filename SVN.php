@@ -47,27 +47,7 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
-// {{{ Error Management
-require_once 'PEAR/ErrorStack.php';
-require_once 'System.php';
-
-// error & notice constants
-define('VERSIONCONTROL_SVN_ERROR', -1);
-define('VERSIONCONTROL_SVN_ERROR_NO_VERSION', -2);
-define('VERSIONCONTROL_SVN_ERROR_NO_REVISION', -3);
-define('VERSIONCONTROL_SVN_ERROR_UNKNOWN_CMD', -4);
-define('VERSIONCONTROL_SVN_ERROR_NOT_IMPLEMENTED', -5);
-define('VERSIONCONTROL_SVN_ERROR_NO_SWITCHES', -6);
-define('VERSIONCONTROL_SVN_ERROR_UNDEFINED', -7);
-define('VERSIONCONTROL_SVN_ERROR_REQUIRED_SWITCH_MISSING', -8);
-define('VERSIONCONTROL_SVN_ERROR_MIN_ARGS', -9);
-define('VERSIONCONTROL_SVN_ERROR_EXEC', -10);
-define('VERSIONCONTROL_SVN_NOTICE', -999);
-define('VERSIONCONTROL_SVN_NOTICE_INVALID_SWITCH', -901);
-define('VERSIONCONTROL_SVN_NOTICE_INVALID_OPTION', -902);
-
-// }}}
-// {{{ fetch modes
+require_once 'VersionControl/SVN/Exception.php';
 
 /**
  * Note on the fetch modes -- as the project matures, more of these modes
@@ -113,8 +93,6 @@ define('VERSIONCONTROL_SVN_FETCHMODE_ALL', 5);
  */
 define('VERSIONCONTROL_SVN_FETCHMODE_ARRAY', 6);
 
-// }}}
-
 /**
  * Simple OO interface for Subversion 
  *
@@ -130,9 +108,6 @@ define('VERSIONCONTROL_SVN_FETCHMODE_ARRAY', 6);
  */
 class VersionControl_SVN
 {
-
-    // {{{ Public Properties
-    
     /**
      * Reference array of subcommand shortcuts. Provided for convenience for 
      * those who prefer the shortcuts they're used to using with the svn
@@ -159,7 +134,7 @@ class VersionControl_SVN
      * ?>
      * </code>
      *
-     * @var     array
+     * @var array $shortcuts Possible shortcuts and their real commands.
      */
     public static $shortcuts = array(
         'praise'    => 'Blame',
@@ -190,46 +165,6 @@ class VersionControl_SVN
         'up'        => 'Update'
     );
 
-    // }}}
-    // {{{ errorMessages()
-    
-    /**
-     * Set up VersionControl_SVN error message templates for PEAR_ErrorStack.
-     *
-     * @return  array
-     */
-    public static function declareErrorMessages()
-    {
-        $messages = array(
-            VERSIONCONTROL_SVN_ERROR => '%errstr%',
-            VERSIONCONTROL_SVN_ERROR_EXEC => '%errstr% (cmd: %cmd%)',
-            VERSIONCONTROL_SVN_ERROR_NO_VERSION => 
-                'undefined 2',
-            VERSIONCONTROL_SVN_ERROR_NO_REVISION => 
-                'undefined 3',
-            VERSIONCONTROL_SVN_ERROR_UNKNOWN_CMD => 
-                '\'%command%\' is not a known VersionControl_SVN command.',
-            VERSIONCONTROL_SVN_ERROR_NOT_IMPLEMENTED => 
-                '\'%method%\' is not implemented in the %class% class.',
-            VERSIONCONTROL_SVN_ERROR_NO_SWITCHES => 
-                'undefined 6',
-            VERSIONCONTROL_SVN_ERROR_REQUIRED_SWITCH_MISSING => 
-                'svn %_svn_cmd% requires the following %switchstr%: %missing%',
-            VERSIONCONTROL_SVN_ERROR_MIN_ARGS => 
-                'svn %_svn_cmd% requires at least %min_args% %argstr%',
-            VERSIONCONTROL_SVN_NOTICE => '%notice%',
-            VERSIONCONTROL_SVN_NOTICE_INVALID_SWITCH => 
-                '\'%list%\' %is_invalid_switch% for %CommandClass% '
-                . 'and %was% ignored. Please refer to the documentation.',
-            VERSIONCONTROL_SVN_NOTICE_INVALID_OPTION =>
-                '\'%option%\' is not a valid option, and was ignored.'
-        );
-        
-        return $messages;
-    }
-    
-    // {{{ factory()
-    
     /**
      * Create a new VersionControl_SVN command object.
      *
@@ -276,11 +211,10 @@ class VersionControl_SVN
      *
      * @return mixed A newly created command object or an stdObj with the
      *               command objects set.
+     * @throws VersionControl_SVN_Exception Exception if command init fails.
      */
     public static function factory($command, $options = array())
     {
-        $stack = PEAR_ErrorStack::singleton('VersionControl_SVN');
-        $stack->setErrorMessageTemplate(VersionControl_SVN::declareErrorMessages());
         if (is_string($command) && strtoupper($command) == '__ALL__') {
             unset($command);
             $command = array();
@@ -298,10 +232,7 @@ class VersionControl_SVN
             return $obj;
         }
     }
-    
-    // }}}
-    // {{{ init()
-    
+
     /**
      * Initialize an object wrapper for a Subversion subcommand.
      *
@@ -309,7 +240,8 @@ class VersionControl_SVN
      * @param array  $options An associative array of option names and
      *                        their values
      *
-     * @return  mixed   object on success, false on failure
+     * @return VersionControl_SVN_Command Instance of command.
+     * @throws VersionControl_SVN_Exception Exception if command init fails.
      */
     public static function init($command, $options)
     {
@@ -336,64 +268,52 @@ class VersionControl_SVN
                 return $obj;
             }
         }
-        
-        PEAR_ErrorStack::staticPush(
-            'VersionControl_SVN', VERSIONCONTROL_SVN_ERROR_UNKNOWN_CMD, 'error', 
-            array('command' => $command, 'options' => $options)
+
+        throw new VersionControl_SVN_Exception(
+            $command . ' is not a known VersionControl_SVN command.',
+            VersionControl_SVN_Exception::UNKNOWN_CMD
         );
-        
-        return false;
     }
-    
-    // }}}
-    // {{{ fetchCommands()
     
     /**
      * Scan through the SVN directory looking for subclasses.
      *
-     * @return  mixed    array on success, false on failure
+     * @return array Array with names of commands as value.
+     * @throws VersionControl_SVN_Exception Exception if fetching commands fails.
      */
     public function fetchCommands()
     {
         $commands = array();
         $dir = realpath(dirname(__FILE__)) . '/SVN/Command';
-        $dp = @opendir($dir);
-        if (empty($dp)) {
-            PEAR_ErrorStack::staticPush(
-                'VersionControl_SVN', VERSIONCONTROL_SVN_ERROR, 'error', 
-                array('errstr' => "fetchCommands: opendir($dir) failed")
+        if (false === $dir
+            || !is_dir($dir)
+            || !is_readable($dir)
+        ) {
+            throw new VersionControl_SVN_Exception(
+                'The path /SVN/Command doesn\'t exists or isn\'t readable.',
+                VersionControl_SVN_Exception::ERROR
             );
-            
-            return false;
         }
-        while ($entry = readdir($dp)) {
-            if ($entry{0} == '.' || substr($entry, -4) != '.php') {
-                continue;
+        $dirEntries = glob($dir . '*.php');
+        foreach ($dirEntries as $entry) {
+            if (is_file($entry)
+                && is_readable($entry)
+            ) {
+                $commands[] = basename($entry, '.php');
             }
-            
-            $commands[] = substr($entry, 0, -4);
         }
-        
-        closedir($dp);
-        
+
         return $commands;
     }
-    
-    // }}}
-    // {{{ apiVersion()
-    
+
     /**
      * Return the VersionControl_SVN API version
      *
-     * @return  string  the VersionControl_SVN API version number
+     * @return string The VersionControl_SVN API version number.
      */
     public function apiVersion()
     {
         return '@version@';
     }
-    
-    // }}}
 }
-
-// }}}
 ?>

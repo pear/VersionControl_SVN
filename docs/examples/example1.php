@@ -54,9 +54,6 @@ ini_set('display_errors', 'on');
 
 require_once 'VersionControl/SVN.php';
 
-// Setup our error stack
-$svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
-
 // Default options
 $base_url = 'svn://svn.killersoft.com/repos/VersionControl_SVN/trunk';
 $base_add = isset($_GET['base_add']) ? '/'.$_GET['base_add'] : '';
@@ -65,39 +62,38 @@ $options = array(
     'target'  => $base_url.$base_add
 );
 
-// Create svn object with subcommands we'll want
-$svn = VersionControl_SVN::factory(array('list', 'cat'), $options);
+try {
+    // Create svn object with subcommands we'll want
+    $svn = VersionControl_SVN::factory(array('list', 'cat'), $options);
 
 
-// A quickie sample of browsing a Subversion repository
-if ($cmd == 'cat') {
-    $file = $_GET['file'];
-    $options['target'] = $base_url.$base_add.'/'.$file;
-    $svn->cat->setOptions($options);
-    $source = $svn->cat->run();
-    if (substr($file, -4) == '.php') {
-        highlight_string($source);
-    } else {
-        echo "<pre>$source</pre>\n";
-    }
-    
-} else {
-    $list = $svn->list->run();
-    $list_array = explode("\n", $list);
-    foreach ($list_array as $item) {
-        if (substr($item, -1) == '/') {
-            $new_base = substr($item, 0, -1);
-            echo "<a href=\"example1.php?cmd=list&base_add={$base_add}/{$new_base}\">$item</a><br />\n";
+    // A quickie sample of browsing a Subversion repository
+    if ($cmd == 'cat') {
+        $file = $_GET['file'];
+        $options['target'] = $base_url.$base_add.'/'.$file;
+        $svn->cat->setOptions($options);
+        $source = $svn->cat->run();
+        if (substr($file, -4) == '.php') {
+            highlight_string($source);
         } else {
-            echo "<a href=\"example1.php?cmd=cat&file={$item}&base_add={$base_add}\">$item</a><br />\n";
+            echo "<pre>$source</pre>\n";
+        }
+
+    } else {
+        $list = $svn->list->run();
+        $list_array = explode("\n", $list);
+        foreach ($list_array as $item) {
+            if (substr($item, -1) == '/') {
+                $new_base = substr($item, 0, -1);
+                echo "<a href=\"example1.php?cmd=list&base_add={$base_add}/{$new_base}\">$item</a><br />\n";
+            } else {
+                echo "<a href=\"example1.php?cmd=cat&file={$item}&base_add={$base_add}\">$item</a><br />\n";
+            }
         }
     }
-}
-
-// Check for errors
-if (count($errs = $svnstack->getErrors())) { 
+} catch (VersionControl_SVN_Exception $e) {
     echo "<pre>\n";
-    print_r($errs);
+    print_r($e->getMessage());
     echo "</pre>\n";
 }
 ?>

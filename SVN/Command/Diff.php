@@ -85,9 +85,6 @@ require_once 'VersionControl/SVN/Command.php';
  * <?php
  * require_once 'VersionControl/SVN.php';
  *
- * // Setup error handling -- always a good idea!
- * $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
- *
  * // Set up runtime options. Will be passed to all 
  * // subclasses.
  * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
@@ -98,15 +95,10 @@ require_once 'VersionControl/SVN/Command.php';
  * );
  *
  * $svn = VersionControl_SVN::factory(array('diff'), $options);
- * if ($diffs = $svn->diff->run($args, $switches)) {
- *     echo "<pre>$diffs</pre>";
- * } else {
- *     if (count($errs = $svnstack->getErrors())) { 
- *         foreach ($errs as $err) {
- *             echo '<br />'.$err['message']."<br />\n";
- *             echo "Command used: " . $err['params']['cmd'];
- *         }
- *     }
+  * try {
+ *     print_r($svn->diff->run($args, $switches));
+ * } catch (VersionControl_SVN_Exception $e) {
+ *     print_r($e->getMessage());
  * }
  * ?>
  * </code>
@@ -116,9 +108,6 @@ require_once 'VersionControl/SVN/Command.php';
  * <?php
  * require_once 'VersionControl/SVN.php';
  *
- * // Setup error handling -- always a good idea!
- * $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
- *
  * // Set up runtime options. Will be passed to all 
  * // subclasses.
  * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
@@ -127,15 +116,10 @@ require_once 'VersionControl/SVN/Command.php';
  * $args = array('svn://svn.example.com/repos/TestProj/trunk/example.php');
  *
  * $svn = VersionControl_SVN::factory(array('diff'), $options);
- * if ($diffs = $svn->diff->run($args, $switches)) {
- *     echo "<pre>$diffs</pre>";
- * } else {
- *     if (count($errs = $svnstack->getErrors())) { 
- *         foreach ($errs as $err) {
- *             echo '<br />'.$err['message']."<br />\n";
- *             echo "Command used: " . $err['params']['cmd'];
- *         }
- *     }
+  * try {
+ *     print_r($svn->diff->run($args, $switches));
+ * } catch (VersionControl_SVN_Exception $e) {
+ *     print_r($e->getMessage());
  * }
  * ?>
  * </code>
@@ -144,9 +128,6 @@ require_once 'VersionControl/SVN/Command.php';
  * <code>
  * <?php
  * require_once 'VersionControl/SVN.php';
- *
- * // Setup error handling -- always a good idea!
- * $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
  *
  * // Set up runtime options. Will be passed to all 
  * // subclasses.
@@ -157,15 +138,10 @@ require_once 'VersionControl/SVN/Command.php';
  *               'svn://svn.example.com/repos/TestProj/trunk/example2.php');
  *
  * $svn = VersionControl_SVN::factory(array('diff'), $options);
- * if ($diffs = $svn->diff->run($args, $switches)) {
- *     echo "<pre>$diffs</pre>";
- * } else {
- *     if (count($errs = $svnstack->getErrors())) { 
- *         foreach ($errs as $err) {
- *             echo '<br />'.$err['message']."<br />\n";
- *             echo "Command used: " . $err['params']['cmd'];
- *         }
- *     }
+  * try {
+ *     print_r($svn->diff->run($args, $switches));
+ * } catch (VersionControl_SVN_Exception $e) {
+ *     print_r($e->getMessage());
  * }
  * ?>
  * </code>
