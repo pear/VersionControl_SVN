@@ -1,0 +1,202 @@
+<?php
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+/**
+ * VersionControl_SVN_Info allows for XML formatted output. XML_Parser is used to
+ * manipulate that output.
+ *
+ * +----------------------------------------------------------------------+
+ * | This LICENSE is in the BSD license style.                            |
+ * | http://www.opensource.org/licenses/bsd-license.php                   |
+ * |                                                                      |
+ * | Redistribution and use in source and binary forms, with or without   |
+ * | modification, are permitted provided that the following conditions   |
+ * | are met:                                                             |
+ * |                                                                      |
+ * |  * Redistributions of source code must retain the above copyright    |
+ * |    notice, this list of conditions and the following disclaimer.     |
+ * |                                                                      |
+ * |  * Redistributions in binary form must reproduce the above           |
+ * |    copyright notice, this list of conditions and the following       |
+ * |    disclaimer in the documentation and/or other materials provided   |
+ * |    with the distribution.                                            |
+ * |                                                                      |
+ * |  * Neither the name of Clay Loveless nor the names of contributors   |
+ * |    may be used to endorse or promote products derived from this      |
+ * |    software without specific prior written permission.               |
+ * |                                                                      |
+ * | THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS  |
+ * | "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT    |
+ * | LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS    |
+ * | FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE      |
+ * | COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,  |
+ * | INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, |
+ * | BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;     |
+ * | LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER     |
+ * | CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT   |
+ * | LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN    |
+ * | ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE      |
+ * | POSSIBILITY OF SUCH DAMAGE.                                          |
+ * +----------------------------------------------------------------------+
+ *
+ * PHP version 5
+ *
+ * @category  VersionControl
+ * @package   VersionControl_SVN
+ * @author    Alexander Opitz <opitz.alexander@gmail.com>
+ * @copyright 2012 Alexander Opitz
+ * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @link      http://pear.php.net/package/VersionControl_SVN
+ */
+
+/**
+ * Class VersionControl_SVN_Parser_Info - XML Parser for Subversion Info output
+ *
+ * @category VersionControl
+ * @package  VersionControl_SVN
+ * @author   Alexander Opitz <opitz.alexander@gmail.com>
+ * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @version  @version@
+ * @link     http://pear.php.net/package/VersionControl_SVN
+ */
+class VersionControl_SVN_Parser_XML
+{
+    /**
+     * @var string $xmlBodyEntry XML body entry tag.
+     */
+    protected $xmlBodyEntry = '';
+
+    /**
+     * @var array $xmlPath The XML configuration (like a DTD).
+     */
+    protected $xmlPathConfig = array();
+
+    /**
+     * Parses given xml by xmlPathConfig of this class.
+     *
+     * @param string $xml The XML as string.
+     *
+     * @return array The processed xml as array.
+     */
+    public function getParsed($xml)
+    {
+        $reader = XMLReader::xml($xml);
+        if (false === $reader) {
+            // @TODO Throw exception
+        }
+        $data = self::getParsedBody(
+            $reader, $this->xmlPathConfig
+        );
+        $reader->close();
+        return $data;
+    }
+
+    protected static function getParsedBody(
+        XMLReader $reader, array $xmlPathConfig
+    ) {
+        $xmlBodyEntry = key($xmlPathConfig);
+        while ($reader->read()) {
+            if (XMLReader::ELEMENT === $reader->nodeType
+                && $xmlBodyEntry === $reader->name
+            ) {
+                return self::getParsedEntry(
+                    $reader, $xmlBodyEntry, $xmlPathConfig[$xmlBodyEntry]
+                );
+            }
+        }
+        // @TODO Throw exception
+    }
+
+    protected static function getParsedEntry(
+        XMLReader $reader, $xmlEntry, array $xmlPathConfig
+    ) {
+        // @var array $data The array of entry data
+        $data = array();
+
+        while ($reader->read()) {
+            if (XMLReader::ELEMENT === $reader->nodeType
+            ) {
+                if (isset($xmlPathConfig['path'][$reader->name])) {
+                    $data[$reader->name] = self::getParsedElement(
+                        $reader,
+                        $reader->name,
+                        $xmlPathConfig['path'][$reader->name]
+                    );
+                } else {
+                    self::parseBlindEntry($reader, $readerName);
+                }
+            }
+            if (XMLReader::END_ELEMENT === $reader->nodeType
+                && $xmlEntry === $reader->name
+            ) {
+                return $data;
+            }
+        }
+        // @TODO Throw exception
+    }
+
+    protected static function getParsedElement(
+        XMLReader $reader, $xmlEntry, array $xmlPathConfig
+    ) {
+        // @var array $data The array of element data
+        $data = array();
+
+        if (isset($xmlPathConfig['attribute'])) {
+            foreach($xmlPathConfig['attribute'] as $attribute) {
+                $data[$attribute] = $reader->getAttribute($attribute);
+            }
+        }
+        if (isset($xmlPathConfig['config'])
+            && 'string' === $xmlPathConfig['config']
+        ) {
+            $data = self::getParsedString($reader, $xmlEntry);
+        } else {
+            $data = array_merge(
+                self::getParsedEntry($reader, $xmlEntry, $xmlPathConfig),
+                $data
+            );
+        }
+        return $data;
+    }
+
+    protected static function getParsedString(
+        XMLReader $reader, $xmlEntry
+    ) {
+        // @var string|null $data The text from an entry.
+        $data = null;
+
+        while ($reader->read()) {
+            if (XMLReader::ELEMENT === $reader->nodeType
+            ) {
+                self::parseBlindEntry($reader, $readerName);
+            }
+            if (XMLReader::TEXT === $reader->nodeType
+            ) {
+                $data = $reader->value;
+            }
+            if (XMLReader::END_ELEMENT === $reader->nodeType
+                && $xmlEntry === $reader->name
+            ) {
+                return $data;
+            }
+        }
+        // @TODO Throw exception
+    }
+
+    protected static function parseBlindEntry(
+        XMLReader $reader, $xmlEntry
+    ) {
+        while ($reader->read()) {
+            if (XMLReader::ELEMENT === $reader->nodeType
+            ) {
+                self::parseBlindEntry($reader, $readerName);
+            }
+            if (XMLReader::END_ELEMENT === $reader->nodeType
+                && $xmlEntry === $reader->name
+            ) {
+                return;
+            }
+        }
+        // @TODO Throw exception
+    }
+}
+?>
