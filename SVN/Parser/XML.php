@@ -82,6 +82,7 @@ class VersionControl_SVN_Parser_XML
      */
     public function getParsed($xml)
     {
+var_dump($xml);
         $reader = XMLReader::xml($xml);
         if (false === $reader) {
             VersionControl_SVN_Parser_Exception('Cannot instantiate XMLReader');
@@ -90,6 +91,7 @@ class VersionControl_SVN_Parser_XML
             $reader, $this->xmlPathConfig
         );
         $reader->close();
+var_dump($data);
         return $data;
     }
 
@@ -153,7 +155,7 @@ class VersionControl_SVN_Parser_XML
                         $data[$reader->name] = $elementData;
                     }
                 } else {
-                    self::parseBlindEntry($reader, $readerName);
+                    self::parseBlindEntry($reader, $reader->name);
                 }
             }
             if (XMLReader::END_ELEMENT === $reader->nodeType
@@ -247,7 +249,7 @@ class VersionControl_SVN_Parser_XML
         while ($reader->read()) {
             if (XMLReader::ELEMENT === $reader->nodeType
             ) {
-                self::parseBlindEntry($reader, $readerName);
+                self::parseBlindEntry($reader, $reader->name);
             }
             if (XMLReader::END_ELEMENT === $reader->nodeType
                 && $xmlEntry === $reader->name
