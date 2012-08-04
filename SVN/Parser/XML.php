@@ -48,6 +48,8 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
+require_once 'VersionControl/SVN/Parser/Exception.php';
+
 /**
  * Class VersionControl_SVN_Parser_Info - XML Parser for Subversion Info output
  *
@@ -76,12 +78,13 @@ class VersionControl_SVN_Parser_XML
      * @param string $xml The XML as string.
      *
      * @return array The processed xml as array.
+     * @throws VersionControl_SVN_Parser_Exception If XML isn't parseable.
      */
     public function getParsed($xml)
     {
         $reader = XMLReader::xml($xml);
         if (false === $reader) {
-            // @TODO Throw exception
+            VersionControl_SVN_Parser_Exception('Cannot instantiate XMLReader');
         }
         $data = self::getParsedBody(
             $reader, $this->xmlPathConfig
@@ -90,6 +93,15 @@ class VersionControl_SVN_Parser_XML
         return $data;
     }
 
+    /**
+     * Function to read out the xml body element.
+     *
+     * @param XMLReader $reader        Instance of the XMLReader.
+     * @param array     $xmlPathConfig Configuration for this XML file.
+     *
+     * @return array The data parsed from XML
+     * @throws VersionControl_SVN_Parser_Exception If XML doesn't match config.
+     */
     protected static function getParsedBody(
         XMLReader $reader, array $xmlPathConfig
     ) {
@@ -103,9 +115,19 @@ class VersionControl_SVN_Parser_XML
                 );
             }
         }
-        // @TODO Throw exception
+        VersionControl_SVN_Parser_Exception('XML ends before body end tag.');
     }
 
+    /**
+     * Function to read out the xml entry element.
+     *
+     * @param XMLReader $reader        Instance of the XMLReader.
+     * @param string    $xmlEntry      Name of the entry.
+     * @param array     $xmlPathConfig Configuration for this XML file.
+     *
+     * @return array The data parsed from XML
+     * @throws VersionControl_SVN_Parser_Exception If XML doesn't match config.
+     */
     protected static function getParsedEntry(
         XMLReader $reader, $xmlEntry, array $xmlPathConfig
     ) {
@@ -116,11 +138,20 @@ class VersionControl_SVN_Parser_XML
             if (XMLReader::ELEMENT === $reader->nodeType
             ) {
                 if (isset($xmlPathConfig['path'][$reader->name])) {
-                    $data[$reader->name] = self::getParsedElement(
+                    $config = $xmlPathConfig['path'][$reader->name];
+                    $elementData = self::getParsedElement(
                         $reader,
                         $reader->name,
-                        $xmlPathConfig['path'][$reader->name]
+                        $config
                     );
+                    if (isset($config['quantifier'])
+                        && ($config['quantifier'] == '+'
+                        || $config['quantifier'] == '*')
+                    ) {
+                        $data[$reader->name][] = $elementData;
+                    } else {
+                        $data[$reader->name] = $elementData;
+                    }
                 } else {
                     self::parseBlindEntry($reader, $readerName);
                 }
@@ -131,9 +162,19 @@ class VersionControl_SVN_Parser_XML
                 return $data;
             }
         }
-        // @TODO Throw exception
+        VersionControl_SVN_Parser_Exception('XML ends before entry end tag.');
     }
 
+    /**
+     * Function to read out the xml element.
+     *
+     * @param XMLReader $reader        Instance of the XMLReader.
+     * @param string    $xmlEntry      Name of the entry.
+     * @param array     $xmlPathConfig Configuration for this XML file.
+     *
+     * @return array The data parsed from XML
+     * @throws VersionControl_SVN_Parser_Exception If XML doesn't match config.
+     */
     protected static function getParsedElement(
         XMLReader $reader, $xmlEntry, array $xmlPathConfig
     ) {
@@ -158,6 +199,15 @@ class VersionControl_SVN_Parser_XML
         return $data;
     }
 
+    /**
+     * Function to read out a string from a XML entry.
+     *
+     * @param XMLReader $reader   Instance of the XMLReader.
+     * @param string    $xmlEntry Name of the entry.
+     *
+     * @return string The string which should be read.
+     * @throws VersionControl_SVN_Parser_Exception If XML doesn't match config.
+     */
     protected static function getParsedString(
         XMLReader $reader, $xmlEntry
     ) {
@@ -179,9 +229,18 @@ class VersionControl_SVN_Parser_XML
                 return $data;
             }
         }
-        // @TODO Throw exception
+        VersionControl_SVN_Parser_Exception('XML ends before entry end tag.');
     }
 
+    /**
+     * Function to read out all XML entries, which aren't configured.
+     *
+     * @param XMLReader $reader   Instance of the XMLReader.
+     * @param string    $xmlEntry Name of the entry.
+     *
+     * @return void
+     * @throws VersionControl_SVN_Parser_Exception If XML doesn't match config.
+     */
     protected static function parseBlindEntry(
         XMLReader $reader, $xmlEntry
     ) {
@@ -196,7 +255,7 @@ class VersionControl_SVN_Parser_XML
                 return;
             }
         }
-        // @TODO Throw exception
+        VersionControl_SVN_Parser_Exception('XML ends before entry end tag.');
     }
 }
 ?>
