@@ -63,12 +63,7 @@ require_once 'VersionControl/SVN/Parser/Exception.php';
 class VersionControl_SVN_Parser_XML
 {
     /**
-     * @var string $xmlBodyEntry XML body entry tag.
-     */
-    protected $xmlBodyEntry = '';
-
-    /**
-     * @var array $xmlPath The XML configuration (like a DTD).
+     * @var array $xmlPathConfig The XML configuration (like a DTD).
      */
     protected $xmlPathConfig = array();
 
@@ -82,16 +77,16 @@ class VersionControl_SVN_Parser_XML
      */
     public function getParsed($xml)
     {
-var_dump($xml);
         $reader = XMLReader::xml($xml);
         if (false === $reader) {
-            VersionControl_SVN_Parser_Exception('Cannot instantiate XMLReader');
+            throw new VersionControl_SVN_Parser_Exception(
+                'Cannot instantiate XMLReader'
+            );
         }
         $data = self::getParsedBody(
             $reader, $this->xmlPathConfig
         );
         $reader->close();
-var_dump($data);
         return $data;
     }
 
@@ -117,7 +112,9 @@ var_dump($data);
                 );
             }
         }
-        VersionControl_SVN_Parser_Exception('XML ends before body end tag.');
+        throw new VersionControl_SVN_Parser_Exception(
+            'XML ends before body end tag.'
+        );
     }
 
     /**
@@ -164,7 +161,9 @@ var_dump($data);
                 return $data;
             }
         }
-        VersionControl_SVN_Parser_Exception('XML ends before entry end tag.');
+        throw new VersionControl_SVN_Parser_Exception(
+            'XML ends before entry end tag. 2'
+        );
     }
 
     /**
@@ -187,6 +186,9 @@ var_dump($data);
             foreach($xmlPathConfig['attribute'] as $attribute) {
                 $data[$attribute] = $reader->getAttribute($attribute);
             }
+        }
+        if ($reader->isEmptyElement) {
+            return $data;
         }
         if (isset($xmlPathConfig['config'])
             && 'string' === $xmlPathConfig['config']
@@ -216,10 +218,13 @@ var_dump($data);
         // @var string|null $data The text from an entry.
         $data = null;
 
+        if ($reader->isEmptyElement) {
+            return $data;
+        }
         while ($reader->read()) {
             if (XMLReader::ELEMENT === $reader->nodeType
             ) {
-                self::parseBlindEntry($reader, $readerName);
+                self::parseBlindEntry($reader, $reader->name);
             }
             if (XMLReader::TEXT === $reader->nodeType
             ) {
@@ -231,7 +236,9 @@ var_dump($data);
                 return $data;
             }
         }
-        VersionControl_SVN_Parser_Exception('XML ends before entry end tag.');
+        throw new VersionControl_SVN_Parser_Exception(
+            'XML ends before entry end tag. 3'
+        );
     }
 
     /**
@@ -246,6 +253,9 @@ var_dump($data);
     protected static function parseBlindEntry(
         XMLReader $reader, $xmlEntry
     ) {
+        if ($reader->isEmptyElement) {
+            return;
+        }
         while ($reader->read()) {
             if (XMLReader::ELEMENT === $reader->nodeType
             ) {
@@ -257,7 +267,9 @@ var_dump($data);
                 return;
             }
         }
-        VersionControl_SVN_Parser_Exception('XML ends before entry end tag.');
+        throw new VersionControl_SVN_Parser_Exception(
+            'XML ends before entry end tag. 4'
+        );
     }
 }
 ?>
