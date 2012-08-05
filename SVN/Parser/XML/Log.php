@@ -1,6 +1,8 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 /**
+ * Implements reading of SVN log XML.
+ *
  * +----------------------------------------------------------------------+
  * | This LICENSE is in the BSD license style.                            |
  * | http://www.opensource.org/licenses/bsd-license.php                   |
@@ -45,10 +47,10 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
- require_once 'PEAR/Exception.php';
+require_once 'VersionControl/SVN/Parser/XML.php';
 
 /**
- * Package Exception
+ * Class VersionControl_SVN_Parser_Log - XML Parser for Subversion Log output
  *
  * @category VersionControl
  * @package  VersionControl_SVN
@@ -57,18 +59,32 @@
  * @version  @version@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */
-class VersionControl_SVN_Exception extends PEAR_Exception
+class VersionControl_SVN_Parser_XML_Log
+    extends VersionControl_SVN_Parser_XML
 {
-    const ERROR = 1;
-    const NO_VERSION = 2;
-    const NO_REVISION = 3;
-    const UNKNOWN_CMD = 4;
-    const NOT_IMPLEMENTED = 5;
-    const NO_SWITCHES = 6;
-    const UNDEFINED = 7;
-    const REQUIRED_SWITCH_MISSING = 8;
-    const MIN_ARGS = 9;
-    const EXEC = 10;
-    const INVALID_SWITCH = 11;
-    const INVALID_OPTION = 12;
+    /**
+     * @var array $xmlPathConfig The XML configuration (like a DTD).
+     */
+    protected $xmlPathConfig = array(
+        'log' => array(
+            'path' => array(
+                'logentry' => array(
+                    'attribute' => array('revision'),
+                    'quantifier' => '+',
+                    'path' => array(
+                        'author' => array(
+                            'config' => 'string',
+                        ),
+                        'date' => array(
+                            'config' => 'string',
+                        ),
+                        'msg' => array(
+                            'config' => 'string',
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    );
 }
+?>

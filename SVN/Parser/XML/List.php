@@ -1,8 +1,7 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 /**
- * VersionControl_SVN_Info allows for XML formatted output. XML_Parser is used to
- * manipulate that output.
+ * Implements reading of SVN list XML.
  *
  * +----------------------------------------------------------------------+
  * | This LICENSE is in the BSD license style.                            |
@@ -42,81 +41,61 @@
  *
  * @category  VersionControl
  * @package   VersionControl_SVN
- * @author    Clay Loveless <clay@killersoft.com>
  * @author    Alexander Opitz <opitz.alexander@gmail.com>
- * @copyright 2004-2007 Clay Loveless
+ * @copyright 2012 Alexander Opitz
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
- require_once 'XML/Parser.php';
+require_once 'VersionControl/SVN/Parser/XML.php';
 
 /**
- * Class VersionControl_SVN_Parser_Info - XML Parser for Subversion Info output
+ * Class VersionControl_SVN_Parser_List - XML Parser for Subversion List output
  *
  * @category VersionControl
  * @package  VersionControl_SVN
- * @author   Clay Loveless <clay@killersoft.com>
  * @author   Alexander Opitz <opitz.alexander@gmail.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
  * @version  @version@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */
-class VersionControl_SVN_Parser_List extends XML_Parser
+class VersionControl_SVN_Parser_XML_List
+    extends VersionControl_SVN_Parser_XML
 {
-    var $commit = array();
-    var $entry = array();
-    var $list = array();
-
-    function startHandler($xp, $element, &$attribs)
-    {
-        switch ($element) {
-        case 'COMMIT':
-            $this->commit = array(
-                'REVISION' => $attribs['REVISION']
-            );
-            break;
-        case 'ENTRY':
-            $this->entry = array(
-                'KIND' => $attribs['KIND']
-            );
-            break;
-        case 'LIST':
-            $this->list = array();
-            break;
-        case 'NAME':
-        case 'AUTHOR':
-        case 'DATE':
-        case 'ROOT':
-            $this->cdata = '';
-            break;
-        }
-    }
-
-    function cdataHandler($xp, $data)
-    {
-        $this->cdata .= $data;
-    }
-
-    function endHandler($xp, $element)
-    {
-        switch($element) {
-        case 'COMMIT':
-            $this->entry['COMMIT'] = $this->commit;
-            break;
-        case 'ENTRY':
-            $this->list[] = $this->entry;
-            break;
-        case 'LIST':
-            break;
-        case 'AUTHOR':
-        case 'DATE':
-            $this->commit[$element] = $this->cdata;
-            break;
-        case 'NAME':
-            $this->entry[$element] = $this->cdata;
-            break;
-        }
-    }
+    /**
+     * @var array $xmlPathConfig The XML configuration (like a DTD).
+     */
+    protected $xmlPathConfig = array(
+        'lists' => array(
+            'path' => array(
+                'list' => array(
+                    'attribute' => array('path'),
+                    'quantifier' => '+',
+                    'path' => array(
+                        'entry' => array(
+                            'attribute' => array('kind'),
+                            'quantifier' => '*',
+                            'path' => array(
+                                'name' => array(
+                                    'config' => 'string',
+                                ),
+                                'commit' => array(
+                                    'attribute' => array('revision'),
+                                    'path' => array(
+                                        'author' => array(
+                                            'config' => 'string',
+                                        ),
+                                        'date' => array(
+                                            'config' => 'string',
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    );
 }
 ?>

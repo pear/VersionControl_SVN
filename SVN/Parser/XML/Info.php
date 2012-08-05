@@ -1,8 +1,7 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 /**
- * VersionControl_SVN_Log allows for XML formatted output. XML_Parser is used to
- * manipulate that output.
+ * Implements reading of SVN info XML.
  *
  * +----------------------------------------------------------------------+
  * | This LICENSE is in the BSD license style.                            |
@@ -42,85 +41,65 @@
  *
  * @category  VersionControl
  * @package   VersionControl_SVN
- * @author    Clay Loveless <clay@killersoft.com>
  * @author    Alexander Opitz <opitz.alexander@gmail.com>
- * @copyright 2004-2007 Clay Loveless
+ * @copyright 2012 Alexander Opitz
  * @license   http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
-require_once 'XML/Parser.php';
+require_once 'VersionControl/SVN/Parser/XML.php';
 
 /**
- * Class VersionControl_SVN_Parser_Log - XML Parser for Subversion Log output
+ * Class VersionControl_SVN_Parser_Info - XML Parser for Subversion Info output
  *
  * @category VersionControl
  * @package  VersionControl_SVN
- * @author   Clay Loveless <clay@killersoft.com>
  * @author   Alexander Opitz <opitz.alexander@gmail.com>
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
  * @version  @version@
  * @link     http://pear.php.net/package/VersionControl_SVN
  */
-class VersionControl_SVN_Parser_Log extends XML_Parser
+class VersionControl_SVN_Parser_XML_Info
+    extends VersionControl_SVN_Parser_XML
 {
-    var $cdata;
-    var $revision;
-    var $logentry;
-    var $action;
-    var $paths;
-    var $pathentry;
-    var $log;
-    
-    function startHandler($xp, $element, &$attribs)
-    {
-        switch ($element) {
-        case 'LOGENTRY':
-            $this->revision = $attribs['REVISION'];
-            $this->logentry = array();
-            break;
-        case 'AUTHOR':
-        case 'DATE':
-        case 'MSG':
-            $this->cdata = '';
-            break;
-        case 'PATHS':
-            $this->paths = array();
-            break;
-        case 'PATH':
-            $this->action = $attribs['ACTION'];
-            $this->cdata = '';
-            break;
-        }
-    }
-    
-    function cdataHandler($xp, $data)
-    {
-        $this->cdata .= $data;
-    }
-    
-    function endHandler($xp, $element)
-    {
-        switch($element) {
-        case 'AUTHOR':
-        case 'DATE':
-        case 'MSG':
-            $this->logentry[$element] = $this->cdata;
-            break;
-        case 'PATH':
-            $this->paths[] = array(
-                $element => $this->cdata,
-                'ACTION' => $this->action
-            );
-            break;
-        case 'PATHS':
-            $this->logentry[$element] = $this->paths;
-            break;
-        case 'LOGENTRY':
-            $this->logentry['REVISION'] = $this->revision;
-            $this->log[] = $this->logentry;
-            break;
-        }
-    }
+    /**
+     * @var array $xmlPathConfig The XML configuration (like a DTD).
+     */
+    protected $xmlPathConfig = array(
+        'info' => array(
+            'path' => array(
+                'entry' => array(
+                    'attribute' => array('kind', 'path', 'revision'),
+                    'quantifier' => '+',
+                    'path' => array(
+                        'url' => array(
+                            'config' => 'string',
+                        ),
+                        'repository' => array(
+                            'path' => array(
+                                'root' => array(
+                                    'config' => 'string',
+                                ),
+                                'uuid' => array(
+                                    'config' => 'string',
+                                ),
+                            ),
+                        ),
+                        'commit' => array(
+                            'attribute' => array('revision'),
+                            'path' => array(
+                                'author' => array(
+                                    'config' => 'string',
+                                ),
+                                'date' => array(
+                                    'config' => 'string',
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    );
 }
 ?>
