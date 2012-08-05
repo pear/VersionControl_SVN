@@ -48,16 +48,14 @@
 require_once 'VersionControl/SVN/Exception.php';
 
 /**
- * Package Exception
+ * Exception for errors while parsing the command output.
  *
- * @tutorial  VersionControl_SVN.pkg
- * @category  VersionControl
- * @package   VersionControl_SVN
- * @author    Alexander Opitz <opitz.alexander@gmail.com>
- * @copyright 2012 Alexander Opitz
- * @license   http://www.killersoft.com/LICENSE.txt BSD License
- * @version   @version@
- * @link      http://pear.php.net/package/VersionControl_SVN
+ * @category VersionControl
+ * @package  VersionControl_SVN
+ * @author   Alexander Opitz <opitz.alexander@gmail.com>
+ * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @version  @version@
+ * @link     http://pear.php.net/package/VersionControl_SVN
  */
 class VersionControl_SVN_Parser_Exception
     extends VersionControl_SVN_Exception

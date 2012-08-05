@@ -1,8 +1,7 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 /**
- * VersionControl_SVN_Info allows for XML formatted output. XML_Parser is used to
- * manipulate that output.
+ * Implements reading of SVN log XML.
  *
  * +----------------------------------------------------------------------+
  * | This LICENSE is in the BSD license style.                            |
@@ -51,7 +50,7 @@
 require_once 'VersionControl/SVN/Parser/XML.php';
 
 /**
- * Class VersionControl_SVN_Parser_Info - XML Parser for Subversion Info output
+ * Class VersionControl_SVN_Parser_Log - XML Parser for Subversion Log output
  *
  * @category VersionControl
  * @package  VersionControl_SVN
@@ -64,7 +63,7 @@ class VersionControl_SVN_Parser_XML_Log
     extends VersionControl_SVN_Parser_XML
 {
     /**
-     * @var array $xmlPath The XML configuration (like a DTD).
+     * @var array $xmlPathConfig The XML configuration (like a DTD).
      */
     protected $xmlPathConfig = array(
         'log' => array(
