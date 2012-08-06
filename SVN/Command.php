@@ -503,25 +503,25 @@ abstract class VersionControl_SVN_Command
      */
     public function parseOutput($out)
     {
-        $dir = realpath(dirname(__FILE__)) . '/Parsers';
+        $dir = realpath(dirname(__FILE__)) . '/Parser/XML';
         switch($this->fetchmode) {
         case VERSIONCONTROL_SVN_FETCHMODE_ARRAY:
         case VERSIONCONTROL_SVN_FETCHMODE_ASSOC:
         case VERSIONCONTROL_SVN_FETCHMODE_OBJECT:
             $file = $dir . '/' . ucfirst($this->commandName) . '.php';
             if (file_exists($file)) {
-                $class = 'VersionControl_SVN_Parser_'
+                $class = 'VersionControl_SVN_Parser_XML_'
                     . ucfirst($this->commandName);
 
                 include_once $file;
                 $parser = new $class;
                 $contentVar = $this->commandName;
 
-                $parser->parseString(join("\n", $out));
+                $parsedData = $parser->getParsed(join("\n", $out));
                 if ($this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT) {
-                    return (object) $parser->$contentVar;
+                    return (object) $parsedData;
                 }
-                return $parser->$contentVar;
+                return $parsedData;
                 break;
             }
         case VERSIONCONTROL_SVN_FETCHMODE_RAW:
