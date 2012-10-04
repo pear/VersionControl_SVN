@@ -435,9 +435,10 @@ abstract class VersionControl_SVN_Command
     public function run($args = array(), $switches = array())
     {
         if (!file_exists($this->binaryPath)) {
-            $this->binaryPath = System::which('svn');
+            $system = new System();
+            $this->binaryPath = $system->which('svn');
         }
-        
+
         if (sizeof($switches) > 0) {
             $this->switches = $switches;
         }
@@ -446,14 +447,14 @@ abstract class VersionControl_SVN_Command
                 $this->args[$k] = escapeshellarg($args[$k]);
             }
         }
-        
+
         // Always prepare, allows for obj re-use. (Request #5021)
         $this->prepare();
-        
+
         $out       = array();
         // @var integer $returnVar Return number from shell execution.
         $returnVar = null;
-        
+
         $cmd = $this->preparedCmd;
 
         // On Windows, don't use escapeshellcmd, and double-quote $cmd
@@ -465,7 +466,7 @@ abstract class VersionControl_SVN_Command
                 escapeshellarg($this->binaryPath),
                 $cmd
             );
-            
+
             if (!$this->passthru) {
                 exec("$cmd 2>&1", $out, $returnVar);
             } else {
