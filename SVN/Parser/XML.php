@@ -77,7 +77,8 @@ class VersionControl_SVN_Parser_XML
      */
     public function getParsed($xml)
     {
-        $reader = XMLReader::xml($xml);
+        $reader = new XMLReader();
+        $reader->xml($xml);
         if (false === $reader) {
             throw new VersionControl_SVN_Parser_Exception(
                 'Cannot instantiate XMLReader'
