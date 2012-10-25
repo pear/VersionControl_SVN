@@ -53,13 +53,12 @@
     object for easy navigation.
 */
 
-error_reporting(E_ALL);
-ini_set('display_errors', 'on');
+error_reporting(E_ALL & ~E_DEPRECATED);
 
 require_once 'VersionControl/SVN.php';
 
 // Default options
-$base_url = 'https://www.killersoft.com/svn/packages/pear/VersionControl_SVN/trunk';
+$base_url = 'https://github.com/pear/VersionControl_SVN/trunk';
 $base_add = '';
 if (isset($_SERVER['PATH_INFO'])) {
     $base_add = $_SERVER['PATH_INFO'];
@@ -98,28 +97,27 @@ try {
                                         'icon' => $foldericon));
 
         $list = $svn->list->run($args, $switches);
-        foreach ($list as $dir => $contents) {
-            foreach ($list[$dir]['name'] as $i => $item) {
-                if ($list[$dir]['type'][$i] == 'D') {
-                    $icon = $foldericon;
-                    $link = '';
-                } else {
-                    $icon = $docicon;
-                    $link = $_SERVER['PHP_SELF']."/$dir/$item";
-                    // don't need the link for the .
-                    $link = str_replace('/.', '', $link);
-                }
-
-                if ($dir == '.') {
-                    // Adding to root level
-                    $obj = $item;
-                    $$obj =& $node1->addItem(new HTML_TreeNode(array('text' => $item, 'icon' => $icon, 'link' => $link)));
-                } else {
-                    // Get parent item
-                    $parent = basename($dir);
-                    $obj = $item;
-                    $$obj =& $$parent->addItem(new HTML_TreeNode(array('text' => $item, 'icon' => $icon, 'link' => $link)));
-                }
+        foreach ($list['list'][0]['entry'] as $item) {
+            $dir = dirname($item['name']);
+            if ($item['kind'] !== 'file') {
+                $icon = $foldericon;
+                $link = '';
+            } else {
+                $icon = $docicon;
+                $link = $_SERVER['PHP_SELF']."/" . $item['name'];
+                // don't need the link for the .
+                $link = str_replace('/.', '', $link);
+            }
+            
+            if ($dir == '.') {
+                // Adding to root level
+                $obj = basename($item['name']);
+                $$obj = $node1->addItem(new HTML_TreeNode(array('text' => $item['name'], 'icon' => $icon, 'link' => $link)));
+            } else {
+                // Get parent item
+                $parent = basename($dir);
+                $obj = basename($item['name']);
+                $$obj = $$parent->addItem(new HTML_TreeNode(array('text' => $item['name'], 'icon' => $icon, 'link' => $link)));
             }
         }
 

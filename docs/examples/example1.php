@@ -55,24 +55,19 @@ ini_set('display_errors', 'on');
 require_once 'VersionControl/SVN.php';
 
 // Default options
-$base_url = 'svn://svn.killersoft.com/repos/VersionControl_SVN/trunk';
+$base_url = 'https://github.com/pear/VersionControl_SVN/trunk';
 $base_add = isset($_GET['base_add']) ? '/'.$_GET['base_add'] : '';
 $cmd = isset($_GET['cmd']) ? $_GET['cmd'] : 'list';
-$options = array(
-    'target'  => $base_url.$base_add
-);
 
 try {
     // Create svn object with subcommands we'll want
-    $svn = VersionControl_SVN::factory(array('list', 'cat'), $options);
+    $svn = VersionControl_SVN::factory(array('list', 'cat'));
 
 
     // A quickie sample of browsing a Subversion repository
     if ($cmd == 'cat') {
         $file = $_GET['file'];
-        $options['target'] = $base_url.$base_add.'/'.$file;
-        $svn->cat->setOptions($options);
-        $source = $svn->cat->run();
+        $source = $svn->cat->run(array($base_url.$base_add.'/'.$file));
         if (substr($file, -4) == '.php') {
             highlight_string($source);
         } else {
@@ -80,14 +75,12 @@ try {
         }
 
     } else {
-        $list = $svn->list->run();
-        $list_array = explode("\n", $list);
-        foreach ($list_array as $item) {
-            if (substr($item, -1) == '/') {
-                $new_base = substr($item, 0, -1);
-                echo "<a href=\"example1.php?cmd=list&base_add={$base_add}/{$new_base}\">$item</a><br />\n";
+        $list = $svn->list->run(array($base_url));
+        foreach ($list['list'][0]['entry'] as $item) {
+            if ($item['kind'] != 'file') {
+                echo "<a href=\"example1.php?cmd=list&base_add={$base_add}/{$item['name']}\">{$item['name']}</a><br />\n";
             } else {
-                echo "<a href=\"example1.php?cmd=cat&file={$item}&base_add={$base_add}\">$item</a><br />\n";
+                echo "<a href=\"example1.php?cmd=cat&file={$item['name']}&base_add={$base_add}\">{$item['name']}</a><br />\n";
             }
         }
     }
