@@ -294,7 +294,7 @@ class VersionControl_SVN
                 VersionControl_SVN_Exception::ERROR
             );
         }
-        $dirEntries = glob($dir . '*.php');
+        $dirEntries = glob($dir . '/*.php');
         foreach ($dirEntries as $entry) {
             if (is_file($entry)
                 && is_readable($entry)
