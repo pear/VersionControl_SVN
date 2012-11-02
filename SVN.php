@@ -299,7 +299,7 @@ class VersionControl_SVN
             if (is_file($entry)
                 && is_readable($entry)
             ) {
-                $commands[] = basename($entry, '.php');
+                $commands[] = strtolower(basename($entry, '.php'));
             }
         }
 
