@@ -79,6 +79,9 @@ class VersionControl_SVN_Parser_XML_List
                                 'name' => array(
                                     'config' => 'string',
                                 ),
+                                'size' => array(
+                                    'config' => 'string',
+                                ),
                                 'commit' => array(
                                     'attribute' => array('revision'),
                                     'path' => array(
