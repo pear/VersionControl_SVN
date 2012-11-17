@@ -474,14 +474,14 @@ abstract class VersionControl_SVN_Command
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $cmd = str_replace(
                 $this->binaryPath,
-                escapeshellarg($this->binaryPath),
+                escapeshellarg(str_replace('/', '\\', $this->binaryPath)),
                 $cmd
             );
 
             if (!$this->passthru) {
-                exec("$cmd 2>&1", $out, $returnVar);
+                exec("cmd /c \"$cmd 2>&1\"", $out, $returnVar);
             } else {
-                passthru("$cmd 2>&1", $returnVar);
+                passthru("cmd /c \"$cmd 2>&1\"", $returnVar);
             }
         } else {
             if ($this->useEscapeshellcmd) {
