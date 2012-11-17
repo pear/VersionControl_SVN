@@ -66,31 +66,35 @@ class VersionControl_SVN_Parser_XML_Info
      * @var array $xmlPathConfig The XML configuration (like a DTD).
      */
     protected $xmlPathConfig = array(
-        'entry' => array(
-            'attribute' => array('kind', 'path', 'revision'),
-            'quantifier' => '+',
+        'info' => array(
             'path' => array(
-                'url' => array(
-                    'config' => 'string',
-                ),
-                'repository' => array(
+                'entry' => array(
+                    'attribute' => array('kind', 'path', 'revision'),
+                    'quantifier' => '+',
                     'path' => array(
-                        'root' => array(
+                        'url' => array(
                             'config' => 'string',
                         ),
-                        'uuid' => array(
-                            'config' => 'string',
+                        'repository' => array(
+                            'path' => array(
+                                'root' => array(
+                                    'config' => 'string',
+                                ),
+                                'uuid' => array(
+                                    'config' => 'string',
+                                ),
+                            ),
                         ),
-                    ),
-                ),
-                'commit' => array(
-                    'attribute' => array('revision'),
-                    'path' => array(
-                        'author' => array(
-                            'config' => 'string',
-                        ),
-                        'date' => array(
-                            'config' => 'string',
+                        'commit' => array(
+                            'attribute' => array('revision'),
+                            'path' => array(
+                                'author' => array(
+                                    'config' => 'string',
+                                ),
+                                'date' => array(
+                                    'config' => 'string',
+                                ),
+                            ),
                         ),
                     ),
                 ),
