@@ -8,21 +8,14 @@
 VersionControl_SVN is a simple OO-style interface for Subversion,
 the free/open-source version control system.
 
-VersionControl_SVN can be used to manage trees of source code, 
-text files, image files -- just about any 
-collection of files.
-
 Some of VersionControl_SVN&apos;s features:
 
-* Full support of svn command-line client&apos;s 
-  subcommands.
-* Use of flexible error reporting provided by
-  PEAR_ErrorStack.
+* Full support of svn command-line client&apos;s  subcommands.
+* Exception handling.
 * Multi-object factory.
-* Source fully documented with PHPDoc.
+* Source fully documented with phpDocumentor.
 * Stable, extensible interface.
-* Collection of helpful quickstart examples and
-  tutorials.
+* Collection of helpful quickstart examples and tutorials.
 
 What can be done with VersionControl_SVN?
 
@@ -39,7 +32,7 @@ Note: Requires a Subversion installation.
 Subverison is available from
 http://subversion.tigris.org/
 
-VersionControl_SVN is tested against Subversion 1.6.3</description>
+VersionControl_SVN is tested against Subversion 1.6 and 1.7.</description>
  <lead>
   <name>Clay Loveless</name>
   <user>clay</user>
@@ -52,8 +45,8 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
   <email>mrook@php.net</email>
   <active>yes</active>
  </lead>
- <date>2011-10-14</date>
- <time>21:42:55</time>
+ <date>2012-11-19</date>
+ <time>20:00:00</time>
  <version>
   <release>0.5.0</release>
   <api>0.5.0</api>
@@ -64,13 +57,13 @@ VersionControl_SVN is tested against Subversion 1.6.3</description>
  </stability>
  <license>BSD License</license>
  <notes>
-* Fix Bug #19465: username/password isn&apos;t handled like described in documentation [mrook]
+* Fix Bug #18130: Problems with executing checkout [mrook]
+ * Fix Bug #19465: username/password isn&apos;t handled like described in documentation [mrook]
  * Implement Feature #18635: Add support for changelist command and arguments [mrook]
  * Implement Feature #18956: Add support for --trust-server-cert switch [mrook]
  * Implement Feature #19388: Support for --xml Flag in Info [mrook]
  * Implement Feature #19464: Move command handling in new class [mrook]
- * Implement Feature #19470: Convert
- * VersionControl_SVN_Comand_List::parseOutputArray into xml parser [mrook]
+ * Implement Feature #19470: Convert VersionControl_SVN_Comand_List::parseOutputArray into xml parser [mrook]
  * Implement Feature #19472: Use Exceptions instead of PEAR_Error [mrook]
  * Implement Feature #19484: Use XMLReader instead of PEAR::XML_Parser [mrook]
  </notes>
