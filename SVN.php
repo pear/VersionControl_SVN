@@ -281,7 +281,7 @@ class VersionControl_SVN
      * @return array Array with names of commands as value.
      * @throws VersionControl_SVN_Exception Exception if fetching commands fails.
      */
-    public function fetchCommands()
+    public static function fetchCommands()
     {
         $commands = array();
         $dir = realpath(dirname(__FILE__)) . '/SVN/Command';
@@ -311,7 +311,7 @@ class VersionControl_SVN
      *
      * @return string The VersionControl_SVN API version number.
      */
-    public function apiVersion()
+    public static function apiVersion()
     {
         return '@version@';
     }
