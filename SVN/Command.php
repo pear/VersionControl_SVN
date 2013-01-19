@@ -303,7 +303,7 @@ abstract class VersionControl_SVN_Command
                 $switchPrefix = '--';
             }
             if (in_array($switch, $this->validSwitchesValue)) {
-                $cmdParts[] = $switchPrefix . $switch . ' ' . $val;
+                $cmdParts[] = $switchPrefix . $switch . ' ' . escapeshellarg($val);
             } elseif (in_array($switch, $this->validSwitches)) {
                 if (true === $val) {
                     $cmdParts[] = $switchPrefix . $switch;
