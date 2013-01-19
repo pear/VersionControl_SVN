@@ -249,7 +249,7 @@ class VersionControl_SVN_Command_Diff extends VersionControl_SVN_Command
                 'N', 'non-recursive',
                 'no-diff-deleted',
                 'notice-ancestry',
-                'summerize',
+                'summarize',
                 'force',
                 'xml',
             )
