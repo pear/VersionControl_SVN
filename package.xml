@@ -45,10 +45,10 @@ VersionControl_SVN is tested against Subversion 1.6 and 1.7.</description>
   <email>mrook@php.net</email>
   <active>yes</active>
  </lead>
- <date>2012-11-19</date>
- <time>20:00:00</time>
+ <date>2013-02-09</date>
+ <time>12:19:00</time>
  <version>
-  <release>0.5.0</release>
+  <release>0.5.1</release>
   <api>0.5.0</api>
  </version>
  <stability>
@@ -57,15 +57,9 @@ VersionControl_SVN is tested against Subversion 1.6 and 1.7.</description>
  </stability>
  <license>BSD License</license>
  <notes>
-* Fix Bug #18130: Problems with executing checkout [mrook]
- * Fix Bug #19465: username/password isn&apos;t handled like described in documentation [mrook]
- * Implement Feature #18635: Add support for changelist command and arguments [mrook]
- * Implement Feature #18956: Add support for --trust-server-cert switch [mrook]
- * Implement Feature #19388: Support for --xml Flag in Info [mrook]
- * Implement Feature #19464: Move command handling in new class [mrook]
- * Implement Feature #19470: Convert VersionControl_SVN_Comand_List::parseOutputArray into xml parser [mrook]
- * Implement Feature #19472: Use Exceptions instead of PEAR_Error [mrook]
- * Implement Feature #19484: Use XMLReader instead of PEAR::XML_Parser [mrook]
+* Fix Bug #19776: switch handling argument injection bug [mrook]
+ * Fix Bug #19795: escapeshellarg for switches [mrook]
+ * Fix Bug #19813: Typo in diff command switch &quot;summarize&quot; [mrook]
  </notes>
  <contents>
   <dir name="/">
@@ -218,6 +212,34 @@ VersionControl_SVN is tested against Subversion 1.6 and 1.7.</description>
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>0.5.0</release>
+    <api>0.5.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>beta</api>
+   </stability>
+   <date>2012-11-19</date>
+   <license>BSD License</license>
+   <notes>
+* Fix Bug #18130: Problems with executing checkout [mrook]
+ * Fix Bug #19465: username/password isn&apos;t handled like described in
+ * documentation [mrook]
+ * Implement Feature #18635: Add support for changelist command and
+ * arguments [mrook]
+ * Implement Feature #18956: Add support for --trust-server-cert switch
+ * [mrook]
+ * Implement Feature #19388: Support for --xml Flag in Info [mrook]
+ * Implement Feature #19464: Move command handling in new class [mrook]
+ * Implement Feature #19470: Convert
+ * VersionControl_SVN_Comand_List::parseOutputArray into xml parser [mrook]
+ * Implement Feature #19472: Use Exceptions instead of PEAR_Error [mrook]
+ * Implement Feature #19484: Use XMLReader instead of PEAR::XML_Parser
+ * [mrook]
+   </notes>
+  </release>
   <release>
    <version>
     <release>0.4.0</release>
