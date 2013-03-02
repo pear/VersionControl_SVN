@@ -119,6 +119,8 @@ require_once 'VersionControl/SVN/Command.php';
  *                      // print as little as possible
  *  'diff3-cmd'     =>  'ARG',
  *                      // use ARG as merge command
+ *  'parents'       =>  true|false,
+ *                      // make intermediate directories
  *  'username'      =>  'Subversion repository login',
  *  'password'      =>  'Subversion repository password',
  *  'no-auth-cache' =>  true|false,
@@ -171,6 +173,7 @@ class VersionControl_SVN_Command_Update extends VersionControl_SVN_Command
                 'q', 'quiet',
                 'force',
                 'ignore-externals',
+                'parents'
             )
         );
     }
