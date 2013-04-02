@@ -71,4 +71,5 @@ class VersionControl_SVN_Exception extends PEAR_Exception
     const EXEC = 10;
     const INVALID_SWITCH = 11;
     const INVALID_OPTION = 12;
+    const SWITCH_MISSING = 13;
 }
