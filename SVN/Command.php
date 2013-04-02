@@ -423,7 +423,7 @@ abstract class VersionControl_SVN_Command
             $num_missing = count($missing);
             if ($num_missing > 0) {
                 throw new VersionControl_SVN_Exception(
-                    'svn command requires the following switch(es): ' . $missing,
+                    'svn command requires the following switch(es): ' . implode(', ', $missing),
                     VersionControl_SVN_Exception::SWITCH_MISSING
                 );
             }
