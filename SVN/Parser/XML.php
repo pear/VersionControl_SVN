@@ -194,7 +194,14 @@ class VersionControl_SVN_Parser_XML
         if (isset($xmlPathConfig['config'])
             && 'string' === $xmlPathConfig['config']
         ) {
-            $data = self::getParsedString($reader, $xmlEntry);
+            if (count($data) > 0) {
+                $data = array_merge(
+                    array('text' => self::getParsedString($reader, $xmlEntry)),
+                    $data
+                );
+            } else {
+                $data = self::getParsedString($reader, $xmlEntry);
+            }
         } else {
             $data = array_merge(
                 self::getParsedEntry($reader, $xmlEntry, $xmlPathConfig),
