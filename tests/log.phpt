@@ -1,5 +1,5 @@
 --TEST--
-test diff
+test log xml
 --SKIPIF--
 --FILE--
 <?php
