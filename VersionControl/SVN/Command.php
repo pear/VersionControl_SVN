@@ -361,7 +361,10 @@ abstract class VersionControl_SVN_Command
             || $this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_XML)
         ) {
             $this->switches['xml'] = true;
+        } else {
+            $this->switches['xml'] = false;
         }
+        
         $this->switches['non-interactive'] = true;
 
         $this->fillSwitch('username', $this->username);
