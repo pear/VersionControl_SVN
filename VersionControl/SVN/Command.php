@@ -168,28 +168,28 @@ abstract class VersionControl_SVN_Command
      *
      * @var string $username
      */
-    public $username = '';
+    public $username = null;
 
     /**
      * Default password to use for connections.
      *
      * @var string $password
      */
-    public $password = '';
+    public $password = null;
 
     /**
      * Default config-dir to use for connections.
      *
      * @var string $configDir
      */
-    public $configDir = '';
+    public $configDir = null;
 
     /**
      * Default config-option to use for connections.
      *
      * @var string $configOption
      */
-    public $configOption = '';
+    public $configOption = null;
 
     /**
      * SVN subcommand to run.
@@ -376,7 +376,7 @@ abstract class VersionControl_SVN_Command
     protected function fillSwitch($switchName, $value)
     {
         if (!isset($this->switches[$switchName])
-            && '' !== $value
+            && null !== $value
         ) {
             $this->switches[$switchName] = $value;
         }
