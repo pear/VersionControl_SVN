@@ -111,15 +111,6 @@ abstract class VersionControl_SVN_Command
     public $switches = array();
 
     /**
-     * Switches required by this subcommand.
-     * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion},
-     * Subversion Complete Reference for details on arguments for this subcommand.
-     *
-     * @var array $requiredSwitches
-     */
-    protected $requiredSwitches = array();
-
-    /**
      * Runtime options being used.
      *
      * @var array $options
@@ -133,15 +124,6 @@ abstract class VersionControl_SVN_Command
      * @var array $args
      */
     public $args = array();
-
-    /**
-     * Minimum number of args required by this subcommand.
-     * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion},
-     * Subversion Complete Reference for details on arguments for this subcommand.
-     *
-     * @var int $minArgs
-     */
-    protected $minArgs = 0;
 
     /**
      * Preferred fetchmode. Note that not all subcommands have output available for
@@ -197,6 +179,24 @@ abstract class VersionControl_SVN_Command
      * @var string $trustServerCert
      */
     public $trustServerCert = false;
+
+    /**
+     * Switches required by this subcommand.
+     * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion},
+     * Subversion Complete Reference for details on arguments for this subcommand.
+     *
+     * @var array $requiredSwitches
+     */
+    protected $requiredSwitches = array();
+
+    /**
+     * Minimum number of args required by this subcommand.
+     * See {@link http://svnbook.red-bean.com/svnbook/ Version Control with Subversion},
+     * Subversion Complete Reference for details on arguments for this subcommand.
+     *
+     * @var int $minArgs
+     */
+    protected $minArgs = 0;
 
     /**
      * SVN subcommand to run.
