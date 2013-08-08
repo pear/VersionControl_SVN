@@ -117,7 +117,7 @@ abstract class VersionControl_SVN_Command
      *
      * @var array $requiredSwitches
      */
-    public $requiredSwitches = array();
+    protected $requiredSwitches = array();
 
     /**
      * Runtime options being used.
@@ -141,7 +141,7 @@ abstract class VersionControl_SVN_Command
      *
      * @var int $minArgs
      */
-    public $minArgs = 0;
+    protected $minArgs = 0;
 
     /**
      * Preferred fetchmode. Note that not all subcommands have output available for

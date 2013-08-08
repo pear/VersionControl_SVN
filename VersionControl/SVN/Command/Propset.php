@@ -166,7 +166,7 @@ class VersionControl_SVN_Command_Propset extends VersionControl_SVN_Command
      *
      * @var int $minArgs
      */
-    public $minArgs = 3;
+    protected $minArgs = 3;
 
     /**
      * Constuctor of command. Adds available switches.
