@@ -141,7 +141,7 @@ class VersionControl_SVN_Command_Commit extends VersionControl_SVN_Command
      *
      * @var array $requiredSwitches
      */
-    public $requiredSwitches = array('m|message|F|file');
+    protected $requiredSwitches = array('m|message|F|file');
 
     /**
      * Constuctor of command. Adds available switches.

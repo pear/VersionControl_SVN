@@ -147,7 +147,7 @@ class VersionControl_SVN_Command_Mkdir extends VersionControl_SVN_Command
      *
      * @var int $minArgs
      */
-    public $minArgs = 1;
+    protected $minArgs = 1;
 
     /**
      * Switches required by this subcommand.
@@ -156,7 +156,7 @@ class VersionControl_SVN_Command_Mkdir extends VersionControl_SVN_Command
      *
      * @var array $requiredSwitches
      */
-    public $requiredSwitches = array('m|message|F|file');
+    protected $requiredSwitches = array('m|message|F|file');
 
     /**
      * Constuctor of command. Adds available switches.

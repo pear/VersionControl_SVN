@@ -213,7 +213,7 @@ class VersionControl_SVN_Command_Diff extends VersionControl_SVN_Command
      *
      * @var int $minArgs
      */
-    public $minArgs = 1;
+    protected $minArgs = 1;
 
     /**
      * Keep track of whether XML output is available for a command
