@@ -94,13 +94,6 @@ abstract class VersionControl_SVN_Command
     public $binaryPath = '/usr/local/bin/svn';
 
     /**
-     * Legacy / compatibility location of the svn client binary
-     *
-     * @var string $svn_path
-     */
-    public $svn_path = '';
-
-    /**
      * String to prepend to command string. Helpful for setting exec()
      * environment variables, such as:
      *    export LANG=en_US.utf8 &&
@@ -443,10 +436,6 @@ abstract class VersionControl_SVN_Command
      */
     public function run($args = array(), $switches = array())
     {
-        if ($this->svn_path != '') {
-            $this->binaryPath = $this->svn_path;
-        }
-
         if (!file_exists($this->binaryPath)) {
             $system = new System();
             $this->binaryPath = $system->which('svn');
