@@ -185,6 +185,20 @@ abstract class VersionControl_SVN_Command
     public $configOption = null;
 
     /**
+     * Default no-auth-cache to use for connections.
+     *
+     * @var string $noAuthCache
+     */
+    public $noAuthCache = null;
+
+    /**
+     * Default trust-server-cert to use for connections.
+     *
+     * @var string $trustServerCert
+     */
+    public $trustServerCert = false;
+
+    /**
      * SVN subcommand to run.
      * 
      * @var string $commandName
@@ -362,6 +376,8 @@ abstract class VersionControl_SVN_Command
         $this->fillSwitch('password', $this->password);
         $this->fillSwitch('config-dir', $this->configDir);
         $this->fillSwitch('config-option', $this->configOption);
+        $this->fillSwitch('no-auth-cache', $this->noAuthCache);
+        $this->fillSwitch('trust-server-cert', $this->trustServerCert);
     }
 
     /**
