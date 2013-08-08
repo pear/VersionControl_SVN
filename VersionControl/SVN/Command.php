@@ -101,8 +101,8 @@ abstract class VersionControl_SVN_Command
     public $svn_path = '';
 
     /**
-     * String to prepend to command string. Helpful for setting exec() 
-     * environment variables, such as: 
+     * String to prepend to command string. Helpful for setting exec()
+     * environment variables, such as:
      *    export LANG=en_US.utf8 &&
      * ... to support non-ASCII file and directory names.
      * 
@@ -127,7 +127,7 @@ abstract class VersionControl_SVN_Command
     public $requiredSwitches = array();
 
     /**
-     * Runtime options being used. 
+     * Runtime options being used.
      *
      * @var array $options
      */
@@ -151,7 +151,7 @@ abstract class VersionControl_SVN_Command
     public $minArgs = 0;
 
     /**
-     * Preferred fetchmode. Note that not all subcommands have output available for 
+     * Preferred fetchmode. Note that not all subcommands have output available for
      * each preferred fetchmode. The default cascade is:
      *
      * VERSIONCONTROL_SVN_FETCHMODE_ASSOC
@@ -371,6 +371,14 @@ abstract class VersionControl_SVN_Command
         $this->fillSwitch('config-option', $this->configOption);
     }
 
+    /**
+     * Fills the switches array on given name with value if not already set and value is not null.
+     *
+     * @param string $switchName Name of the switch.
+     * @param string $value      Value for the switch.
+     *
+     * @return void
+     */
     protected function fillSwitch($switchName, $value)
     {
         if (!isset($this->switches[$switchName])
@@ -395,7 +403,7 @@ abstract class VersionControl_SVN_Command
         $params['args']        = $this->args;
         $params['commandName'] = $this->commandName;
         $params['cmd']         = '';
-        
+
         // Check for minimum arguments
         if (sizeof($this->args) < $this->minArgs) {
             throw new VersionControl_SVN_Exception(
@@ -418,7 +426,7 @@ abstract class VersionControl_SVN_Command
                     }
                 }
                 if (!$found) {
-                    $missing[] = '('.$req.')';
+                    $missing[] = '(' . $req . ')';
                 }
             }
             $num_missing = count($missing);
@@ -437,7 +445,7 @@ abstract class VersionControl_SVN_Command
      * @param array $args     Arguments to pass to Subversion
      * @param array $switches Switches to pass to Subversion
      *
-     * @return  mixed   $fetchmode specified output on success.
+     * @return mixed $fetchmode specified output on success.
      * @throws VersionControl_SVN_Exception If command failed.
      */
     public function run($args = array(), $switches = array())
@@ -511,8 +519,8 @@ abstract class VersionControl_SVN_Command
      *
      * @param array $out Array of output captured by exec command in {@link run}
      *
-     * @return  mixed   Returns output requested by fetchmode (if available), or 
-     *                  raw output if desired fetchmode is not available.
+     * @return mixed Returns output requested by fetchmode (if available), or
+     *               raw output if desired fetchmode is not available.
      */
     public function parseOutput($out)
     {
