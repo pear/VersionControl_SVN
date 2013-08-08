@@ -92,7 +92,7 @@ abstract class VersionControl_SVN_Command
      * @var string $binaryPath
      */
     public $binaryPath = '/usr/local/bin/svn';
-    
+
     /**
      * Legacy / compatibility location of the svn client binary
      *
@@ -315,9 +315,7 @@ abstract class VersionControl_SVN_Command
 
         $this->postProcessSwitches($invalidSwitches);
 
-        $this->preparedCmd = implode(
-            ' ', array_merge($cmdParts, $this->args)
-        );
+        $this->preparedCmd = implode(' ', array_merge($cmdParts, $this->args));
     }
 
     /**
@@ -364,7 +362,7 @@ abstract class VersionControl_SVN_Command
         } else {
             $this->switches['xml'] = false;
         }
-        
+
         $this->switches['non-interactive'] = true;
 
         $this->fillSwitch('username', $this->username);
@@ -405,7 +403,7 @@ abstract class VersionControl_SVN_Command
                 VersionControl_SVN_Exception::MIN_ARGS
             );
         }
-        
+
         // Check for presence of required switches
         if (sizeof($this->requiredSwitches) > 0) {
             $missing    = array();
@@ -447,7 +445,7 @@ abstract class VersionControl_SVN_Command
         if ($this->svn_path != '') {
             $this->binaryPath = $this->svn_path;
         }
-        
+
         if (!file_exists($this->binaryPath)) {
             $system = new System();
             $this->binaryPath = $system->which('svn');
@@ -472,7 +470,7 @@ abstract class VersionControl_SVN_Command
         $cmd = $this->preparedCmd;
 
         // On Windows, don't use escapeshellcmd, and double-quote $cmd
-        // so it's executed as 
+        // so it's executed as
         // cmd /c ""C:\Program Files\SVN\bin\svn.exe" info "C:\Program Files\dev\trunk""
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $cmd = str_replace(
