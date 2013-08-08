@@ -397,13 +397,6 @@ abstract class VersionControl_SVN_Command
      */
     public function checkCommandRequirements()
     {
-        // Set up error push parameters to avoid any notices about undefined indexes
-        $params['options']     = $this->options;
-        $params['switches']    = $this->switches;
-        $params['args']        = $this->args;
-        $params['commandName'] = $this->commandName;
-        $params['cmd']         = '';
-
         // Check for minimum arguments
         if (sizeof($this->args) < $this->minArgs) {
             throw new VersionControl_SVN_Exception(
