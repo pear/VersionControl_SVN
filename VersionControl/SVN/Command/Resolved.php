@@ -123,7 +123,7 @@ class VersionControl_SVN_Command_Resolved extends VersionControl_SVN_Command
      *
      * @var int $minArgs
      */
-    public $minArgs = 1;
+    protected $minArgs = 1;
 
     /**
      * Constuctor of command. Adds available switches.
