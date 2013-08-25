@@ -367,7 +367,7 @@ abstract class VersionControl_SVN_Command
         ) {
             $this->switches['xml'] = true;
         } else {
-            $this->switches['xml'] = false;
+            unset($this->switches['xml']);
         }
 
         $this->switches['non-interactive'] = true;
