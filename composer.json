@@ -1,0 +1,36 @@
+{
+    "authors": [
+        {
+            "email": "clay@loveless.net",
+            "name": "Clay Loveless",
+            "role": "Lead"
+        },
+        {
+            "email": "mrook@php.net",
+            "name": "Michiel Rook",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "VersionControl_SVN": "./"
+        }
+    },
+    "description": "More info available on: http://pear.php.net/package/VersionControl_SVN",
+    "include-path": [
+        "./"
+    ],
+    "license": "BSD License",
+    "name": "pear/versioncontrol_svn",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=VersionControl_SVN",
+        "source": "https://github.com/pear/VersionControl_SVN"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
