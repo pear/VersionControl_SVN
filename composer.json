@@ -28,7 +28,7 @@
     },
     "type": "library",
     "require": {
-        "pear/pear_exception": "*"
+        "pear/pear_exception": "*@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
