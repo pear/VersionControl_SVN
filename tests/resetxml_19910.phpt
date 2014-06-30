@@ -23,8 +23,8 @@ var_export($result);
 echo "\ntests done\n";
 ?>
 --CLEAN--
---EXPECT--
-'<?xml version="1.0" encoding="UTF-8"?>
+--EXPECTF--
+'<?xml version="1.0"%S?>
 <log>
 <logentry
    revision="157">
