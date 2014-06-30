@@ -460,7 +460,7 @@ abstract class VersionControl_SVN_Command
         if (sizeof($switches) > 0) {
             $this->switches = $switches;
         }
-        $this->args = array_map('escapeshellargs', $args);
+        $this->args = array_map('escapeshellarg', $args);
 
         // Always prepare, allows for obj re-use. (Request #5021)
         $this->prepare();
