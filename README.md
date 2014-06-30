@@ -1,6 +1,8 @@
 VersionControl_SVN
 ==================
 
+Master: [![Build Status](https://travis-ci.org/pear/VersionControl_SVN.png?branch=master)](https://travis-ci.org/pear/VersionControl_SVN)
+
 VersionControl_SVN is a simple OO-style interface for Subversion,
 the free/open-source version control system.
 
