@@ -34,7 +34,7 @@ echo "\ntests done\n";
 </msg>
 </logentry>
 </log>''------------------------------------------------------------------------
-r157 | michiel.rook | 2012-11-19 19:34:37 +0100 (Mon, 19 Nov 2012) | 2 lines
+r157 | michiel.rook | 2012-11-19 %d:34:37 +%d (Mon, 19 Nov 2012) | 2 lines
 
 Update package.xml for release
 
