@@ -15,6 +15,13 @@ $svn = VersionControl_Svn::factory(array('propget'), $options);
 
 $result = $svn->propget->run(array('svn:keywords', $url), $switches);
 
+usort($result['target'], function ($a, $b) {
+	if (($r = strnatcasecmp($a['path'], $b['path'])) === 0) {
+		return strnatcmp($a['path'], $b['path']);
+	}
+	return $r;
+});
+
 var_export($result);
 echo "\ntests done\n";
 ?>
@@ -30,7 +37,7 @@ array (
         'text' => 'Id Rev Revision Date LastChangedDate LastChangedRevision Author LastChangedBy HeadURL URL',
         'name' => 'svn:keywords',
       ),
-      'path' => 'http://svn.php.net/repository/pear/pearbot/tags/pearbot_0_1/PEARbot.php',
+      'path' => 'http://svn.php.net/repository/pear/pearbot/tags/pearbot_0_1/config.php',
     ),
     1 => 
     array (
@@ -39,7 +46,7 @@ array (
         'text' => 'Id Rev Revision Date LastChangedDate LastChangedRevision Author LastChangedBy HeadURL URL',
         'name' => 'svn:keywords',
       ),
-      'path' => 'http://svn.php.net/repository/pear/pearbot/tags/pearbot_0_1/config.php',
+      'path' => 'http://svn.php.net/repository/pear/pearbot/tags/pearbot_0_1/PEARbot.php',
     ),
   ),
 )

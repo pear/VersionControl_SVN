@@ -15,6 +15,25 @@ $svn = VersionControl_Svn::factory(array('proplist'), $options);
 
 $result = $svn->proplist->run(array($url), $switches);
 
+function custom_array_sort($a, $b, $idx) {
+	if (($r = strnatcasecmp($a[$idx], $b[$idx])) === 0) {
+		return strnatcmp($a[$idx], $b[$idx]);
+	}
+	return $r;
+}
+
+$propertySort = function ($a, $b) {
+	return custom_array_sort($a, $b, 'name');
+};
+$targetSort   = function ($a, $b) {
+	return custom_array_sort($a, $b, 'path');
+};
+
+foreach (array_keys($result['target']) as $key) {
+	usort($result['target'][$key]['property'], $propertySort);
+}
+usort($result['target'], $targetSort);
+
 var_export($result);
 echo "\ntests done\n";
 ?>
@@ -37,14 +56,10 @@ array (
         ),
         2 => 
         array (
-          'name' => 'svn:executable',
-        ),
-        3 => 
-        array (
           'name' => 'svn:keywords',
         ),
       ),
-      'path' => 'http://svn.php.net/repository/pear/pearbot/tags/pearbot_0_1/PEARbot.php',
+      'path' => 'http://svn.php.net/repository/pear/pearbot/tags/pearbot_0_1/config.php',
     ),
     1 => 
     array (
@@ -60,10 +75,14 @@ array (
         ),
         2 => 
         array (
+          'name' => 'svn:executable',
+        ),
+        3 => 
+        array (
           'name' => 'svn:keywords',
         ),
       ),
-      'path' => 'http://svn.php.net/repository/pear/pearbot/tags/pearbot_0_1/config.php',
+      'path' => 'http://svn.php.net/repository/pear/pearbot/tags/pearbot_0_1/PEARbot.php',
     ),
   ),
 )

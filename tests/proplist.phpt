@@ -15,6 +15,13 @@ $svn = VersionControl_Svn::factory(array('proplist'), $options);
 
 $result = $svn->proplist->run(array($url), $switches);
 
+usort($result['target'][0]['property'], function ($a, $b) {
+	if (($r = strnatcasecmp($a['name'], $b['name'])) === 0) {
+		return strnatcmp($a['name'], $b['name']);
+	}
+	return $r;
+});
+
 var_export($result);
 echo "\ntests done\n";
 ?>
