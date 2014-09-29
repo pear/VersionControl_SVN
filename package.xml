@@ -45,10 +45,10 @@ VersionControl_SVN is tested against Subversion 1.6 and 1.7.</description>
   <email>mrook@php.net</email>
   <active>yes</active>
  </lead>
- <date>2013-02-09</date>
- <time>12:19:00</time>
+ <date>2014-09-29</date>
+ <time>08:55:20</time>
  <version>
-  <release>0.5.1</release>
+  <release>0.5.2</release>
   <api>0.5.0</api>
  </version>
  <stability>
@@ -57,9 +57,13 @@ VersionControl_SVN is tested against Subversion 1.6 and 1.7.</description>
  </stability>
  <license>BSD License</license>
  <notes>
-* Fix Bug #19776: switch handling argument injection bug [mrook]
- * Fix Bug #19795: escapeshellarg for switches [mrook]
- * Fix Bug #19813: Typo in diff command switch &quot;summarize&quot; [mrook]
+* Fix Bug #19902: Array to string conversion in SWITCH_MISSING exception message [mrook]
+ * Fix Bug #20025: empty vs. no value [mrook]
+ * Fix Bug #20031: Global options aren&apos;t accepted [mrook]
+ * Implement Feature #19901: Add parser for diff (xml) output [mrook]
+ * Implement Feature #19903: Add &apos;parents&apos; switch support to update command [mrook]
+ * Implement Feature #19910: preProcessSwitches() never sets &apos;xml&apos; to false [mrook]
+ * Implement Feature #20411: Add parser for propget &amp; proplist xml output [mrook]
  </notes>
  <contents>
   <dir name="/">
@@ -214,6 +218,23 @@ VersionControl_SVN is tested against Subversion 1.6 and 1.7.</description>
  </dependencies>
  <phprelease />
  <changelog>
+   <release>
+   <version>
+    <release>0.5.1</release>
+    <api>0.5.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>beta</api>
+   </stability>
+   <date>2013-02-09</date>
+   <license>BSD License</license>
+   <notes>
+* Fix Bug #19776: switch handling argument injection bug [mrook]
+ * Fix Bug #19795: escapeshellarg for switches [mrook]
+ * Fix Bug #19813: Typo in diff command switch &quot;summarize&quot; [mrook]
+   </notes>
+  </release>
   <release>
    <version>
     <release>0.5.0</release>
