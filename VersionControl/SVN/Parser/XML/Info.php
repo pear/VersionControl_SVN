@@ -75,12 +75,28 @@ class VersionControl_SVN_Parser_XML_Info
                         'url' => array(
                             'config' => 'string',
                         ),
+                        'relative-url' => array(
+                            'config' => 'string',
+                        ),
                         'repository' => array(
                             'path' => array(
                                 'root' => array(
                                     'config' => 'string',
                                 ),
                                 'uuid' => array(
+                                    'config' => 'string',
+                                ),
+                            ),
+                        ),
+                        'wc-info' => array(
+                            'path' => array(
+                                'wcroot-abspath' => array(
+                                    'config' => 'string',
+                                ),
+                                'schedule' => array(
+                                    'config' => 'string',
+                                ),
+                                'depth' => array(
                                     'config' => 'string',
                                 ),
                             ),
