@@ -77,7 +77,7 @@ class VersionControl_SVN_Parser_XML_Status
                             'quantifier' => '+',
                             'path' => array(
                                 'wc-status' => array(
-                                    'attribute' => array('item', 'revision', 'props'),
+                                    'attribute' => array('item', 'revision', 'props', 'file-external'),
                                     'path' => array(
                                         'commit' => array(
                                             'attribute' => array('revision'),
