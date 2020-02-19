@@ -310,7 +310,7 @@ abstract class VersionControl_SVN_Command
                 $switchPrefix = '--';
             }
             if (in_array($switch, $this->validSwitchesValue)) {
-                $cmdParts[] = $switchPrefix . $switch . ' ' . escapeshellarg($val);
+                $cmdParts[] = $switchPrefix . $switch . ' ' . $this->escapeshellarg($val);
             } elseif (in_array($switch, $this->validSwitches)) {
                 if (true === $val) {
                     $cmdParts[] = $switchPrefix . $switch;
@@ -460,7 +460,7 @@ abstract class VersionControl_SVN_Command
         if (sizeof($switches) > 0) {
             $this->switches = $switches;
         }
-        $this->args = array_map('escapeshellarg', $args);
+        $this->args = array_map(array($this, 'escapeshellarg'), $args);
 
         // Always prepare, allows for obj re-use. (Request #5021)
         $this->prepare();
@@ -477,7 +477,7 @@ abstract class VersionControl_SVN_Command
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $cmd = str_replace(
                 $this->binaryPath,
-                escapeshellarg(str_replace('/', '\\', $this->binaryPath)),
+                $this->escapeshellarg(str_replace('/', '\\', $this->binaryPath)),
                 $cmd
             );
 
@@ -545,6 +545,60 @@ abstract class VersionControl_SVN_Command
             // What you get with VERSIONCONTROL_SVN_FETCHMODE_DEFAULT
             return join("\n", $out);
             break;
+        }
+    }
+
+    /**
+     * Escape a single value in accordance with CommandLineToArgV() for Windows
+     * @see https://docs.microsoft.com/en-us/previous-versions/17w5ykft(v=vs.85)
+     */
+    private function escapeshellarg($value)
+    {
+        $value = (string)$value;
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            static $expr = '(
+			[\x00-\x20\x7F"] # control chars, whitespace or double quote
+		  | \\\\++ (?=("|$)) # backslashes followed by a quote or at the end
+		)ux';
+
+            if ($value === '') {
+                return '""';
+            }
+
+            $quote = false;
+            $replacer = function($match) use($value, &$quote) {
+                switch ($match[0][0]) { // only inspect the first byte of the match
+
+                    case '"': // double quotes are escaped and must be quoted
+                        $match[0] = '\\"';
+                    case ' ': case "\t": // spaces and tabs are ok but must be quoted
+                    $quote = true;
+                    return $match[0];
+
+                    case '\\': // matching backslashes are escaped if quoted
+                        return $match[0] . $match[0];
+
+                    default: throw new VersionControl_SVN_Exception(sprintf(
+                        "Invalid byte at offset %d: 0x%02X",
+                        strpos($value, $match[0]), ord($match[0])
+                    ), VersionControl_SVN_Exception::ERROR);
+                }
+            };
+
+            $escaped = preg_replace_callback($expr, $replacer, (string)$value);
+
+            if ($escaped === null) {
+                throw preg_last_error() === PREG_BAD_UTF8_ERROR
+                    ? new VersionControl_SVN_Exception("Invalid UTF-8 string", VersionControl_SVN_Exception::ERROR)
+                    : new VersionControl_SVN_Exception("PCRE error: " . preg_last_error(), VersionControl_SVN_Exception::ERROR);
+            }
+
+            return $quote // only quote when needed
+                ? '"' . $escaped . '"'
+                : $value;
+
+        } else {
+            return escapeshellarg($value);
         }
     }
 }
