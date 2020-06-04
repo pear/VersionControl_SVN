@@ -1,19 +1,9 @@
 language: php
 php:
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - 7.1
-  - 7.2
+  - 7.4
 script: ./.travis.sh 
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: 5.3
-    - php: 5.4
-    - php: 5.5
-    - php: 5.6
+
 
