@@ -550,6 +550,10 @@ abstract class VersionControl_SVN_Command
 
     /**
      * Escape a single value in accordance with CommandLineToArgV() for Windows
+     *
+     * @param string $value
+     * @return string
+     * @throws VersionControl_SVN_Exception If command failed.
      * @see https://docs.microsoft.com/en-us/previous-versions/17w5ykft(v=vs.85)
      */
     private function escapeshellarg($value)
