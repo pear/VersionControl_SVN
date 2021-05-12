@@ -129,14 +129,14 @@ abstract class VersionControl_SVN_Command
      * Preferred fetchmode. Note that not all subcommands have output available for
      * each preferred fetchmode. The default cascade is:
      *
-     * VERSIONCONTROL_SVN_FETCHMODE_ASSOC
-     *  VERSIONCONTROL_SVN_FETCHMODE_RAW
+     * VersionControl_SVN::FETCHMODE_ASSOC
+     * VersionControl_SVN::FETCHMODE_RAW
      *
      * If the specified fetchmode isn't available, raw output will be returned.
      * 
      * @var int $fetchmode
      */
-    public $fetchmode = VERSIONCONTROL_SVN_FETCHMODE_ASSOC;
+    public $fetchmode = VersionControl_SVN::FETCHMODE_ASSOC;
 
     /**
      * Default username to use for connections.
@@ -360,10 +360,10 @@ abstract class VersionControl_SVN_Command
     protected function preProcessSwitches()
     {
         if ($this->xmlAvail
-            && ($this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ARRAY
-            || $this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_ASSOC
-            || $this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT
-            || $this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_XML)
+            && ($this->fetchmode == VersionControl_SVN::FETCHMODE_ARRAY
+            || $this->fetchmode == VersionControl_SVN::FETCHMODE_ASSOC
+            || $this->fetchmode == VersionControl_SVN::FETCHMODE_OBJECT
+            || $this->fetchmode == VersionControl_SVN::FETCHMODE_XML)
         ) {
             $this->switches['xml'] = true;
         } else {
@@ -407,7 +407,7 @@ abstract class VersionControl_SVN_Command
     public function checkCommandRequirements()
     {
         // Check for minimum arguments
-        if (sizeof($this->args) < $this->minArgs) {
+        if (count($this->args) < $this->minArgs) {
             throw new VersionControl_SVN_Exception(
                 'svn command requires at least ' . $this->minArgs . ' argument(s)',
                 VersionControl_SVN_Exception::MIN_ARGS
@@ -415,7 +415,7 @@ abstract class VersionControl_SVN_Command
         }
 
         // Check for presence of required switches
-        if (sizeof($this->requiredSwitches) > 0) {
+        if (!empty($this->requiredSwitches)) {
             $missing    = array();
             $switches   = $this->switches;
             $reqsw      = $this->requiredSwitches;
@@ -457,7 +457,7 @@ abstract class VersionControl_SVN_Command
             $this->binaryPath = $system->which('svn');
         }
 
-        if (sizeof($switches) > 0) {
+        if (!empty($switches)) {
             $this->switches = $switches;
         }
         $this->args = array_map(array($this, 'escapeshellarg'), $args);
@@ -474,7 +474,7 @@ abstract class VersionControl_SVN_Command
         // On Windows, don't use escapeshellcmd, and double-quote $cmd
         // so it's executed as
         // cmd /c ""C:\Program Files\SVN\bin\svn.exe" info "C:\Program Files\dev\trunk""
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        if (0 === stripos(PHP_OS, 'WIN')) {
             $cmd = str_replace(
                 $this->binaryPath,
                 $this->escapeshellarg(str_replace('/', '\\', $this->binaryPath)),
@@ -518,33 +518,35 @@ abstract class VersionControl_SVN_Command
      */
     public function parseOutput($out)
     {
-        $dir = realpath(dirname(__FILE__)) . '/Parser/XML';
         switch($this->fetchmode) {
-        case VERSIONCONTROL_SVN_FETCHMODE_ARRAY:
-        case VERSIONCONTROL_SVN_FETCHMODE_ASSOC:
-        case VERSIONCONTROL_SVN_FETCHMODE_OBJECT:
-            $file = $dir . '/' . ucfirst($this->commandName) . '.php';
-            if (file_exists($file)) {
-                $class = 'VersionControl_SVN_Parser_XML_'
-                    . ucfirst($this->commandName);
+            case VersionControl_SVN::FETCHMODE_ARRAY:
+            case VersionControl_SVN::FETCHMODE_ASSOC:
+            case VersionControl_SVN::FETCHMODE_OBJECT:
+                $class = 'VersionControl_SVN_Parser_XML_' . ucfirst($this->commandName);
+                if (class_exists($class)) {
+                    $class = 'VersionControl_SVN_Parser_XML_'
+                        . ucfirst($this->commandName);
 
-                include_once $file;
-                $parser = new $class;
-                $contentVar = $this->commandName;
+                    $parser = new $class;
 
-                $parsedData = $parser->getParsed(join("\n", $out));
-                if ($this->fetchmode == VERSIONCONTROL_SVN_FETCHMODE_OBJECT) {
-                    return (object) $parsedData;
+                    $parsedData = $parser->getParsed(implode("\n", $out));
+                    if ($this->fetchmode == VersionControl_SVN::FETCHMODE_OBJECT) {
+                        return (object) $parsedData;
+                    }
+                    return $parsedData;
+                } else {
+                    throw new VersionControl_SVN_Exception(sprintf(
+                        "Could not find parser for command output: '%s'",
+                        $this->commandName
+                    ), VersionControl_SVN_Exception::ERROR);
                 }
-                return $parsedData;
                 break;
-            }
-        case VERSIONCONTROL_SVN_FETCHMODE_RAW:
-        case VERSIONCONTROL_SVN_FETCHMODE_XML:
-        default:
-            // What you get with VERSIONCONTROL_SVN_FETCHMODE_DEFAULT
-            return join("\n", $out);
-            break;
+            case VersionControl_SVN::FETCHMODE_RAW:
+            case VersionControl_SVN::FETCHMODE_XML:
+            default:
+                // What you get with VersionControl_SVN::FETCHMODE_DEFAULT
+                return implode("\n", $out);
+                break;
         }
     }
 
@@ -559,7 +561,7 @@ abstract class VersionControl_SVN_Command
     private function escapeshellarg($value)
     {
         $value = (string)$value;
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        if (0 === stripos(PHP_OS, 'WIN')) {
             static $expr = '(
 			[\x00-\x20\x7F"] # control chars, whitespace or double quote
 		  | \\\\++ (?=("|$)) # backslashes followed by a quote or at the end

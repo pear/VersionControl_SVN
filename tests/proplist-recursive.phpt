@@ -8,7 +8,7 @@ require_once __DIR__ . '/setup.php.inc';
 $changeset = '334899';
 $url = 'http://svn.php.net/repository/pear/pearbot/tags/pearbot_0_1/';
 
-$options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ASSOC);
+$options = array('fetchmode' => VersionControl_SVN::FETCHMODE_ASSOC);
 $switches = array('recursive' => true, 'r' => $changeset);
 
 $svn = VersionControl_Svn::factory(array('proplist'), $options);

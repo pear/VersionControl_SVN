@@ -3,7 +3,7 @@ test upgrade xml
 --SKIPIF--
 --FILE--
 <?php
-require_once dirname(__FILE__) . '/setup.php.inc';
+require_once __DIR__ . '/setup.php.inc';
 
 $svn = VersionControl_SVN::factory(array('upgrade'));
 $result = array();

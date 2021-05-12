@@ -81,7 +81,7 @@ require_once 'VersionControl/SVN/Command.php';
  *
  * // Set up runtime options. Will be passed to all 
  * // subclasses.
- * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
+ * $options = array('fetchmode' => VersionControl_SVN::FETCHMODE_RAW);
  *
  * $switches = array('r' => '30');
  * $args = array('/path/to/working/copy');

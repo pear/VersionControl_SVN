@@ -194,7 +194,7 @@ class VersionControl_SVN_Parser_XML
         if (isset($xmlPathConfig['config'])
             && 'string' === $xmlPathConfig['config']
         ) {
-            if (count($data) > 0) {
+            if (!empty($data)) {
                 $data = array_merge(
                     array('text' => self::getParsedString($reader, $xmlEntry)),
                     $data

@@ -41,7 +41,7 @@ class PEAR_PHPTest
 
     function assertNoErrors($message, $trace = null)
     {
-        if (count($this->_errors) == 0) {
+        if (empty($this->_errors)) {
             return true;
         }
         if ($trace === null) {
@@ -105,7 +105,7 @@ class PEAR_PHPTest
             }
             echo "message: \"$err[message]\"\n";
         }
-        if (count($this->_errors)) {
+        if (!empty($this->_errors)) {
             if (!$failed) {
                 if ($trace === null) {
                     $trace = debug_backtrace();

@@ -49,49 +49,7 @@
 
 require_once 'VersionControl/SVN/Exception.php';
 
-/**
- * Note on the fetch modes -- as the project matures, more of these modes
- * will be implemented. At the time of initial release only the 
- * Log and List commands implement anything other than basic
- * RAW output.
- */
 
-/**
- * This is a special constant that tells VersionControl_SVN the user hasn't specified
- * any particular get mode, so the default should be used.
- */
-define('VERSIONCONTROL_SVN_FETCHMODE_DEFAULT', 0);
-
-/**
- * Responses returned in associative array format
- */
-define('VERSIONCONTROL_SVN_FETCHMODE_ASSOC', 1);
-
-/**
- * Responses returned as object properties
- */
-define('VERSIONCONTROL_SVN_FETCHMODE_OBJECT', 2);
-
-/**
- * Responses returned as raw XML (as passed-thru from svn --xml command responses)
- */
-define('VERSIONCONTROL_SVN_FETCHMODE_XML', 3);
-
-/**
- * Responses returned as string - unmodified from command-line output
- */
-define('VERSIONCONTROL_SVN_FETCHMODE_RAW', 4);
-
-/**
- * Responses returned as raw output, but all available output parsing methods
- * are performed and stored in the {@link output} property.
- */
-define('VERSIONCONTROL_SVN_FETCHMODE_ALL', 5);
-
-/**
- * Responses returned as numbered array
- */
-define('VERSIONCONTROL_SVN_FETCHMODE_ARRAY', 6);
 
 /**
  * Simple OO interface for Subversion 
@@ -166,6 +124,50 @@ class VersionControl_SVN
     );
 
     /**
+     * Note on the fetch modes -- as the project matures, more of these modes
+     * will be implemented. At the time of initial release only the
+     * Log and List commands implement anything other than basic
+     * RAW output.
+     */
+
+    /**
+     * This is a special constant that tells VersionControl_SVN the user hasn't specified
+     * any particular get mode, so the default should be used.
+     */
+    const FETCHMODE_DEFAULT = 0;
+
+    /**
+     * Responses returned in associative array format
+     */
+    const FETCHMODE_ASSOC = 1;
+
+    /**
+     * Responses returned as object properties
+     */
+    const FETCHMODE_OBJECT = 2;
+
+    /**
+     * Responses returned as raw XML (as passed-thru from svn --xml command responses)
+     */
+    const FETCHMODE_XML = 3;
+
+    /**
+     * Responses returned as string - unmodified from command-line output
+     */
+    const FETCHMODE_RAW = 4;
+
+    /**
+     * Responses returned as raw output, but all available output parsing methods
+     * are performed and stored in the {@link output} property.
+     */
+    const FETCHMODE_ALL = 5;
+
+    /**
+     * Responses returned as numbered array
+     */
+    const FETCHMODE_ARRAY = 6;
+
+    /**
      * Create a new VersionControl_SVN command object.
      *
      * $options is an array containing multiple options
@@ -183,7 +185,7 @@ class VersionControl_SVN
      *  'binaryPath'    => 'Path to the svn client binary installed as part of Subversion',
      *                     // [DEFAULT: /usr/local/bin/svn]
      *  'fetchmode'     => Type of returning of run function.
-     *                     // [DEFAULT: VERSIONCONTROL_SVN_FETCHMODE_ASSOC]
+     *                     // [DEFAULT: VersionControl_SVN::FETCHMODE_ASSOC]
      * )
      *
      * </code>
@@ -216,19 +218,17 @@ class VersionControl_SVN
     public static function factory($command, $options = array())
     {
         if (is_string($command) && strtoupper($command) == '__ALL__') {
-            unset($command);
-            $command = array();
-            $command = VersionControl_SVN::fetchCommands();
+            $command = self::fetchCommands();
         }
         if (is_array($command)) {
             $objects = new stdClass;
             foreach ($command as $cmd) {
-                $obj = VersionControl_SVN::init($cmd, $options);
+                $obj = self::init($cmd, $options);
                 $objects->$cmd = $obj;
             }
             return $objects;
         } else {
-            $obj = VersionControl_SVN::init($command, $options);
+            $obj = self::init($command, $options);
             return $obj;
         }
     }
@@ -259,14 +259,12 @@ class VersionControl_SVN
             : $command;
         $cmd   = ucfirst(strtolower($cmd));
         $class = 'VersionControl_SVN_Command_' . $cmd;
-        
-        if (include_once realpath(dirname(__FILE__)) . "/SVN/Command/{$cmd}.php") {
-            if (class_exists($class)) {
-                $obj = new $class;
-                $obj->options = $options;
-                $obj->setOptions($options);
-                return $obj;
-            }
+
+        if (class_exists($class)) {
+            $obj = new $class;
+            $obj->options = $options;
+            $obj->setOptions($options);
+            return $obj;
         }
 
         throw new VersionControl_SVN_Exception(
@@ -284,7 +282,7 @@ class VersionControl_SVN
     public static function fetchCommands()
     {
         $commands = array();
-        $dir = realpath(dirname(__FILE__)) . '/SVN/Command';
+        $dir = realpath(__DIR__) . '/SVN/Command';
         if (false === $dir
             || !is_dir($dir)
             || !is_readable($dir)

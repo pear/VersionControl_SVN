@@ -3,7 +3,7 @@ test if xml switch is reset between commands (see bug #19910)
 --SKIPIF--
 --FILE--
 <?php
-require_once dirname(__FILE__) . '/setup.php.inc';
+require_once __DIR__ . '/setup.php.inc';
 
 $changeset = '325013';
 $url = 'https://github.com/pear/VersionControl_SVN/tags/0.5.0';
@@ -12,11 +12,11 @@ $switches = array('c' => $changeset);
 
 $svn = VersionControl_SVN::factory(array('log'));
 
-$svn->log->fetchmode = VERSIONCONTROL_SVN_FETCHMODE_XML;
+$svn->log->fetchmode = VersionControl_SVN::FETCHMODE_XML;
 $result = $svn->log->run(array($url));
 var_export($result);
 
-$svn->log->fetchmode = VERSIONCONTROL_SVN_FETCHMODE_RAW;
+$svn->log->fetchmode = VersionControl_SVN::FETCHMODE_RAW;
 $result = $svn->log->run(array($url));
 var_export($result);
 
