@@ -1,3 +1,3 @@
 #!/bin/bash
 composer install
-phpunit
+vendor/bin/phpunit

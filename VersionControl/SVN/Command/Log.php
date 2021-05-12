@@ -81,8 +81,8 @@ require_once 'VersionControl/SVN/Command.php';
  *  'incremental'   =>  true|false,
  *                      // gives output suitable for concatenation
  *  'xml'           =>  true|false,
- *                      // output in XML. Auto-set by fetchmodes VERSIONCONTROL_SVN_FETCHMODE_ASSOC,
- *                      // VERSIONCONTROL_SVN_FETCHMODE_XML and VERSIONCONTROL_SVN_FETCHMODE_OBJECT
+ *                      // output in XML. Auto-set by fetchmodes VersionControl_SVN::FETCHMODE_ASSOC,
+ *                      // VersionControl_SVN::FETCHMODE_XML and VersionControl_SVN::FETCHMODE_OBJECT
  *  'no-auth-cache' =>  true|false
  *                      // Do not cache authentication tokens
  *
@@ -100,7 +100,7 @@ require_once 'VersionControl/SVN/Command.php';
  *
  * // Set up runtime options. Will be passed to all 
  * // subclasses.
- * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ASSOC);
+ * $options = array('fetchmode' => VersionControl_SVN::FETCHMODE_ASSOC);
  *
  * // Pass array of subcommands we need to factory
  * $svn = VersionControl_SVN::factory(array('log'), $options);

@@ -3,12 +3,12 @@ test list xml
 --SKIPIF--
 --FILE--
 <?php
-require_once dirname(__FILE__) . '/setup.php.inc';
+require_once __DIR__ . '/setup.php.inc';
 
 $changeset = '325013';
 $url = 'https://github.com/pear/VersionControl_SVN/tags/0.5.0/docs';
 
-$options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ASSOC);
+$options = array('fetchmode' => VersionControl_SVN::FETCHMODE_ASSOC);
 $switches = array();
 
 $svn = VersionControl_SVN::factory(array('list'), $options);

@@ -67,7 +67,7 @@ if (isset($_SERVER['PATH_INFO'])) {
 $cmd = '';
 $cmd = isset($_GET['cmd']) ? $_GET['cmd'] : 'list';
 
-$options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ASSOC);
+$options = array('fetchmode' => VersionControl_SVN::FETCHMODE_ASSOC);
 $switches = array('R' => true);
 $args = array("{$base_url}{$base_add}");
 

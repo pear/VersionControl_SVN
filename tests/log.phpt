@@ -3,12 +3,12 @@ test log xml
 --SKIPIF--
 --FILE--
 <?php
-require_once dirname(__FILE__) . '/setup.php.inc';
+require_once __DIR__ . '/setup.php.inc';
 
 $changeset = '325013';
 $url = 'http://svn.php.net/repository/pear';
 
-$options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ASSOC);
+$options = array('fetchmode' => VersionControl_SVN::FETCHMODE_ASSOC);
 $switches = array('c' => $changeset);
 
 $svn = VersionControl_SVN::factory(array('log'), $options);

@@ -79,7 +79,7 @@ require_once 'VersionControl/SVN/Command.php';
  *
  * // Set up runtime options. Will be passed to all 
  * // subclasses.
- * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
+ * $options = array('fetchmode' => VersionControl_SVN::FETCHMODE_RAW);
  *
  * $switches = array('r' => 'HEAD');
  * $args = array('svn://svn.example.com/repos/TestProj/trunk',
@@ -102,7 +102,7 @@ require_once 'VersionControl/SVN/Command.php';
  *
  * // Set up runtime options. Will be passed to all 
  * // subclasses.
- * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
+ * $options = array('fetchmode' => VersionControl_SVN::FETCHMODE_RAW);
  *
  * $args = array('/repos/TestProj/trunk',
  *               '/my/export/path/Test-Project-1.0');

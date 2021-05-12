@@ -90,7 +90,7 @@ require_once 'VersionControl/SVN/Command.php';
  *
  * // Set up runtime options. Will be passed to all 
  * // subclasses.
- * $options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
+ * $options = array('fetchmode' => VersionControl_SVN::FETCHMODE_RAW);
  *
  * // Pass array of subcommands we need to factory
  * $svn = VersionControl_SVN::factory(array('cat'), $options);

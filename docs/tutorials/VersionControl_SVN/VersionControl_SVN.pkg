@@ -60,7 +60,7 @@ require_once 'VersionControl/SVN.php';
 $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
 
 // Set up runtime options. 
-$options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ARRAY);
+$options = array('fetchmode' => VersionControl_SVN::FETCHMODE_ARRAY);
 // Request list class from factory
 $svn = VersionControl_SVN::factory('list', $options);
 
@@ -72,7 +72,7 @@ $args = array('svn://svn.example.com/repos/TestProject');
 if ($output = $svn->run($args, $switches)) {
     print_r($output);
 } else {
-    if (count($errs = $svnstack->getErrors())) { 
+    if (!empty($errs = $svnstack->getErrors())) {
         foreach ($errs as $err) {
             echo '<br />'.$err['message']."<br />\n";
             echo "Command used: " . $err['params']['cmd'];
@@ -158,7 +158,7 @@ require_once 'VersionControl/SVN.php';
 $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
 
 // Set up runtime options. 
-$options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_ARRAY);
+$options = array('fetchmode' => VersionControl_SVN::FETCHMODE_ARRAY);
 
 // Request list class from factory
 $svn = VersionControl_SVN::factory('list', $options);
@@ -171,7 +171,7 @@ $args = array('svn://svn.example.com/repos/TestProject');
 if ($output = $svn->run($args, $switches)) {
     print_r($output);
 } else {
-    if (count($errs = $svnstack->getErrors())) { 
+    if (!empty($errs = $svnstack->getErrors())) {
         foreach ($errs as $err) {
             echo '<br />'.$err['message']."<br />\n";
             echo "Command used: " . $err['params']['cmd'];
@@ -196,7 +196,7 @@ require_once 'VersionControl/SVN.php';
 $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
 
 // Set up runtime options. 
-$options = array('fetchmode' => VERSIONCONTROL_SVN_FETCHMODE_RAW);
+$options = array('fetchmode' => VersionControl_SVN::FETCHMODE_RAW);
 
 // METHOD ONE: Lowest Overhead
 // Create svn object with subcommands we need listed out individually
