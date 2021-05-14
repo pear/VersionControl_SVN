@@ -23,8 +23,8 @@ jobs:
       - name: Test SVN
         run: |
           export
-          svn
-          svn --version
+          svn || true
+          svn --version || true
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
