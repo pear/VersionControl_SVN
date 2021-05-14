@@ -22,7 +22,7 @@ jobs:
 
       - name: Set locale
         run: |
-          sudo apt-get update && sudo apt-get install tzdata locales -y
+          export LC_ALL=C
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
