@@ -20,7 +20,7 @@
     "include-path": [
         "./"
     ],
-    "license": "BSD License",
+    "license": "BSD-3-Clause",
     "name": "pear/versioncontrol_svn",
     "support": {
         "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=VersionControl_SVN",
