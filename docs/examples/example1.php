@@ -52,7 +52,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-require_once 'VersionControl/SVN.php';
+require_once 'vendor/autoload.php';
 
 // Default options
 $base_url = 'https://github.com/pear/VersionControl_SVN/trunk';

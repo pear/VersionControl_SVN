@@ -45,7 +45,6 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
- require_once 'PEAR/Exception.php';
 
 /**
  * Package Exception

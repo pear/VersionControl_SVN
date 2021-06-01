@@ -47,7 +47,6 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
-require_once 'VersionControl/SVN/Parser/XML.php';
 
 /**
  * Class VersionControl_SVN_Parser_Status - XML Parser for Subversion Status output

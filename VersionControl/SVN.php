@@ -47,8 +47,6 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
-require_once 'VersionControl/SVN/Exception.php';
-
 
 
 /**
@@ -76,7 +74,7 @@ class VersionControl_SVN
      *
      * <code>
      * <?php
-     * require_once 'VersionControl/SVN.php';
+     * require_once 'vendor/autoload.php';
      *
      * $options['shortcuts'] = array('boot' => 'Delete', 'checkin' => 'Commit');
      *

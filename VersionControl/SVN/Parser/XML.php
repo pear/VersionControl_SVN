@@ -48,7 +48,6 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
-require_once 'VersionControl/SVN/Parser/Exception.php';
 
 /**
  * Class VersionControl_SVN_Parser_Info - XML Parser for Subversion Info output

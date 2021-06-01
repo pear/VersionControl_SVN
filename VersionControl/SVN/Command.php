@@ -50,9 +50,6 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
-require_once 'VersionControl/SVN/Exception.php';
-require_once 'System.php';
-
 /**
  * Ground class for a SVN command.
  *
