@@ -45,7 +45,6 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
-require_once 'VersionControl/SVN/Exception.php';
 
 /**
  * Exception for errors while parsing the command output.

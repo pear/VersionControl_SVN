@@ -54,7 +54,7 @@
    <programlisting role="php">
 <![CDATA[
 <?php
-require_once 'VersionControl/SVN.php';
+require_once 'vendor/autoload.php';
 
 // Setup error handling -- always a good idea!
 $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
@@ -152,7 +152,7 @@ Array
    <programlisting role="php">
 <![CDATA[
 <?php
-require_once 'VersionControl/SVN.php';
+require_once 'vendor/autoload.php';
 
 // Setup error handling -- always a good idea!
 $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');
@@ -190,7 +190,7 @@ if ($output = $svn->run($args, $switches)) {
    <programlisting role="php">
 <![CDATA[
 <?php
-require_once 'VersionControl/SVN.php';
+require_once 'vendor/autoload.php';
 
 // Setup error handling -- always a good idea!
 $svnstack = &PEAR_ErrorStack::singleton('VersionControl_SVN');

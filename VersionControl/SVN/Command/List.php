@@ -46,7 +46,6 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
-require_once 'VersionControl/SVN/Command.php';
 
 /**
  * Subversion List command manager class
@@ -98,7 +97,7 @@ require_once 'VersionControl/SVN/Command.php';
  * Usage example:
  * <code>
  * <?php
- * require_once 'VersionControl/SVN.php';
+ * require_once 'vendor/autoload.php';
  *
  * // Set up runtime options. Will be passed to all 
  * // subclasses.

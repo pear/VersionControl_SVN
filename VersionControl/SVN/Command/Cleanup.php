@@ -46,7 +46,6 @@
  * @link      http://pear.php.net/package/VersionControl_SVN
  */
 
-require_once 'VersionControl/SVN/Command.php';
 
 /**
  * Subversion Cleanup command manager class
@@ -77,7 +76,7 @@ require_once 'VersionControl/SVN/Command.php';
  * Usage example:
  * <code>
  * <?php
- * require_once 'VersionControl/SVN.php';
+ * require_once 'vendor/autoload.php';
  *
  * // Pass array of subcommands we need to factory
  * $svn = VersionControl_SVN::factory(array('cleanup'), $options);
