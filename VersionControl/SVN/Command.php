@@ -534,11 +534,6 @@ abstract class VersionControl_SVN_Command
                         return (object) $parsedData;
                     }
                     return $parsedData;
-                } else {
-                    throw new VersionControl_SVN_Exception(sprintf(
-                        "Could not find parser for command output: '%s'",
-                        $this->commandName
-                    ), VersionControl_SVN_Exception::ERROR);
                 }
                 break;
             case VersionControl_SVN::FETCHMODE_RAW:
