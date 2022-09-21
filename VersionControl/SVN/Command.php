@@ -66,11 +66,9 @@
 abstract class VersionControl_SVN_Command
 {
     /**
-     * Indicates whether commands passed to the
-     * {@link http://www.php.net/exec exec()} function in the
-     * {@link run} method should be passed through
-     * {@link http://www.php.net/escapeshellcmd escapeshellcmd()}.
-     * NOTE: this variable is ignored on Windows machines!
+     * Indicates whether arguments and switch values passed to the
+     * {@link run} method should be escaped with
+     * {@link self::escapeshellarg()}.
      *
      * @var boolean $useEscapeshellcmd
      */
@@ -307,7 +305,8 @@ abstract class VersionControl_SVN_Command
                 $switchPrefix = '--';
             }
             if (in_array($switch, $this->validSwitchesValue)) {
-                $cmdParts[] = $switchPrefix . $switch . ' ' . $this->escapeshellarg($val);
+                $switchValue = $this->useEscapeshellcmd ? $this->escapeshellarg($val) : $val;
+                $cmdParts[] = $switchPrefix . $switch . ' ' . $switchValue;
             } elseif (in_array($switch, $this->validSwitches)) {
                 if (true === $val) {
                     $cmdParts[] = $switchPrefix . $switch;
@@ -457,7 +456,7 @@ abstract class VersionControl_SVN_Command
         if (!empty($switches)) {
             $this->switches = $switches;
         }
-        $this->args = array_map(array($this, 'escapeshellarg'), $args);
+        $this->args = $this->useEscapeshellcmd ? array_map(array($this, 'escapeshellarg'), $args) : $args;
 
         // Always prepare, allows for obj re-use. (Request #5021)
         $this->prepare();
@@ -484,9 +483,6 @@ abstract class VersionControl_SVN_Command
                 passthru("cmd /c \"$cmd 2>&1\"", $returnVar);
             }
         } else {
-            if ($this->useEscapeshellcmd) {
-                $cmd = escapeshellcmd($cmd);
-            }
             if (!$this->passthru) {
                 exec("{$this->prependCmd}$cmd 2>&1", $out, $returnVar);
             } else {
@@ -543,7 +539,9 @@ abstract class VersionControl_SVN_Command
     }
 
     /**
-     * Escape a single value in accordance with CommandLineToArgV() for Windows
+     * Escape a single value for execution in the system shell.
+     * For Windows this is in accordance with CommandLineToArgV().
+     * For other OS {@link http://www.php.net/escapeshellarg escapeshellarg()} is executed.
      *
      * @param string $value
      * @return string
